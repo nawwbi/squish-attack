@@ -25,6 +25,8 @@ void Main_Menu_Init(void)
 
 void Main_Menu_Update(void)
 {
+	CP_Graphics_ClearBackground(CP_Color_Create(200, 200, 200, 255));
+
 	int playClicked = IsAreaClicked(800.0f, 350.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
 
