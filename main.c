@@ -1,7 +1,6 @@
 #include "cprocessing.h"
 #include "mainmenu.h"
 
-
 // main() the starting point for the program
 // CP_Engine_SetNextGameState() tells CProcessing which functions to use for init, update and exit
 // CP_Engine_Run() is the core function that starts the simulation

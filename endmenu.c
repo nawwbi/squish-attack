@@ -1,6 +1,7 @@
 #include "cprocessing.h"
 #include "game.h"
 #include "utils.h"
+#include "endmenu.h"
 
 CP_Font font;
 

@@ -1,6 +1,7 @@
 #include "cprocessing.h"
 #include "utils.h"
 #include "mainmenu.h"
+#include "game.h"
 #include <stdio.h>
 #include <stdbool.h>
 
