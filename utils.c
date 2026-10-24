@@ -22,6 +22,6 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 
 double CalculateCurrentAttack(double increment_percentage)
 {
-	double current_attack = BASE_ATTACK * ((100 + increment_percentage) / 100.0);
+	double current_attack = BASE_ATTACK * (1 + increment_percentage);
 	return current_attack;
 }
