@@ -31,3 +31,9 @@ double CalculateCurrentDefence(double increment_percentage)
 	double current_defence = BASE_DEFENCE * (1 + increment_percentage);
 	return current_defence;
 }
+
+double CalculateCurrentMaxHP(double increment_percentage)
+{
+	double current_maxHP = BASE_HEALTH * (1 + increment_percentage);
+	return current_maxHP;
+}
