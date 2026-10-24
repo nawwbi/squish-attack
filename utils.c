@@ -25,3 +25,9 @@ double CalculateCurrentAttack(double increment_percentage)
 	double current_attack = BASE_ATTACK * (1 + increment_percentage);
 	return current_attack;
 }
+
+double CalculateCurrentDefence(double increment_percentage)
+{
+	double current_defence = BASE_DEFENCE * (1 + increment_percentage);
+	return current_defence;
+}
