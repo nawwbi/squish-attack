@@ -20,6 +20,11 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	else { return 0; }
 }
 
+void DrawRectangle(CP_Color colour, float x, float y, float width, float height) {
+	CP_Settings_Fill(colour);
+	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, 10);
+}
+
 double CalculateCurrentAttack(double increment_percentage)
 {
 	double current_attack = BASE_ATTACK * (1 + increment_percentage);
