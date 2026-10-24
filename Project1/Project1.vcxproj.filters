@@ -30,6 +30,9 @@
     <ClCompile Include="..\endmenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\constants.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">

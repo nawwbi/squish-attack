@@ -1,5 +1,7 @@
 #include <math.h>
 #include "cprocessing.h"
+#include "utils.h"
+#include "constants.c"
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -16,4 +18,10 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 		return 1;
 	}
 	else { return 0; }
+}
+
+double CalculateCurrentAttack(double increment_percentage)
+{
+	double current_attack = BASE_ATTACK * ((100 + increment_percentage) / 100.0);
+	return current_attack;
 }

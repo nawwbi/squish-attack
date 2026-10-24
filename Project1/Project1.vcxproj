@@ -105,6 +105,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\constants.c" />
     <ClCompile Include="..\endmenu.c" />
     <ClCompile Include="..\game.c" />
     <ClCompile Include="..\main.c" />

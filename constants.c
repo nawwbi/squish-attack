@@ -1,0 +1,3 @@
+const BASE_ATTACK = 100.0;
+const BASE_DEFENCE = 50.0;
+const BASE_HEALTH = 1000.0;
