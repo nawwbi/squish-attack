@@ -54,4 +54,12 @@
   <ItemGroup>
     <None Include=".gitignore" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Assets\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
