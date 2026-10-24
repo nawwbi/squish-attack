@@ -20,6 +20,11 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	else { return 0; }
 }
 
+void DrawRectangle(CP_Color colour, float x, float y, float width, float height) {
+	CP_Settings_Fill(colour);
+	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, 10);
+}
+
 // calculates current hp based on healing recieved 
 double CalculateHealing(double previous_hp, double max_hp, double healing_percentage)
 {
@@ -36,6 +41,7 @@ double CalculateDamage(double attack, double defense)
 	double current_damage = attack - defense;
 	return current_damage;
 }
+
 
 double CalculateCurrentAttack(double increment_percentage)
 {
