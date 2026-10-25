@@ -20,9 +20,9 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	else { return 0; }
 }
 
-void DrawRectangle(CP_Color colour, float x, float y, float width, float height) {
+void DrawRectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius) {
 	CP_Settings_Fill(colour);
-	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, 10);
+	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, cornerRadius);
 }
 
 // calculates current hp based on healing recieved 
@@ -88,4 +88,13 @@ void SkillUpgradeButton(
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Font_Set(font);
 	CP_Font_DrawTextBox(text, text_x, text_y, 250);
+}
+
+void HealthBar(CP_Color current_colour, CP_Color max_colour, float x, float y, float current_hp, float max_hp) {
+	CP_Settings_RectMode(CP_POSITION_CORNER);
+	CP_Settings_NoStroke();
+	DrawRectangle(max_colour, x, y, 100, 20, 0);
+
+	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
+	DrawRectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
 }

@@ -11,3 +11,5 @@ void SkillUpgradeButton(
 	CP_Font font,
 	char* text, float text_x, float text_y
 );
+
+void HealthBar(CP_Color current_colour, CP_Color max_colour, float x, float y, float current_hp, float max_hp);
