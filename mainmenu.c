@@ -2,6 +2,7 @@
 #include "game.h"
 #include "utils.h"
 #include "mainmenu.h"
+#include "upgrades.h"
 
 CP_Font font;
 
@@ -27,7 +28,7 @@ void Main_Menu_Update(void)
 	CP_Font_DrawText("Exit", 800.0f, 550.0f);
 
 	int playClicked = IsAreaClicked(800.0f, 350.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
+	if (playClicked == 1) { CP_Engine_SetNextGameState(Upgrades_Init, Upgrades_Update, Upgrades_Exit); }
 
 	int exitClicked = IsAreaClicked(800.0f, 550.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	if (exitClicked == 1) { CP_Engine_Terminate(); }
