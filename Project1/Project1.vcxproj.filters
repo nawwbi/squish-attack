@@ -61,12 +61,6 @@
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\Assets\player.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\dumpling.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\..\..\..\Downloads\defence_button.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -74,6 +68,27 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\attack_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\title-banner1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\title-banner2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\player-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\player-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling-open.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
