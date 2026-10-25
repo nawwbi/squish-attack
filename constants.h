@@ -11,3 +11,8 @@ const double PLAYER_Y_AXIS;
 
 const double ENEMY_X_AXIS;
 const double ENEMY_Y_AXIS;
+
+const double BUTTON_WIDTH;
+const double BUTTON_HEIGHT;
+const double BUTTON_X_AXIS;
+const double BUTTON_Y_AXIS;

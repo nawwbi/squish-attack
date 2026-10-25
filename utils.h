@@ -4,3 +4,10 @@ void DrawRectangle(CP_Color colour, float x, float y, float width, float height)
 double CalculateCurrentAttack(double increment_percentage);
 double CalculateCurrentDefence(double increment_percentage);
 double CalculateCurrentMaxHP(double increment_percentage);
+
+void SkillUpgradeButton(
+	CP_Image image, float image_x, float image_y, float image_width, float image_height,
+	CP_Color colour,
+	CP_Font font,
+	char* text, float text_x, float text_y
+);

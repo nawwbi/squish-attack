@@ -67,5 +67,14 @@
     <Image Include="..\Assets\dumpling.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\..\Downloads\defence_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\hp_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\attack_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

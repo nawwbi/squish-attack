@@ -125,7 +125,10 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\defence_button.png" />
+    <Image Include="..\Assets\attack_button.png" />
     <Image Include="..\Assets\dumpling.png" />
+    <Image Include="..\Assets\hp_button.png" />
     <Image Include="..\Assets\player.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

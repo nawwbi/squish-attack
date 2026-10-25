@@ -11,3 +11,8 @@ const double PLAYER_Y_AXIS = 450;
 
 const double ENEMY_X_AXIS = 1400;
 const double ENEMY_Y_AXIS = 450;
+
+const double BUTTON_WIDTH = 1700;
+const double BUTTON_HEIGHT = 1700;
+const double BUTTON_X_AXIS = 400;
+const double BUTTON_Y_AXIS = 450;

@@ -75,3 +75,17 @@ double CalculateCurrentMaxHP(double increment_percentage)
 	// (suggestion!) add that current hp gets updated too when player picks the health upgrade
 	return current_maxHP;
 }
+
+void SkillUpgradeButton(
+	CP_Image image, float image_x, float image_y, float image_width, float image_height,
+	CP_Color colour, 
+	CP_Font font,
+	char* text, float text_x, float text_y
+) {
+	CP_Image_Draw(image, image_x, image_y, image_width, image_height, 255);
+	CP_Settings_Fill(colour);
+	CP_Settings_TextSize(45);
+	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+	CP_Font_Set(font);
+	CP_Font_DrawTextBox(text, text_x, text_y, 250);
+}
