@@ -91,5 +91,8 @@
     <Image Include="..\Assets\dumpling-open.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\home-background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
