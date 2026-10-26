@@ -1,8 +1,11 @@
 #pragma once
 
-const double BASE_ATTACK;
-const double BASE_DEFENCE;
-const double BASE_HEALTH;
+struct Characters {
+	double attack;
+	double defense;
+	double current_hp;
+	double max_hp;
+};
 
 const double PLAYER_WIDTH;
 const double PLAYER_HEIGHT;

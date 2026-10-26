@@ -1,10 +1,6 @@
 #include "constants.h"
 #include "cprocessing.h"
 
-const double BASE_ATTACK = 100.0;
-const double BASE_DEFENCE = 50.0;
-const double BASE_HEALTH = 1000.0;
-
 const double PLAYER_WIDTH = 180;
 const double PLAYER_HEIGHT = 180;
 const double PLAYER_X_AXIS = 300;

@@ -36,22 +36,22 @@ double CalculateHealing(double previous_hp, double max_hp, double healing_percen
 	return current_hp;
 }
 
-double CalculateDamage(double attack, double defense)
+double CalculateDamage(double attack, double defence)
 {
-	double current_damage = attack - defense;
+	double current_damage = attack - defence;
 	return current_damage;
 }
 
 
-double CalculateCurrentAttack(double increment_percentage)
+double CalculateCurrentAttack(double attack, double increment_percentage)
 {
-	double current_attack = BASE_ATTACK * (1 + increment_percentage);
+	double current_attack = attack * (1 + increment_percentage);
 	return current_attack;
 }
 
-double CalculateCurrentDefence(double increment_percentage)
+double CalculateCurrentDefence(double defence, double increment_percentage)
 {
-	double current_defence = BASE_DEFENCE * (1 + increment_percentage);
+	double current_defence = defence * (1 + increment_percentage);
 	return current_defence;
 }
 
@@ -59,21 +59,21 @@ double CalculateCurrentDefence(double increment_percentage)
 double CalculateCurrentHP(double previous_hp, double received_damage)
 {
 
-	double current_HP = previous_hp - received_damage;
+	double current_hp = previous_hp - received_damage;
 
-	if (current_HP < 0.0) // makes sure that the current hp dont go below 0
+	if (current_hp < 0.0) // makes sure that the current hp dont go below 0
 	{
-		current_HP = 0.0;
+		current_hp = 0.0;
 	}
 
-	return current_HP;
+	return current_hp;
 }
 
-double CalculateCurrentMaxHP(double increment_percentage)
+double CalculateCurrentMaxHP(double health , double increment_percentage)
 {
-	double current_maxHP = BASE_HEALTH * (1 + increment_percentage);
+	double current_max_hp = health * (1 + increment_percentage);
 	// (suggestion!) add that current hp gets updated too when player picks the health upgrade
-	return current_maxHP;
+	return current_max_hp;
 }
 
 void SkillUpgradeButton(

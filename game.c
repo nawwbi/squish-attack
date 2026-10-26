@@ -15,6 +15,13 @@ CP_Image fireball = NULL;
 extern CP_Image background;
 int fireball_x = 300;
 
+// attack , defense , current_hp , max_hp
+struct Characters player = { 100.0, 50.0, 1000.0, 1000.0 };
+// enemy values to be updated based on user testing
+struct Characters dumpling = { 80.0, 50.0, 1000.0, 1000.0 };
+struct Characters butter = { 80.0, 50.0, 1500.0, 1500.0 };
+struct Characters boss = { 120.0, 60.0, 1800.0, 1800.0 };
+
 void Game_Init(void)
 {
     player_closed = CP_Image_Load("./Assets/player-closed.png");
@@ -51,7 +58,7 @@ void Game_Update(void)
     CP_Graphics_DrawEllipse(PLAYER_X_AXIS + 25, PLAYER_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
 
     //base health should be current player health
-    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, CalculateCurrentHP(BASE_HEALTH, 0), CalculateCurrentMaxHP(0));
+    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, CalculateCurrentHP(player.current_hp, 0), CalculateCurrentMaxHP(player.max_hp, 0));
 
     bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
 
@@ -59,11 +66,11 @@ void Game_Update(void)
         fireball_x += 10;
         CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
         CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(BASE_HEALTH, 0), CalculateCurrentMaxHP(0));
+        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(dumpling.current_hp, 0), CalculateCurrentMaxHP(dumpling.max_hp, 0));
     } else {
         CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
         //base health should be current enemy health, and base attack should be current enemy attack
-        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(BASE_HEALTH, BASE_ATTACK), CalculateCurrentMaxHP(0));
+        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(dumpling.current_hp, dumpling.attack), CalculateCurrentMaxHP(dumpling.max_hp, 0));
     }
 
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
