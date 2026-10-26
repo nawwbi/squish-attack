@@ -96,3 +96,10 @@ void HealthBar(CP_Color current_colour, float x, float y, float current_hp, floa
 	DrawRectangle(CP_Color_Create(100, 100, 100, 255), x, y, 100, 20, 0);
 	if (current_hp > 0) DrawRectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
 }
+
+bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2)
+{
+	double distance_squared = (((c1_x - c2_x) * (c1_x - c2_x)) + ((c1_y - c2_y) * (c1_y - c2_y)));
+	double diameter_squared = (r1 + r2) * (r1 + r2);
+	return distance_squared <= diameter_squared;
+}

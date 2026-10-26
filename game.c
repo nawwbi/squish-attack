@@ -9,7 +9,11 @@ CP_Image player_closed = NULL;
 CP_Image player_opened = NULL;
 CP_Image dumpling_closed = NULL;
 CP_Image dumpling_opened = NULL;
+CP_Image boss_closed = NULL;
+CP_Image boss_opened = NULL;
+CP_Image fireball = NULL;
 extern CP_Image background;
+int fireball_x = 300;
 
 void Game_Init(void)
 {
@@ -17,6 +21,9 @@ void Game_Init(void)
     player_opened = CP_Image_Load("./Assets/player-open.png");
     dumpling_closed = CP_Image_Load("./Assets/dumpling-closed.png");
     dumpling_opened = CP_Image_Load("./Assets/dumpling-open.png");
+    boss_closed = CP_Image_Load("./Assets/boss-closed.png");
+    boss_opened = CP_Image_Load("./Assets/boss-open.png");
+    fireball = CP_Image_Load("./Assets/fireball.png");
 }
 
 void Game_Update(void)
@@ -43,13 +50,26 @@ void Game_Update(void)
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
     CP_Graphics_DrawEllipse(PLAYER_X_AXIS + 25, PLAYER_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
 
-    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, CalculateCurrentHP(767, 0), CalculateCurrentMaxHP(0));
-    CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+    //base health should be current player health
+    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, CalculateCurrentHP(BASE_HEALTH, 0), CalculateCurrentMaxHP(0));
+
+    bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
+
+    if (!fireballHitEnemy) {
+        fireball_x += 10;
+        CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
+        CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(BASE_HEALTH, 0), CalculateCurrentMaxHP(0));
+    } else {
+        CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+        //base health should be current enemy health, and base attack should be current enemy attack
+        HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(BASE_HEALTH, BASE_ATTACK), CalculateCurrentMaxHP(0));
+    }
 
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
     CP_Graphics_DrawEllipse(ENEMY_X_AXIS + 25, ENEMY_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
 
-    HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(123, 0), CalculateCurrentMaxHP(0));
+    
     CP_Image_Draw(dumpling_closed, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 }
 

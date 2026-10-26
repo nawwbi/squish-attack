@@ -1,4 +1,6 @@
 #pragma once
+#include <stdbool.h>
+
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y);
 void DrawRectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius);
 double CalculateCurrentAttack(double increment_percentage);
@@ -14,3 +16,5 @@ void SkillUpgradeButton(
 );
 
 void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp);
+
+bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2);
