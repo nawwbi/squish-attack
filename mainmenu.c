@@ -3,25 +3,29 @@
 #include "utils.h"
 #include "mainmenu.h"
 #include "upgrades.h"
+#include "constants.h"
 
 CP_Font font;
-CP_Image home = NULL;
+CP_Image background;
+CP_Image banner;
 
 void Main_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 
 	font = CP_Font_Load("Assets/Exo2-Regular.ttf");
-	home = CP_Image_Load("./Assets/home-background.png");
+	background = CP_Image_Load("./Assets/background.png");
+	banner = CP_Image_Load("./Assets/title-banner1.png");
 }
 
 void Main_Menu_Update(void)
 {
 	CP_Graphics_ClearBackground(CP_Color_Create(200, 200, 200, 255));
 
-	CP_Settings_Fill(CP_Color_Create(200, 200, 200, 255));
-
-	CP_Image_Draw(home, 800, 450, 1600, 900, 255);
+	CP_Settings_Tint(CP_Color_Create(0, 0, 0, 100));
+	CP_Image_Draw(background, 800, 450, 1600, 900, 255);
+	CP_Settings_NoTint();
+	CP_Image_Draw(banner, 800, 450, 1600, 900, 255);
 
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Font_Set(font);

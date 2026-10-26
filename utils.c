@@ -56,7 +56,7 @@ double CalculateCurrentDefence(double increment_percentage)
 }
 
 // calculates current hp based on damage taken
-double CalculateCurrentHP(double previous_hp, double max_hp, double received_damage)
+double CalculateCurrentHP(double previous_hp, double received_damage)
 {
 
 	double current_HP = previous_hp - received_damage;
@@ -90,11 +90,9 @@ void SkillUpgradeButton(
 	CP_Font_DrawTextBox(text, text_x, text_y, 250);
 }
 
-void HealthBar(CP_Color current_colour, CP_Color max_colour, float x, float y, float current_hp, float max_hp) {
+void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {
 	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_NoStroke();
-	DrawRectangle(max_colour, x, y, 100, 20, 0);
-
-	CP_Settings_Stroke(CP_Color_Create(0, 0, 0, 255));
-	DrawRectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
+	DrawRectangle(CP_Color_Create(100, 100, 100, 255), x, y, 100, 20, 0);
+	if (current_hp > 0) DrawRectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
 }

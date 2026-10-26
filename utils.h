@@ -3,6 +3,7 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 void DrawRectangle(CP_Color colour, float x, float y, float width, float height);
 double CalculateCurrentAttack(double increment_percentage);
 double CalculateCurrentDefence(double increment_percentage);
+double CalculateCurrentHP(double previous_hp, double received_damage);
 double CalculateCurrentMaxHP(double increment_percentage);
 
 void SkillUpgradeButton(
@@ -12,4 +13,4 @@ void SkillUpgradeButton(
 	char* text, float text_x, float text_y
 );
 
-void HealthBar(CP_Color current_colour, CP_Color max_colour, float x, float y, float current_hp, float max_hp);
+void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp);
