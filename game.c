@@ -29,8 +29,8 @@ void Game_Update(void)
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_LEFT, CP_TEXT_ALIGN_V_MIDDLE);
     CP_Settings_TextSize(50);
-    CP_Font_DrawText("Level 1/3", 30, 50);
-    CP_Font_DrawText("Round 1/10", 30, 100);
+    CP_Font_DrawText("Level: 1/3", 30, 50);
+    CP_Font_DrawText("Round: 1/10", 30, 100);
 
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
     CP_Graphics_DrawEllipse(PLAYER_X_AXIS + 25, PLAYER_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
