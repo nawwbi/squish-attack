@@ -94,5 +94,17 @@
     <Image Include="..\Assets\home-background.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\boss-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\boss-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\fireball.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\game_button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
