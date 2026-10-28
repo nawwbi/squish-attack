@@ -106,5 +106,11 @@
     <Image Include="..\Assets\game_button.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\defence-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\hp-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

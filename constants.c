@@ -18,3 +18,8 @@ const double BUTTON_Y_AXIS = 450;
 
 const double MINI_PLAYER_WIDTH = 50;
 const double MINI_PLAYER_HEIGHT = 50;
+
+const double ICON_WIDTH = 170;
+const double ICON_HEIGHT = 170;
+const double ICON_X_AXIS = 400;
+const double ICON_Y_AXIS = 350;

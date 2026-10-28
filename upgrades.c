@@ -8,38 +8,68 @@
 #include <stdbool.h>
 
 
-CP_Image defence_button;
-CP_Image attack_button;
-CP_Image hp_button;
-CP_Font font;
+CP_Image button;
+
+CP_Image defence_icon;
+CP_Image hp_icon;
+CP_Image attack_icon;
+
 int numSkills;
 
-struct Upgrades skill[] = {
-	{ "+5% Defence", 350, 220 },
-	//{ "+10% Attack", 800, 680 },
-	//{ "+20% Max HP", 1250, 1130 }
+struct Upgrades upgrade[] = {
+	{ DEFENCE, "+5% Defence", 360, 220, 360 },
+	{ ATTACK, "+10% Attack", 810, 670, 810 },
+	{ HP, "+20% Max HP", 1260, 1120, 1260 }
 };
 
 void Upgrades_Init(void) {
 	
-	defence_button = CP_Image_Load("./Assets/defence_button.png");
-	attack_button = CP_Image_Load("./Assets/attack_button.png");
-	hp_button = CP_Image_Load("./Assets/hp_button.png");
-	font = CP_Font_Load("Assets/Exo2-Regular.ttf");
+	button = CP_Image_Load("./Assets/defence_button.png");
+	defence_icon = CP_Image_Load("./Assets/defence-icon.png");
+	hp_icon = CP_Image_Load("./Assets/hp-icon.png");
+	attack_icon = CP_Image_Load("./Assets/fireball.png");
 
-	skill[0].image = defence_button;
-	//skill[1].image = attack_button;
-	//skill[2].image = hp_button;
+	upgrade[0].image = button;
+	upgrade[1].image = button;
+	upgrade[2].image = button;
 
-	numSkills = sizeof(skill) / sizeof(skill[0]);
+	upgrade[0].icon = defence_icon;
+	upgrade[1].icon = attack_icon;
+	upgrade[2].icon = hp_icon;
+
+	numSkills = sizeof(upgrade) / sizeof(upgrade[0]);
 }
 
 void Upgrades_Update(void) {
 	CP_Settings_NoTint();
 	CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	for (int i = 0; i < numSkills; i++) {
-		SkillUpgradeButton(skill[i].image, skill[i].image_x, BUTTON_Y_AXIS, BUTTON_WIDTH, BUTTON_HEIGHT, black, font, skill[i].name, skill[i].text_x, 520);
+		SkillUpgradeButton(
+			upgrade[i].skill,
+
+			upgrade[i].image,
+			upgrade[i].image_x,
+			BUTTON_Y_AXIS, 
+			BUTTON_WIDTH, 
+			BUTTON_HEIGHT, 
+
+			black,
+			upgrade[i].name,
+			upgrade[i].text_x,
+			520,
+
+			upgrade[i].icon,
+			upgrade[i].icon_x,
+			ICON_Y_AXIS,
+			ICON_WIDTH,
+			ICON_HEIGHT
+		);
 	}
 }
 
-void Upgrades_Exit(void) { }
+void Upgrades_Exit(void) { 
+	CP_Image_Free(button);
+	CP_Image_Free(defence_icon);
+	CP_Image_Free(hp_icon);
+	CP_Image_Free(attack_icon);
+}

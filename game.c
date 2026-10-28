@@ -40,7 +40,6 @@ void Game_Init(void)
 
 void Game_Update(void)
 {
-    //CP_Settings_Tint(CP_Color_Create(0, 0, 0, 200));
     CP_Color darkRed = CP_Color_Create(255, 0, 0, 255);
     CP_Color darkGreen = CP_Color_Create(0, 255, 0, 255);
     CP_Graphics_ClearBackground(CP_Color_Create(0, 0, 0, 255));
@@ -134,9 +133,10 @@ void Game_Update(void)
     } else {
         CP_Image_Draw(dumpling_closed, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
         HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, CalculateCurrentHP(player.current_hp, dumpling.attack), CalculateCurrentMaxHP(player.max_hp, 0));
+        CP_Settings_Tint(CP_Color_Create(0, 0, 0, 200));
+        soundwave = 1300;
+        CP_Engine_SetNextGameState(Upgrades_Init, Upgrades_Update, Upgrades_Exit);
     }
-
-    //CP_Engine_SetNextGameState(Upgrades_Init, Upgrades_Update, Upgrades_Exit);
 }
 
 void Game_Exit(void)

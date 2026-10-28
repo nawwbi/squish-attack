@@ -130,11 +130,13 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\background.png" />
     <Image Include="..\Assets\boss-closed.png" />
     <Image Include="..\Assets\boss-open.png" />
+    <Image Include="..\Assets\defence-icon.png" />
     <Image Include="..\Assets\dumpling-closed.png" />
     <Image Include="..\Assets\dumpling-open.png" />
     <Image Include="..\Assets\fireball.png" />
     <Image Include="..\Assets\game_button.png" />
     <Image Include="..\Assets\home-background.png" />
+    <Image Include="..\Assets\hp-icon.png" />
     <Image Include="..\Assets\hp_button.png" />
     <Image Include="..\Assets\player-closed.png" />
     <Image Include="..\Assets\player-open.png" />

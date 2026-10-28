@@ -24,3 +24,8 @@ const double BUTTON_Y_AXIS;
 
 const double MINI_PLAYER_WIDTH;
 const double MINI_PLAYER_HEIGHT;
+
+const double ICON_WIDTH;
+const double ICON_HEIGHT;
+const double ICON_X_AXIS;
+const double ICON_Y_AXIS;

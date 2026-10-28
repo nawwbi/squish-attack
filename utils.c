@@ -2,6 +2,8 @@
 #include "cprocessing.h"
 #include "utils.h"
 #include "constants.h"
+#include "upgrades.h"
+#include "game.h"
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
@@ -77,17 +79,43 @@ double CalculateCurrentMaxHP(double health , double increment_percentage)
 }
 
 void SkillUpgradeButton(
+	int skillEnum,
 	CP_Image image, float image_x, float image_y, float image_width, float image_height,
-	CP_Color colour, 
-	CP_Font font,
-	char* text, float text_x, float text_y
+	CP_Color colour,
+	char* text, float text_x, float text_y,
+	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height
 ) {
 	CP_Image_Draw(image, image_x, image_y, image_width, image_height, 255);
+	CP_Image_Draw(icon, icon_x, icon_y, icon_width, icon_height, 255);
 	CP_Settings_Fill(colour);
 	CP_Settings_TextSize(45);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Font_Set(font);
 	CP_Font_DrawTextBox(text, text_x, text_y, 250);
+
+	int clicked = IsAreaClicked(image_x, image_y, image_width, image_height, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+	extern struct Characters player;
+
+	if (clicked) {
+		switch (skillEnum) {
+			case DEFENCE: 
+				player.defense = CalculateCurrentDefence(player.defense, 5);
+				break;
+
+			case ATTACK: 
+				player.attack = CalculateCurrentAttack(player.attack, 10);
+				break;
+
+			case HP: 
+				player.max_hp = CalculateCurrentMaxHP(player.max_hp, 20);
+				break;
+
+			case HEAL: 
+				break;
+		}
+
+		CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+	}
 }
 
 void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {
