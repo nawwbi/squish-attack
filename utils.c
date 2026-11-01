@@ -58,15 +58,10 @@ double CalculateCurrentDefence(double defence, double increment_percentage)
 }
 
 // calculates current hp based on damage taken
-double CalculateCurrentHP(double previous_hp, double received_damage)
+double CalculateCurrentHP(double previous_hp, double received_damage, double defence)
 {
 
-	double current_hp = previous_hp - received_damage;
-
-	if (current_hp < 0.0) // makes sure that the current hp dont go below 0
-	{
-		current_hp = 0.0;
-	}
+	double current_hp = previous_hp - (received_damage - defence);
 
 	return current_hp;
 }
@@ -99,7 +94,7 @@ void SkillUpgradeButton(
 	if (clicked) {
 		switch (skillEnum) {
 			case DEFENCE: 
-				player.defense = CalculateCurrentDefence(player.defense, 5);
+				player.defence = CalculateCurrentDefence(player.defence, 5);
 				break;
 
 			case ATTACK: 

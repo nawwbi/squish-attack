@@ -2,7 +2,7 @@
 
 struct Characters {
 	double attack;
-	double defense;
+	double defence;
 	double current_hp;
 	double max_hp;
 };
