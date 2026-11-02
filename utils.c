@@ -7,6 +7,7 @@
 
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
+
 	float half_width = area_width / 2;
 	float half_height = area_height / 2;
 
@@ -60,8 +61,13 @@ double CalculateCurrentDefence(double defence, double increment_percentage)
 // calculates current hp based on damage taken
 double CalculateCurrentHP(double previous_hp, double received_damage, double defence)
 {
+	received_damage = received_damage - defence;
 
-	double current_hp = previous_hp - (received_damage - defence);
+	if (received_damage < 0) {
+		received_damage = 0;
+	}
+
+	double current_hp = previous_hp - received_damage;
 
 	return current_hp;
 }
@@ -87,30 +93,7 @@ void SkillUpgradeButton(
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Font_DrawTextBox(text, text_x, text_y, 250);
 
-	int clicked = IsAreaClicked(image_x, image_y, image_width, image_height, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-	extern struct Characters player;
-
-	if (clicked) {
-		switch (skillEnum) {
-			case DEFENCE: 
-				player.defence = CalculateCurrentDefence(player.defence, 5);
-				break;
-
-			case ATTACK: 
-				player.attack = CalculateCurrentAttack(player.attack, 10);
-				break;
-
-			case HP: 
-				player.max_hp = CalculateCurrentMaxHP(player.max_hp, 20);
-				break;
-
-			case HEAL: 
-				break;
-		}
-
-		CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
-	}
 }
 
 void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {
@@ -125,4 +108,11 @@ bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float 
 	double distance_squared = (((c1_x - c2_x) * (c1_x - c2_x)) + ((c1_y - c2_y) * (c1_y - c2_y)));
 	double diameter_squared = (r1 + r2) * (r1 + r2);
 	return distance_squared <= diameter_squared;
+}
+
+void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char*const string) {
+	CP_Settings_TextSize(font_size);
+	char text[50];
+	snprintf(text, sizeof(text), string, value);
+	CP_Font_DrawText(text, text_x, text_y);
 }
