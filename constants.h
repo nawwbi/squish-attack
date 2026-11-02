@@ -1,11 +1,11 @@
 #pragma once
 
-struct Characters {
+typedef struct Characters {
 	double attack;
 	double defence;
 	double current_hp;
 	double max_hp;
-};
+} Characters;
 
 const double PLAYER_WIDTH;
 const double PLAYER_HEIGHT;

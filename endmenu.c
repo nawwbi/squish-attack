@@ -29,10 +29,10 @@ void End_Menu_Update(void)
 	CP_Font_DrawText("Play Again", 800.0f, 700.0f);
 	CP_Font_DrawText("Exit", 800.0f, 800.0f);
 
-	int playClicked = IsAreaClicked(800.0f, 350.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	int playClicked = IsAreaClicked(800.0f, 700.0f, 400.0f, 50.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
 
-	int exitClicked = IsAreaClicked(800.0f, 550.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	int exitClicked = IsAreaClicked(800.0f, 800.0f, 400.0f, 50.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	if (exitClicked == 1) { CP_Engine_Terminate(); }
 }
 

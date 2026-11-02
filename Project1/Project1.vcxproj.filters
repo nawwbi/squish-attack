@@ -112,5 +112,11 @@
     <Image Include="..\Assets\hp-icon.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\butter-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\butter-close.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

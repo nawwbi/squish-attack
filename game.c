@@ -1,6 +1,7 @@
 #include "cprocessing.h"
 #include "utils.h"
 #include "game.h"
+#include "endmenu.h"
 #include "constants.h"
 #include "upgrades.h"
 #include <stdio.h>
@@ -8,10 +9,16 @@
 
 CP_Image player_closed = NULL;
 CP_Image player_opened = NULL;
+
 CP_Image dumpling_closed = NULL;
 CP_Image dumpling_opened = NULL;
+
+CP_Image butter_closed = NULL;
+CP_Image butter_opened = NULL;
+
 CP_Image boss_closed = NULL;
 CP_Image boss_opened = NULL;
+
 CP_Image fireball = NULL;
 CP_Image soundwave = NULL;
 extern CP_Image background;
@@ -22,11 +29,11 @@ int soundwave_x = 1300;
 int clicked = 0;
 
 // attack , defence , current_hp , max_hp
-struct Characters player = { 500.0, 50.0, 1000.0, 1000.0 };
+Characters player = { 1000.0, 50.0, 1000.0, 1000.0 };
 // enemy values to be updated based on user testing
-struct Characters dumpling = { 100.0, 0.0, 1000.0, 1000.0 };
-struct Characters butter = { 80.0, 50.0, 1500.0, 1500.0 };
-struct Characters boss = { 120.0, 60.0, 1800.0, 1800.0 };
+Characters dumpling = { 100.0, 0.0, 1000.0, 1000.0 };
+Characters butter = { 80.0, 50.0, 1500.0, 1500.0 };
+Characters boss = { 120.0, 60.0, 1800.0, 1800.0 };
 
 CP_Image button;
 
@@ -37,13 +44,40 @@ CP_Image attack_icon;
 int numSkills;
 bool showUpgrade = false;
 
+Characters* current_enemy;
+
+CP_Image current_enemy_closed_img, current_enemy_opened_img;
+
 struct Upgrades upgrade[] = {
     { DEFENCE, "+5% Defence", 360, 220, 360 },
     { ATTACK, "+10% Attack", 810, 670, 810 },
     { HP, "+20% Max HP", 1260, 1120, 1260 }
 };
 
-int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_round) {
+void Check_Current_Enemy(int current_level) {
+    switch (current_level) {
+    case 1:
+        current_enemy = &dumpling;
+
+        current_enemy_closed_img = dumpling_closed;
+        current_enemy_opened_img = dumpling_opened;
+        break;
+    case 2:
+        current_enemy = &butter;
+
+        current_enemy_closed_img = butter_closed;
+        current_enemy_opened_img = butter_opened;
+        break;
+    case 3:
+        current_enemy = &boss;
+
+        current_enemy_closed_img = boss_closed;
+        current_enemy_opened_img = boss_opened;
+        break;
+    }
+}
+
+int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_round, int current_level) {
 
     static bool current_attacker = true; // true for player turn, false for enemy turn
 
@@ -59,31 +93,33 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     snprintf(roundText, sizeof(roundText), "Round: %d/10", current_round);
     CP_Font_DrawText(roundText, 800, 130);
 
+    char levelText[50];
+    snprintf(levelText, sizeof(levelText), "Round: %d/3", current_level);
+    CP_Font_DrawText(levelText, 800, 170);
+
     CP_Color white = CP_Color_Create(255, 255, 255, 255);
 
-    //setting text for player defence
-    Text(30, white, player.defence,
-        PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 30, "Defence: %.2f");
+    //--------------------------------------------PLAYER--------------------------------------------\\
+    //defence text
+    Text(30, white, player.defence, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 30, "Defence: %.2f");
 
-    //setting text for player attack
-    Text(30, white, player.attack,
-        PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT, "Attack: %.2f");
+    //attack text
+    Text(30, white, player.attack, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT, "Attack: %.2f");
 
-    //setting text for player max hp
-    Text(30, white, player.max_hp,
-        PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT + 30, "Max HP: %.2f");
+    //max hp text
+    Text(30, white, player.max_hp, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT + 30, "Max HP: %.2f");
+    //--------------------------------------------PLAYER--------------------------------------------\\
 
-    //setting text for dumpling defence
-    Text(30, white, dumpling.defence,
-        ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Defence: %.2f");
+    //--------------------------------------------ENEMY--------------------------------------------\\
+    //defence text
+    Text(30, white, current_enemy->defence, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Defence: %.2f");
 
-    //setting text for dumpling attack
-    Text(30, white, dumpling.attack,
-        ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Attack: %.2f");
+    //attack text
+    Text(30, white, current_enemy->attack, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Attack: %.2f");
 
-    //setting text for dumpling max hp
-    Text(30, white, dumpling.attack,
-        ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
+    //max hp text
+    Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
+    //--------------------------------------------ENEMY--------------------------------------------\\
 
     //current level status, bar at the top
     CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -97,7 +133,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
 
     CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
     // display healthbar before rounds
-    HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(dumpling.current_hp, 0, dumpling.defence), CalculateCurrentMaxHP(dumpling.max_hp, 0));
+    HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
     // if its players turn to attack
@@ -112,15 +148,15 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
             CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
             //player open mouth when shooting fireball
             CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(dumpling.current_hp, 0, dumpling.defence), CalculateCurrentMaxHP(dumpling.max_hp, 0));
+            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(current_enemy->current_hp, 0, current_enemy->defence), CalculateCurrentMaxHP(current_enemy->max_hp, 0));
         }
         else {
             //player close mouth when fireball is shot
             CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
             //base health should be current enemy health, and base attack should be current player attack
             // update current hp with reduced health
-            dumpling.current_hp = CalculateCurrentHP(dumpling.current_hp, player.attack, dumpling.defence);
-            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, dumpling.current_hp, dumpling.max_hp);
+            current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, player.attack, current_enemy->defence);
+            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
             fireball_x = 300; // reset fireball position after hitting enemy
             current_attacker = false;
         }
@@ -130,7 +166,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     CP_Graphics_DrawEllipse(ENEMY_X_AXIS + 25, ENEMY_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
 
     //enemy closed mouth
-    CP_Image_Draw(dumpling_closed, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+    CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 
     if (current_attacker == false) {
 		//collision check for enemy soundwave and player
@@ -141,14 +177,14 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
             soundwave_x -= speed * dt;
             CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
             // enemy open mouth when shooting soundwave
-            CP_Image_Draw(dumpling_opened, ENEMY_X_AXIS, ENEMY_Y_AXIS, ENEMY_WIDTH, ENEMY_HEIGHT, 255);
+            CP_Image_Draw(current_enemy_opened_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, ENEMY_WIDTH, ENEMY_HEIGHT, 255);
             HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
         }
         else {
 			// enemy closed mouth when soundwave is shot
-            CP_Image_Draw(dumpling_closed, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+            CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
             // update current hp with reduced health
-            player.current_hp = CalculateCurrentHP(player.current_hp, dumpling.attack, player.defence);
+            player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
             HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
             soundwave_x = 1300; // reset soundwave position after hitting player
 
@@ -168,6 +204,8 @@ void Game_Init(void)
     player_opened = CP_Image_Load("./Assets/player-open.png");
     dumpling_closed = CP_Image_Load("./Assets/dumpling-closed.png");
     dumpling_opened = CP_Image_Load("./Assets/dumpling-open.png");
+    butter_closed = CP_Image_Load("./Assets/butter-close.png");
+    butter_opened = CP_Image_Load("./Assets/butter-open.png");
     boss_closed = CP_Image_Load("./Assets/boss-closed.png");
     boss_opened = CP_Image_Load("./Assets/boss-open.png");
     fireball = CP_Image_Load("./Assets/fireball.png");
@@ -198,6 +236,7 @@ void Game_Update(void)
     //get delta time
     float dt = CP_System_GetDt();
     static int current_round = 1;      // track current round number
+    static int current_level = 1;      // track current level number
     static bool gameOver = false;      // check if game is over (for both win and lose)
     static int upgradeEnum = 0;
 
@@ -208,17 +247,26 @@ void Game_Update(void)
     static bool showUpgrade = false;
     static bool upgradeTriggered = false;
 
-    if (dumpling.current_hp <= 0 &&
+    Check_Current_Enemy(current_level);
+
+    if (current_enemy->current_hp <= 0 &&
         current_round <= 10 &&
         player.current_hp > 0 &&
-        !upgradeTriggered) {
+        !upgradeTriggered && current_level < 4) {
 
         showUpgrade = true;
         upgradeTriggered = true;
+        ++current_level;
     }
 
+    if (current_level > 3) {
+        CP_Engine_SetNextGameState(End_Menu_Init, End_Menu_Update, End_Menu_Exit);
+        current_level = 1;
+        current_round = 1;
+        showUpgrade = false;
+    }
     // Display upgrade screen
-    if (showUpgrade) {
+    else if (showUpgrade) {
 
         CP_Color black = CP_Color_Create(0, 0, 0, 255);
 
@@ -283,7 +331,7 @@ void Game_Update(void)
 
             upgradeEnum = 0;
             // Restore enemy and player HP
-            dumpling.current_hp = dumpling.max_hp;
+            //dumpling.current_hp = dumpling.max_hp;
 
             // Reset upgrade selection
             current_round = 0;
@@ -299,7 +347,7 @@ void Game_Update(void)
     }
 
     // player loses if they have lesser hp than dumpling
-    if (player.current_hp <= 0 && dumpling.current_hp > 0) {
+    if (player.current_hp <= 0 && current_enemy->current_hp > 0) {
         gameOver = true;
         CP_Font_DrawText("GAME OVER (died before dumpling)", 500, 500); // temporary test
         return;
@@ -312,7 +360,7 @@ void Game_Update(void)
     }
     // update the round for each hit when game is not over
     if (!gameOver && current_round <= 10) {
-        if (Game_Per_Round(dt, darkRed, darkGreen, current_round) == 1) {
+        if (Game_Per_Round(dt, darkRed, darkGreen, current_round, current_level) == 1) {
             ++current_round;
         }
     }
@@ -324,6 +372,10 @@ void Game_Exit(void)
     CP_Image_Free(player_closed);
     CP_Image_Free(dumpling_closed);
     CP_Image_Free(dumpling_opened);
+    CP_Image_Free(butter_closed);
+    CP_Image_Free(butter_opened);
+    CP_Image_Free(boss_closed);
+    CP_Image_Free(boss_opened);
 
     CP_Image_Free(button);
     CP_Image_Free(defence_icon);
