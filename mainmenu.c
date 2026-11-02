@@ -4,6 +4,8 @@
 #include "mainmenu.h"
 #include "upgrades.h"
 #include "constants.h"
+#include "controls.h"
+#include "credits.h"
 
 CP_Font font;
 CP_Image background;
@@ -36,21 +38,30 @@ void Main_Menu_Update(void)
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 	CP_Font_DrawText("Squish Attack!", 800.0f, 70.0f);
 
-	CP_Image_Draw(game_button, 800, 340, 350, 360, 255); // play button
-	CP_Image_Draw(game_button, 800, 480, 350, 360, 255); // controls button
-	CP_Image_Draw(game_button, 800, 620, 350, 360, 255); // quit button
+	CP_Image_Draw(game_button, 800, 300, 350, 360, 255); // play button
+	CP_Image_Draw(game_button, 800, 415, 350, 360, 255); // controls button
+	CP_Image_Draw(game_button, 800, 530, 350, 360, 255); // credits button
+	CP_Image_Draw(game_button, 800, 645, 350, 360, 255); // quit button
 
 	CP_Settings_TextSize(60);
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
-	CP_Font_DrawText("Play", 800.0f, 325.0f);
-	CP_Font_DrawText("Controls", 800.0f, 465.0f);
-	CP_Font_DrawText("Quit", 800.0f, 605.0f);
 
-	int playClicked = IsAreaClicked(800.0f, 350.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	CP_Font_DrawText("Play", 800.0f, 285.0f);
+	CP_Font_DrawText("Controls", 800.0f, 400.0f);
+	CP_Font_DrawText("Credits", 800.0f, 515.0f);
+	CP_Font_DrawText("Quit", 800.0f, 630.0f);
+
+	int playClicked = IsAreaClicked(800.0f, 300.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
 
-	int exitClicked = IsAreaClicked(800.0f, 550.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (exitClicked == 1) { CP_Engine_Terminate(); }
+	int controlsClicked = IsAreaClicked(800.0f, 415.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    if (controlsClicked == 1) { CP_Engine_SetNextGameState(Controls_Init, Controls_Update, Controls_Exit); }
+
+	int creditsClicked = IsAreaClicked(800.0f, 530.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	if (creditsClicked == 1) { CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit); }
+
+	int quitClicked = IsAreaClicked(800.0f, 645.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+	if (quitClicked == 1) { CP_Engine_Terminate(); }
 }
 
 void Main_Menu_Exit(void)
