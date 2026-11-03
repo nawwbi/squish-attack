@@ -94,7 +94,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     CP_Font_DrawText(roundText, 800, 130);
 
     char levelText[50];
-    snprintf(levelText, sizeof(levelText), "Round: %d/3", current_level);
+    snprintf(levelText, sizeof(levelText), "Level: %d/3", current_level);
     CP_Font_DrawText(levelText, 800, 170);
 
     CP_Color white = CP_Color_Create(255, 255, 255, 255);
@@ -123,7 +123,17 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
 
     //current level status, bar at the top
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(CP_Color_Create(100, 100, 100, 100), 800, 100, 1000, 10, 10);
+    DrawRectangle(CP_Color_Create(100, 100, 100, 100), 800, 100, 999, 10, 10);
+
+    static int progress_x = 300;
+    progress_x += 300 * dt;
+
+    if (progress_x >= 600) {
+        progress_x = 300;
+    }
+
+    DrawRectangle(CP_Color_Create(0, 100, 0, 225), progress_x, 100, 37, 10, 10);
+
     CP_Image_Draw(player_opened, PLAYER_X_AXIS, 100, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
     CP_Image_Draw(dumpling_opened, 600, 90, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
 
@@ -198,6 +208,33 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     return 0;
 }
 
+void Reset_Characters(void)
+{
+    // player
+    player.attack = 1000.0;
+    player.defence = 50.0;
+    player.current_hp = 1000.0;
+    player.max_hp = 1000.0;
+
+    // dumpling
+    dumpling.attack = 100.0;
+    dumpling.defence = 0.0;
+    dumpling.current_hp = 1000.0;
+    dumpling.max_hp = 1000.0;
+
+    // butter
+    butter.attack = 80.0;
+    butter.defence = 50.0;
+    butter.current_hp = 1500.0;
+    butter.max_hp = 1500.0;
+
+    // boss
+    boss.attack = 120.0;
+    boss.defence = 60.0;
+    boss.current_hp = 1800.0;
+    boss.max_hp = 1800.0;
+}
+
 void Game_Init(void)
 {
     player_closed = CP_Image_Load("./Assets/player-closed.png");
@@ -243,7 +280,6 @@ void Game_Update(void)
     // checking for lose conditions for player and enemy 
     // check if player has killed dumpling , with health over 0 and current round is less than 10
 
-    // Check whether the upgrade screen should appear
     static bool showUpgrade = false;
     static bool upgradeTriggered = false;
 
@@ -264,8 +300,11 @@ void Game_Update(void)
         current_level = 1;
         current_round = 1;
         showUpgrade = false;
+        upgradeTriggered = false;
+        Reset_Characters();
+        Check_Current_Enemy(current_level);
     }
-    // Display upgrade screen
+
     else if (showUpgrade) {
 
         CP_Color black = CP_Color_Create(0, 0, 0, 255);
@@ -307,7 +346,6 @@ void Game_Update(void)
             );
         }
 
-        // Apply selected upgrade
         if (clicked && upgradeEnum >= 0) {
 
             switch (upgradeEnum) {
@@ -330,11 +368,7 @@ void Game_Update(void)
             }
 
             upgradeEnum = 0;
-            // Restore enemy and player HP
-            //dumpling.current_hp = dumpling.max_hp;
-
-            // Reset upgrade selection
-            current_round = 0;
+            current_round = 1;
             showUpgrade = false;
             upgradeTriggered = false;
             
@@ -343,7 +377,7 @@ void Game_Update(void)
             return;
         }
 
-        return; // Prevent normal gameplay while selecting upgrades
+        return;
     }
 
     // player loses if they have lesser hp than dumpling
