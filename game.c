@@ -77,6 +77,34 @@ void Check_Current_Enemy(int current_level) {
     }
 }
 
+void Progress_Bar(int current_level, float dt) {
+    CP_Settings_RectMode(CP_POSITION_CENTER);
+    DrawRectangle(CP_Color_Create(100, 100, 100, 100), 800, 100, 999, 25, 10);
+
+    CP_Settings_RectMode(CP_POSITION_CORNER);
+    int start_x = 300 + (current_level - 1) * 300;
+    int end_x = (current_level == 3) ? 1250 : start_x + 300;
+
+    DrawRectangle(
+        CP_Color_Create(0, 225, 0, 225),
+        300, 95,
+        (current_level - 1) * 333,
+        10, 10
+    );
+
+    CP_Color grey = CP_Color_Create(70, 70, 70, 225);
+
+    static float progress_x = 300;
+
+    progress_x += 300 * dt;
+
+    if (progress_x >= end_x || progress_x < start_x) {
+        progress_x = start_x;
+    }
+
+    DrawRectangle(grey, progress_x, 95, 37, 10, 10);
+}
+
 int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_round, int current_level) {
 
     static bool current_attacker = true; // true for player turn, false for enemy turn
@@ -121,21 +149,14 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
     //--------------------------------------------ENEMY--------------------------------------------\\
 
-    //current level status, bar at the top
+    //current level status, progress bar
+    Progress_Bar(current_level, dt);
+
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(CP_Color_Create(100, 100, 100, 100), 800, 100, 999, 10, 10);
-
-    static int progress_x = 300;
-    progress_x += 300 * dt;
-
-    if (progress_x >= 600) {
-        progress_x = 300;
-    }
-
-    DrawRectangle(CP_Color_Create(0, 100, 0, 225), progress_x, 100, 37, 10, 10);
-
     CP_Image_Draw(player_opened, PLAYER_X_AXIS, 100, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
-    CP_Image_Draw(dumpling_opened, 600, 90, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
+    CP_Image_Draw(dumpling_opened, 630, 85, MINI_PLAYER_WIDTH+10, MINI_PLAYER_HEIGHT+10, 255);
+    CP_Image_Draw(butter_opened, 950, 80, MINI_PLAYER_WIDTH+15, MINI_PLAYER_HEIGHT+15, 255);
+    CP_Image_Draw(boss_opened, 1300, 85, MINI_PLAYER_WIDTH+10, MINI_PLAYER_HEIGHT+10, 255);
 
     //shadow for player
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
