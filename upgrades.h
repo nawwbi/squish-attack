@@ -2,16 +2,16 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef enum {
+typedef enum UpgradeEnum {
 	DEFENCE,
 	ATTACK,
 	HP,
 	HEAL
-} Skill;
+} UpgradeEnum;
 
 struct Upgrades {
-	int skill;
-	char* name;
+	int upgrade_enum;
+	char* details;
 	int image_x;
 	int text_x;
 	int icon_x;

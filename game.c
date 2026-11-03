@@ -7,20 +7,24 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-CP_Image player_closed = NULL;
-CP_Image player_opened = NULL;
+CP_Image 
+player_closed, 
+player_opened,
+dumpling_closed,
+dumpling_opened,
+butter_closed,
+butter_opened,
+boss_closed,
+boss_opened,
+fireball,
+soundwave,
+button,
+defence_icon,
+hp_icon,
+attack_icon,
+current_enemy_closed_img,
+current_enemy_opened_img;
 
-CP_Image dumpling_closed = NULL;
-CP_Image dumpling_opened = NULL;
-
-CP_Image butter_closed = NULL;
-CP_Image butter_opened = NULL;
-
-CP_Image boss_closed = NULL;
-CP_Image boss_opened = NULL;
-
-CP_Image fireball = NULL;
-CP_Image soundwave = NULL;
 extern CP_Image background;
 float speed = 800.0f;
 int fireball_x = 300;
@@ -29,26 +33,24 @@ int soundwave_x = 1300;
 int clicked = 0;
 
 // attack , defence , current_hp , max_hp
-Characters player = { 1000.0, 50.0, 1000.0, 1000.0 };
+Characters player = {
+    200.0, 50.0, 1000.0, 1000.0,
+    {
+        { BASIC_ATTACK, 2, "Basic Attack" },
+        { ULTIMATE, 1, "Ultimate" },
+    }
+};
 // enemy values to be updated based on user testing
 Characters dumpling = { 100.0, 0.0, 1000.0, 1000.0 };
 Characters butter = { 80.0, 50.0, 1500.0, 1500.0 };
 Characters boss = { 120.0, 60.0, 1800.0, 1800.0 };
-
-CP_Image button;
-
-CP_Image defence_icon;
-CP_Image hp_icon;
-CP_Image attack_icon;
 
 int numSkills;
 bool showUpgrade = false;
 
 Characters* current_enemy;
 
-CP_Image current_enemy_closed_img, current_enemy_opened_img;
-
-struct Upgrades upgrade[] = {
+struct Upgrades upgrades[] = {
     { DEFENCE, "+5% Defence", 360, 220, 360 },
     { ATTACK, "+10% Attack", 810, 670, 810 },
     { HP, "+20% Max HP", 1260, 1120, 1260 }
@@ -167,30 +169,39 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
+    static int basic_attack_shot = 0;
     // if its players turn to attack
     if (current_attacker == true) { 
 
-    //collision check for player fireball and enemy
-        bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
+        if (basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
+            //collision check for player fireball and enemy
+            bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
 
-        //if not colliding, fireball continues to travel forward. else, enemy's hp is reduced based off player's attack
-        if (!fireballHitEnemy) {
-            fireball_x += speed * dt;
-            CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
-            //player open mouth when shooting fireball
-            CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(current_enemy->current_hp, 0, current_enemy->defence), CalculateCurrentMaxHP(current_enemy->max_hp, 0));
+            //if not colliding, fireball continues to travel forward. else, enemy's hp is reduced based off player's attack
+            if (!fireballHitEnemy) {
+                fireball_x += speed * dt;
+                CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
+                //player open mouth when shooting fireball
+                CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(current_enemy->current_hp, 0, current_enemy->defence), CalculateCurrentMaxHP(current_enemy->max_hp, 0));
+            }
+            else {
+                //player close mouth when fireball is shot
+                CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                //base health should be current enemy health, and base attack should be current player attack
+                // update current hp with reduced health
+                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, player.attack, current_enemy->defence);
+                HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
+                fireball_x = 300; // reset fireball position after hitting enemy
+                
+                basic_attack_shot++;
+            }
         }
         else {
-            //player close mouth when fireball is shot
-            CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-            //base health should be current enemy health, and base attack should be current player attack
-            // update current hp with reduced health
-            current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, player.attack, current_enemy->defence);
-            HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
-            fireball_x = 300; // reset fireball position after hitting enemy
+            basic_attack_shot = 0;
             current_attacker = false;
         }
+        
     }
     //shadow for enemy
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
@@ -274,15 +285,15 @@ void Game_Init(void)
     hp_icon = CP_Image_Load("./Assets/hp-icon.png");
     attack_icon = CP_Image_Load("./Assets/fireball.png");
 
-    upgrade[0].image = button;
-    upgrade[1].image = button;
-    upgrade[2].image = button;
+    upgrades[0].image = button;
+    upgrades[1].image = button;
+    upgrades[2].image = button;
 
-    upgrade[0].icon = defence_icon;
-    upgrade[1].icon = attack_icon;
-    upgrade[2].icon = hp_icon;
+    upgrades[0].icon = defence_icon;
+    upgrades[1].icon = attack_icon;
+    upgrades[2].icon = hp_icon;
 
-    numSkills = sizeof(upgrade) / sizeof(upgrade[0]);
+    numSkills = sizeof(upgrades) / sizeof(upgrades[0]);
 }
 
 void Game_Update(void)
@@ -335,7 +346,7 @@ void Game_Update(void)
             CP_Settings_RectMode(CP_POSITION_CENTER);
 
             clicked = IsAreaClicked(
-                upgrade[i].image_x,
+                upgrades[i].image_x,
                 BUTTON_Y_AXIS,
                 300,
                 500,
@@ -344,23 +355,23 @@ void Game_Update(void)
             );
 
             if (clicked) {
-                upgradeEnum = upgrade[i].skill;
+                upgradeEnum = upgrades[i].upgrade_enum;
                 break;
             }
 
             SkillUpgradeButton(
-                upgrade[i].skill,
-                upgrade[i].image,
-                upgrade[i].image_x,
+                upgrades[i].upgrade_enum,
+                upgrades[i].image,
+                upgrades[i].image_x,
                 BUTTON_Y_AXIS,
                 BUTTON_WIDTH,
                 BUTTON_HEIGHT,
                 black,
-                upgrade[i].name,
-                upgrade[i].text_x,
+                upgrades[i].details,
+                upgrades[i].text_x,
                 520,
-                upgrade[i].icon,
-                upgrade[i].icon_x,
+                upgrades[i].icon,
+                upgrades[i].icon_x,
                 ICON_Y_AXIS,
                 ICON_WIDTH,
                 ICON_HEIGHT
