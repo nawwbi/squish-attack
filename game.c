@@ -23,10 +23,12 @@ defence_icon,
 hp_icon,
 attack_icon,
 current_enemy_closed_img,
-current_enemy_opened_img;
+current_enemy_opened_img,
+skip_button;
 
 extern CP_Image background;
-float speed = 800.0f;
+float speed = 400.0f;
+int speed_multiplier = 1;
 int fireball_x = 300;
 int soundwave_x = 1300;
 
@@ -113,7 +115,26 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
 
     //setting background
     CP_Image_Draw(background, 800, 450, 1600, 900, 255);
+    CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
 
+    CP_Color black = CP_Color_Create(0, 0, 0, 255);
+    char speedMultiplierText[100];
+    snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
+    CP_Font_DrawText(speedMultiplierText, 1500 , 720);
+
+
+    if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+		if (speed < 1200.0) {
+			speed += 400.0;
+            speed_multiplier += 1;
+		}
+        else if (speed >= 1200.0) {
+			speed = 400.0;
+            speed_multiplier = 1;
+        }
+ 
+
+    }
     //setting text for rounds
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -284,6 +305,7 @@ void Game_Init(void)
     defence_icon = CP_Image_Load("./Assets/defence-icon.png");
     hp_icon = CP_Image_Load("./Assets/hp-icon.png");
     attack_icon = CP_Image_Load("./Assets/fireball.png");
+	skip_button = CP_Image_Load("./Assets/skip-button.png");
 
     upgrades[0].image = button;
     upgrades[1].image = button;
