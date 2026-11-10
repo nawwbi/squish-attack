@@ -81,19 +81,18 @@ double CalculateCurrentMaxHP(double health , double increment_percentage)
 
 void SkillUpgradeButton(
 	int skillEnum,
-	CP_Image image, float image_x, float image_y, float image_width, float image_height,
+	float image_x, float image_y, float image_width, float image_height,
 	CP_Color colour,
 	char* text, float text_x, float text_y,
 	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height
 ) {
-	CP_Image_Draw(image, image_x, image_y, image_width, image_height, 255);
+	CP_Image button = CP_Image_Load("./Assets/defence_button.png");
+	CP_Image_Draw(button, image_x, image_y, image_width, image_height, 255);
 	CP_Image_Draw(icon, icon_x, icon_y, icon_width, icon_height, 255);
 	CP_Settings_Fill(colour);
 	CP_Settings_TextSize(45);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Font_DrawTextBox(text, text_x, text_y, 250);
-
-
 }
 
 void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {

@@ -130,5 +130,8 @@
     <Image Include="..\Assets\butter-close.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\heal-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

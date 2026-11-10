@@ -11,7 +11,7 @@ double CalculateCurrentMaxHP(double health, double increment_percentage);
 
 void SkillUpgradeButton(
 	int skillEnum,
-	CP_Image image, float image_x, float image_y, float image_width, float image_height,
+	float image_x, float image_y, float image_width, float image_height,
 	CP_Color colour,
 	char* text, float text_x, float text_y,
 	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height
