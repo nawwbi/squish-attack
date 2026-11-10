@@ -48,3 +48,6 @@ const double ICON_WIDTH;
 const double ICON_HEIGHT;
 const double ICON_X_AXIS;
 const double ICON_Y_AXIS;
+
+extern int score;
+extern int highscore;

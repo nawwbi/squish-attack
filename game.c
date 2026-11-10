@@ -33,6 +33,8 @@ int fireball_x = 300;
 int soundwave_x = 1300;
 
 int clicked = 0;
+int score = 0;
+int highscore = 0;
 
 // attack , defence , current_hp , max_hp
 Characters player = {
@@ -118,6 +120,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
 
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
+	CP_Settings_Fill(black);
     char speedMultiplierText[100];
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
     CP_Font_DrawText(speedMultiplierText, 1500 , 720);
@@ -216,6 +219,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
                 fireball_x = 300; // reset fireball position after hitting enemy
                 
                 basic_attack_shot++;
+                score += (player.attack - current_enemy->defence);
             }
         }
         else {
@@ -250,6 +254,8 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
             player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
             HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
             soundwave_x = 1300; // reset soundwave position after hitting player
+
+			score -= (current_enemy->attack - player.defence);
 
 			// resets current_attacker to true for next round which allows player to attack first
             current_attacker = true;
@@ -316,6 +322,8 @@ void Game_Init(void)
     upgrades[2].icon = hp_icon;
 
     numSkills = sizeof(upgrades) / sizeof(upgrades[0]);
+
+    score = 0; // reset score every time new game
 }
 
 void Game_Update(void)
@@ -350,6 +358,9 @@ void Game_Update(void)
     }
 
     if (current_level > 3) {
+        if (highscore < score) {
+            highscore = score;
+        }
         CP_Engine_SetNextGameState(End_Menu_Init, End_Menu_Update, End_Menu_Exit);
         current_level = 1;
         current_round = 1;
