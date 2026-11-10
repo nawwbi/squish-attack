@@ -10,6 +10,7 @@ typedef enum SkillEnum {
 typedef struct Skills {
 	int skill_enum;
 	int iteration;
+	int charge; // only used for ultimate skill
 } Skills;
 
 // double attack, double defence, double current_hp, double max_hp

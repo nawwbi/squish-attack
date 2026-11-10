@@ -71,6 +71,11 @@ void Upgrades_Init(void) {
 
 	for (int i = 0; i < numSkills; ++i) {
 		int random = minimum + (rand() % (maximum - minimum + 1));
+
+        if ((i > 0) && random == random_list[i - 1]) {
+            random = minimum + (rand() % (maximum - minimum + 1));
+        }
+
 		random_list[i] = random;
 	}
 
@@ -111,7 +116,7 @@ void Upgrades_Update(void) {
         );
 
         if (clicked) {
-            upgradeEnum = upgrades[i].upgrade_enum;
+            upgradeEnum = displaying_upgrades[i].upgrade_enum;
             break;
         }
 

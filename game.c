@@ -41,54 +41,69 @@ int numSkills;
 bool showUpgrade = false;
 
 //player's attack, defence, current hp, max hp
-#define PLAYER_ATTACK     200.0
-#define PLAYER_DEFENCE    50.0
-#define PLAYER_CURRENT_HP 1000.0
-#define PLAYER_MAX_HP     1000.0
+#define PLAYER_ATTACK                 200.0
+#define PLAYER_DEFENCE                50.0
+#define PLAYER_CURRENT_HP             1000.0
+#define PLAYER_MAX_HP                 1000.0
+#define PLAYER_BASIC_ATTACK_ITERATION 2
+#define PLAYER_ULTIMATE_ITERATION     1
+#define PLAYER_ULTIMATE_CHARGE        2
 
 //dumpling's attack, defence, current hp, max hp
-#define DUMPLING_ATTACK     100.0
-#define DUMPLING_DEFENCE    0.0
-#define DUMPLING_CURRENT_HP 1000.0
-#define DUMPLING_MAX_HP     1000.0
+#define DUMPLING_ATTACK                 80.0
+#define DUMPLING_DEFENCE                0.0
+#define DUMPLING_CURRENT_HP             1000.0
+#define DUMPLING_MAX_HP                 1000.0
+#define DUMPLING_BASIC_ATTACK_ITERATION 3
+#define DUMPLING_ULTIMATE_ITERATION     1
+#define DUMPLING_ULTIMATE_CHARGE        2
 
 //butter's attack, defence, current hp, max hp
-#define BUTTER_ATTACK     80.0
-#define BUTTER_DEFENCE    50.0
-#define BUTTER_CURRENT_HP 1500.0
-#define BUTTER_MAX_HP     1500.0
+#define BUTTER_ATTACK                 100.0
+#define BUTTER_DEFENCE                50.0
+#define BUTTER_CURRENT_HP             1500.0
+#define BUTTER_MAX_HP                 1500.0
+#define BUTTER_BASIC_ATTACK_ITERATION 2
+#define BUTTER_ULTIMATE_ITERATION     1
+#define BUTTER_ULTIMATE_CHARGE        2
 
 //boss's attack, defence, current hp, max hp
-#define BOSS_ATTACK     120.0
-#define BOSS_DEFENCE    60.0
-#define BOSS_CURRENT_HP 1800.0
-#define BOSS_MAX_HP     1800.0
+#define BOSS_ATTACK                 120.0
+#define BOSS_DEFENCE                60.0
+#define BOSS_CURRENT_HP             1800.0
+#define BOSS_MAX_HP                 1800.0
+#define BOSS_BASIC_ATTACK_ITERATION 1
+#define BOSS_ULTIMATE_ITERATION     1
+#define BOSS_ULTIMATE_CHARGE        2
 
 struct Characters player = { PLAYER_ATTACK, PLAYER_DEFENCE, PLAYER_CURRENT_HP, PLAYER_MAX_HP,
-    {{ BASIC_ATTACK, 2 }, { ULTIMATE, 1 }}
+    {{ BASIC_ATTACK, PLAYER_BASIC_ATTACK_ITERATION }, { ULTIMATE, PLAYER_ULTIMATE_ITERATION }}
 };
-struct Characters dumpling = { DUMPLING_ATTACK, DUMPLING_DEFENCE, DUMPLING_CURRENT_HP, DUMPLING_MAX_HP };
-struct Characters butter = { BUTTER_ATTACK, BUTTER_DEFENCE, BUTTER_CURRENT_HP, BUTTER_MAX_HP };
-struct Characters boss = { BOSS_ATTACK, BOSS_DEFENCE, BOSS_CURRENT_HP, BOSS_MAX_HP };
+struct Characters dumpling = { DUMPLING_ATTACK, DUMPLING_DEFENCE, DUMPLING_CURRENT_HP, DUMPLING_MAX_HP,
+    {{ BASIC_ATTACK, DUMPLING_BASIC_ATTACK_ITERATION }, { ULTIMATE, DUMPLING_ULTIMATE_ITERATION }}
+};
+struct Characters butter = { BUTTER_ATTACK, BUTTER_DEFENCE, BUTTER_CURRENT_HP, BUTTER_MAX_HP,
+    {{ BASIC_ATTACK, BUTTER_BASIC_ATTACK_ITERATION }, { ULTIMATE, BUTTER_ULTIMATE_ITERATION }}
+};
+struct Characters boss = { BOSS_ATTACK, BOSS_DEFENCE, BOSS_CURRENT_HP, BOSS_MAX_HP, 
+    {{ BASIC_ATTACK, BOSS_BASIC_ATTACK_ITERATION }, { ULTIMATE, BOSS_ULTIMATE_ITERATION, BOSS_ULTIMATE_CHARGE}}
+};
 struct Characters* current_enemy;
 
 void Check_Current_Enemy(int current_level) {
     switch (current_level) {
     case 1:
         current_enemy = &dumpling;
-
         current_enemy_closed_img = dumpling_closed;
         current_enemy_opened_img = dumpling_opened;
         break;
     case 2:
         current_enemy = &butter;
-
         current_enemy_closed_img = butter_closed;
         current_enemy_opened_img = butter_opened;
         break;
     case 3:
         current_enemy = &boss;
-
         current_enemy_closed_img = boss_closed;
         current_enemy_opened_img = boss_opened;
         break;
@@ -200,11 +215,11 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
-    static int basic_attack_shot = 0;
+    static int player_basic_attack_shot = 0;
     // if its players turn to attack
     if (current_attacker == true) { 
 
-        if (basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
+        if (player_basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
             //collision check for player fireball and enemy
             bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
 
@@ -225,12 +240,12 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
                 fireball_x = 300; // reset fireball position after hitting enemy
                 
-                basic_attack_shot++;
+                player_basic_attack_shot++;
                 score += (player.attack - current_enemy->defence);
             }
         }
         else {
-            basic_attack_shot = 0;
+            player_basic_attack_shot = 0;
             current_attacker = false;
         }
         
@@ -242,32 +257,41 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     //enemy closed mouth
     CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 
+	static int enemy_basic_attack_shot = 0;
     if (current_attacker == false) {
-		//collision check for enemy soundwave and player
+
+        //collision check for enemy soundwave and player
         bool soundwaveHitPlayer = AreCirclesIntersecting(soundwave_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
 
-		//if not colliding, soundwave continues to travel forward. else, player's hp is reduced based off enemy's attack
-        if (!soundwaveHitPlayer) {
-            soundwave_x -= speed * dt;
-            CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
-            // enemy open mouth when shooting soundwave
-            CP_Image_Draw(current_enemy_opened_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, ENEMY_WIDTH, ENEMY_HEIGHT, 255);
-            HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+        if (enemy_basic_attack_shot < current_enemy->skills[BASIC_ATTACK].iteration) {
+
+            //if not colliding, soundwave continues to travel forward. else, player's hp is reduced based off enemy's attack
+            if (!soundwaveHitPlayer) {
+                soundwave_x -= speed * dt;
+                CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
+                // enemy open mouth when shooting soundwave
+                CP_Image_Draw(current_enemy_opened_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, ENEMY_WIDTH, ENEMY_HEIGHT, 255);
+                HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+            }
+            else {
+                // enemy closed mouth when soundwave is shot
+                CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                // update current hp with reduced health
+                player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
+                HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+                soundwave_x = 1300; // reset soundwave position after hitting player
+
+                score -= (current_enemy->attack - player.defence);
+				++enemy_basic_attack_shot;
+            }
         }
         else {
-			// enemy closed mouth when soundwave is shot
-            CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-            // update current hp with reduced health
-            player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
-            HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
-            soundwave_x = 1300; // reset soundwave position after hitting player
+			enemy_basic_attack_shot = 0;
+			current_attacker = true;
 
-			score -= (current_enemy->attack - player.defence);
-
-			// resets current_attacker to true for next round which allows player to attack first
-            current_attacker = true;
+            // resets current_attacker to true for next round which allows player to attack first
             if (soundwaveHitPlayer) {
-				return 1; //allows current round to increment when player is hit by soundwave
+                return 1; //allows current round to increment when player is hit by soundwave
             }
         }
     }
