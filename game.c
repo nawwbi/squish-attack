@@ -18,47 +18,59 @@ boss_closed,
 boss_opened,
 fireball,
 soundwave,
-button,
-defence_icon,
-hp_icon,
-attack_icon,
 current_enemy_closed_img,
 current_enemy_opened_img,
 skip_button;
+
+CP_Color 
+darkRed, 
+darkGreen,
+grey,
+lightGrey,
+black,
+white;
 
 extern CP_Image background;
 float speed = 400.0f;
 int speed_multiplier = 1;
 int fireball_x = 300;
 int soundwave_x = 1300;
-
-int clicked = 0;
 int score = 0;
 int highscore = 0;
-
-// attack , defence , current_hp , max_hp
-Characters player = {
-    200.0, 50.0, 1000.0, 1000.0,
-    {
-        { BASIC_ATTACK, 2, "Basic Attack" },
-        { ULTIMATE, 1, "Ultimate" },
-    }
-};
-// enemy values to be updated based on user testing
-Characters dumpling = { 100.0, 0.0, 1000.0, 1000.0 };
-Characters butter = { 80.0, 50.0, 1500.0, 1500.0 };
-Characters boss = { 120.0, 60.0, 1800.0, 1800.0 };
-
 int numSkills;
 bool showUpgrade = false;
 
-Characters* current_enemy;
+//player's attack, defence, current hp, max hp
+#define PLAYER_ATTACK     200.0
+#define PLAYER_DEFENCE    50.0
+#define PLAYER_CURRENT_HP 1000.0
+#define PLAYER_MAX_HP     1000.0
 
-struct Upgrades upgrades[] = {
-    { DEFENCE, "+5% Defence", 360, 220, 360 },
-    { ATTACK, "+10% Attack", 810, 670, 810 },
-    { HP, "+20% Max HP", 1260, 1120, 1260 }
+//dumpling's attack, defence, current hp, max hp
+#define DUMPLING_ATTACK     100.0
+#define DUMPLING_DEFENCE    0.0
+#define DUMPLING_CURRENT_HP 1000.0
+#define DUMPLING_MAX_HP     1000.0
+
+//butter's attack, defence, current hp, max hp
+#define BUTTER_ATTACK     80.0
+#define BUTTER_DEFENCE    50.0
+#define BUTTER_CURRENT_HP 1500.0
+#define BUTTER_MAX_HP     1500.0
+
+//boss's attack, defence, current hp, max hp
+#define BOSS_ATTACK     120.0
+#define BOSS_DEFENCE    60.0
+#define BOSS_CURRENT_HP 1800.0
+#define BOSS_MAX_HP     1800.0
+
+struct Characters player = { PLAYER_ATTACK, PLAYER_DEFENCE, PLAYER_CURRENT_HP, PLAYER_MAX_HP,
+    {{ BASIC_ATTACK, 2 }, { ULTIMATE, 1 }}
 };
+struct Characters dumpling = { DUMPLING_ATTACK, DUMPLING_DEFENCE, DUMPLING_CURRENT_HP, DUMPLING_MAX_HP };
+struct Characters butter = { BUTTER_ATTACK, BUTTER_DEFENCE, BUTTER_CURRENT_HP, BUTTER_MAX_HP };
+struct Characters boss = { BOSS_ATTACK, BOSS_DEFENCE, BOSS_CURRENT_HP, BOSS_MAX_HP };
+struct Characters* current_enemy;
 
 void Check_Current_Enemy(int current_level) {
     switch (current_level) {
@@ -85,20 +97,18 @@ void Check_Current_Enemy(int current_level) {
 
 void Progress_Bar(int current_level, float dt) {
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(CP_Color_Create(100, 100, 100, 100), 800, 100, 999, 25, 10);
+    DrawRectangle(lightGrey, 800, 100, 999, 25, 10);
 
     CP_Settings_RectMode(CP_POSITION_CORNER);
     int start_x = 300 + (current_level - 1) * 300;
     int end_x = (current_level == 3) ? 1250 : start_x + 300;
 
     DrawRectangle(
-        CP_Color_Create(0, 225, 0, 225),
+        darkGreen,
         300, 95,
         (current_level - 1) * 333,
         10, 10
     );
-
-    CP_Color grey = CP_Color_Create(70, 70, 70, 225);
 
     static float progress_x = 300;
 
@@ -111,14 +121,13 @@ void Progress_Bar(int current_level, float dt) {
     DrawRectangle(grey, progress_x, 95, 37, 10, 10);
 }
 
-int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_round, int current_level) {
+int Game_Per_Round(float dt, int current_round, int current_level) {
 
     static bool current_attacker = true; // true for player turn, false for enemy turn
 
     //setting background
     CP_Image_Draw(background, 800, 450, 1600, 900, 255);
     CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
-
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Settings_Fill(black);
     char speedMultiplierText[100];
@@ -150,8 +159,6 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
     char levelText[50];
     snprintf(levelText, sizeof(levelText), "Level: %d/3", current_level);
     CP_Font_DrawText(levelText, 800, 170);
-
-    CP_Color white = CP_Color_Create(255, 255, 255, 255);
 
     //--------------------------------------------PLAYER--------------------------------------------\\
     //defence text
@@ -270,7 +277,7 @@ int Game_Per_Round(float dt, CP_Color darkRed, CP_Color darkGreen, int current_r
 void Reset_Characters(void)
 {
     // player
-    player.attack = 1000.0;
+    player.attack = 200.0;
     player.defence = 50.0;
     player.current_hp = 1000.0;
     player.max_hp = 1000.0;
@@ -306,38 +313,26 @@ void Game_Init(void)
     boss_opened = CP_Image_Load("./Assets/boss-open.png");
     fireball = CP_Image_Load("./Assets/fireball.png");
     soundwave = CP_Image_Load("./Assets/soundwave.png");
-
-    button = CP_Image_Load("./Assets/defence_button.png");
-    defence_icon = CP_Image_Load("./Assets/defence-icon.png");
-    hp_icon = CP_Image_Load("./Assets/hp-icon.png");
-    attack_icon = CP_Image_Load("./Assets/fireball.png");
 	skip_button = CP_Image_Load("./Assets/skip-button.png");
 
-    upgrades[0].image = button;
-    upgrades[1].image = button;
-    upgrades[2].image = button;
-
-    upgrades[0].icon = defence_icon;
-    upgrades[1].icon = attack_icon;
-    upgrades[2].icon = hp_icon;
-
-    numSkills = sizeof(upgrades) / sizeof(upgrades[0]);
-
     score = 0; // reset score every time new game
+    skip_button = CP_Image_Load("./Assets/skip-button.png");
+     
+    darkRed = CP_Color_Create(255, 0, 0, 255);
+    darkGreen = CP_Color_Create(0, 255, 0, 255);
+    grey = CP_Color_Create(70, 70, 70, 225);
+    lightGrey = CP_Color_Create(100, 100, 100, 100);
+    black = CP_Color_Create(0, 0, 0, 255);
+    white = CP_Color_Create(255, 255, 255, 255);
 }
 
 void Game_Update(void)
 {
-    
-
-    CP_Color darkRed = CP_Color_Create(255, 0, 0, 255);
-    CP_Color darkGreen = CP_Color_Create(0, 255, 0, 255);
     //get delta time
     float dt = CP_System_GetDt();
     static int current_round = 1;      // track current round number
     static int current_level = 1;      // track current level number
     static bool gameOver = false;      // check if game is over (for both win and lose)
-    static int upgradeEnum = 0;
 
     // checking for lose conditions for player and enemy 
     // check if player has killed dumpling , with health over 0 and current round is less than 10
@@ -371,77 +366,10 @@ void Game_Update(void)
     }
 
     else if (showUpgrade) {
-
-        CP_Color black = CP_Color_Create(0, 0, 0, 255);
-
-        for (int i = 0; i < numSkills ; ++i) {
-            CP_Settings_Fill(CP_Color_Create(100, 100, 100, 255));
-            CP_Settings_RectMode(CP_POSITION_CENTER);
-
-            clicked = IsAreaClicked(
-                upgrades[i].image_x,
-                BUTTON_Y_AXIS,
-                300,
-                500,
-                CP_Input_GetMouseX(),
-                CP_Input_GetMouseY()
-            );
-
-            if (clicked) {
-                upgradeEnum = upgrades[i].upgrade_enum;
-                break;
-            }
-
-            SkillUpgradeButton(
-                upgrades[i].upgrade_enum,
-                upgrades[i].image,
-                upgrades[i].image_x,
-                BUTTON_Y_AXIS,
-                BUTTON_WIDTH,
-                BUTTON_HEIGHT,
-                black,
-                upgrades[i].details,
-                upgrades[i].text_x,
-                520,
-                upgrades[i].icon,
-                upgrades[i].icon_x,
-                ICON_Y_AXIS,
-                ICON_WIDTH,
-                ICON_HEIGHT
-            );
-        }
-
-        if (clicked && upgradeEnum >= 0) {
-
-            switch (upgradeEnum) {
-
-                case DEFENCE:
-                    player.defence = CalculateCurrentDefence(player.defence, 0.05);
-                    break;
-
-                case ATTACK:
-                    player.attack = CalculateCurrentAttack(player.attack, 0.1);
-                    break;
-
-                case HP:
-                    player.max_hp = CalculateCurrentMaxHP(player.max_hp, 0.2);
-                    break;
-
-                case HEAL:
-                    player.current_hp = CalculateHealing(player.current_hp, player.max_hp, 0.2);
-                    break;
-            }
-
-            upgradeEnum = 0;
-            current_round = 1;
-            showUpgrade = false;
-            upgradeTriggered = false;
-            
-            clicked = 0;
-
-            return;
-        }
-
+        CP_Engine_SetNextGameState(Upgrades_Init, Upgrades_Update, Upgrades_Exit);
+        current_round = 1;
+        showUpgrade = false;
+        upgradeTriggered = false;
         return;
     }
 
@@ -459,7 +387,7 @@ void Game_Update(void)
     }
     // update the round for each hit when game is not over
     if (!gameOver && current_round <= 10) {
-        if (Game_Per_Round(dt, darkRed, darkGreen, current_round, current_level) == 1) {
+        if (Game_Per_Round(dt, current_round, current_level) == 1) {
             ++current_round;
         }
     }
@@ -475,9 +403,4 @@ void Game_Exit(void)
     CP_Image_Free(butter_opened);
     CP_Image_Free(boss_closed);
     CP_Image_Free(boss_opened);
-
-    CP_Image_Free(button);
-    CP_Image_Free(defence_icon);
-    CP_Image_Free(hp_icon);
-    CP_Image_Free(attack_icon);
 }

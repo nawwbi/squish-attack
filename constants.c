@@ -1,11 +1,13 @@
 #include "constants.h"
 #include "cprocessing.h"
 
+//----------player character details----------//
 const double PLAYER_WIDTH = 180;
 const double PLAYER_HEIGHT = 180;
 const double PLAYER_X_AXIS = 300;
 const double PLAYER_Y_AXIS = 600;
 
+//----------enemy character details----------//
 const double ENEMY_X_AXIS = 1300;
 const double ENEMY_Y_AXIS = 600;
 const double ENEMY_WIDTH = 180;

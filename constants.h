@@ -1,30 +1,26 @@
 #pragma once
 
+// existing skill enums: basic attack, ultimate
 typedef enum SkillEnum {
 	BASIC_ATTACK,
 	ULTIMATE
 } SkillEnum;
 
-// int skill_enum
-// int iteration
-// char* details
+// int skill_enum, int iteration, char* details
 typedef struct Skills {
 	int skill_enum;
 	int iteration;
-	char* details;
 } Skills;
 
-// double attack, 
-// double defence, 
-// double current_hp, 
-// double max_hp
-typedef struct Characters {
+// double attack, double defence, double current_hp, double max_hp
+// Skills skills []
+struct Characters {
 	double attack;
 	double defence;
 	double current_hp;
 	double max_hp;
 	Skills skills [];
-} Characters;
+} player, dumpling, butter, boss;
 
 const double PLAYER_WIDTH;
 const double PLAYER_HEIGHT;
