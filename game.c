@@ -301,28 +301,28 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 void Reset_Characters(void)
 {
     // player
-    player.attack = 200.0;
-    player.defence = 50.0;
-    player.current_hp = 1000.0;
-    player.max_hp = 1000.0;
+    player.attack = PLAYER_ATTACK;
+    player.defence = PLAYER_DEFENCE;
+    player.current_hp = PLAYER_CURRENT_HP;
+    player.max_hp = PLAYER_MAX_HP;
 
     // dumpling
-    dumpling.attack = 100.0;
-    dumpling.defence = 0.0;
-    dumpling.current_hp = 1000.0;
-    dumpling.max_hp = 1000.0;
+    dumpling.attack = DUMPLING_ATTACK;
+    dumpling.defence = DUMPLING_DEFENCE;
+    dumpling.current_hp = DUMPLING_CURRENT_HP;
+    dumpling.max_hp = DUMPLING_MAX_HP;
 
     // butter
-    butter.attack = 80.0;
-    butter.defence = 50.0;
-    butter.current_hp = 1500.0;
-    butter.max_hp = 1500.0;
+    butter.attack = BUTTER_ATTACK;
+    butter.defence = BUTTER_DEFENCE;
+    butter.current_hp = BUTTER_CURRENT_HP;
+    butter.max_hp = BUTTER_MAX_HP;
 
     // boss
-    boss.attack = 120.0;
-    boss.defence = 60.0;
-    boss.current_hp = 1800.0;
-    boss.max_hp = 1800.0;
+    boss.attack = BOSS_ATTACK;
+    boss.defence = BOSS_DEFENCE;
+    boss.current_hp = BOSS_CURRENT_HP;
+    boss.max_hp = BOSS_MAX_HP;
 }
 
 void Game_Init(void)
