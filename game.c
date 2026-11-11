@@ -4,6 +4,7 @@
 #include "endmenu.h"
 #include "constants.h"
 #include "upgrades.h"
+#include "mainmenu.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -20,7 +21,9 @@ fireball,
 soundwave,
 current_enemy_closed_img,
 current_enemy_opened_img,
-skip_button;
+skip_button,
+pause_button,
+menu_button;
 
 CP_Color 
 darkRed, 
@@ -37,6 +40,8 @@ int fireball_x = 300;
 int soundwave_x = 1300;
 int score = 0;
 int highscore = 0;
+
+int is_paused = 0; // pause state initialize 
 int numSkills;
 bool showUpgrade = false;
 
@@ -338,6 +343,8 @@ void Game_Init(void)
     fireball = CP_Image_Load("./Assets/fireball.png");
     soundwave = CP_Image_Load("./Assets/soundwave.png");
 	skip_button = CP_Image_Load("./Assets/skip-button.png");
+    pause_button = CP_Image_Load("./Assets/pause-button.png"); 
+    menu_button = CP_Image_Load("./Assets/game_button.png");
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");
@@ -413,6 +420,92 @@ void Game_Update(void)
     if (!gameOver && current_round <= 10) {
         if (Game_Per_Round(dt, current_round, current_level) == 1) {
             ++current_round;
+        }
+    }
+
+    // pause button 
+    float pause_button_x = 1500.0f;
+    float pause_button_y = 100.0f;
+    float pause_button_w = 80.0f;
+    float pause_button_h = 80.0f;
+
+    if (!is_paused && !showUpgrade) {
+        CP_Image_Draw(pause_button, pause_button_x, pause_button_y, pause_button_w, pause_button_h, 255);
+
+        if (IsAreaClicked(pause_button_x, pause_button_y, pause_button_w, pause_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+            is_paused = 1; // pause state true if pause button clicked
+        }
+    }
+
+    /*if (is_paused) {
+        dt = 0.0f; // freeze time in pause state
+    }*/
+
+    // pause menu (continue, settings, restart, exit)
+    if (is_paused) {
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 500, 20);
+
+        CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+        CP_Settings_TextSize(50);
+        CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+        CP_Font_DrawText("PAUSED", 800, 260); // pause menu background
+
+        // menu buttons coordinates in pause menu 
+        float pmenu_button_w = 300.0f;
+        float pmenu_button_h = 260.0f;
+        float pmenu_button_x = 800.0f;
+
+        float continue_button_y = 340.0f; // 340
+        float settings_button_y = 430.0f; // 430
+        float restart_button_y =  520.0f; // 520 
+        float mainmenu_button_y = 610.0f; // 610
+
+        // clicks for menu buttons 
+        bool continueClicked = IsAreaClicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        bool settingsClicked = IsAreaClicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        bool restartClicked = IsAreaClicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        bool mainMenuClicked = IsAreaClicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        // menu buttons 
+        CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, 255);
+        CP_Image_Draw(menu_button, pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, 255);
+        CP_Image_Draw(menu_button, pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, 255);
+        CP_Image_Draw(menu_button, pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, 255);
+
+        CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+        CP_Settings_TextSize(30.0f);
+        CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+
+        CP_Font_DrawText("Continue", pmenu_button_x, continue_button_y);
+        CP_Font_DrawText("Settings", pmenu_button_x, settings_button_y);
+        CP_Font_DrawText("Restart", pmenu_button_x, restart_button_y);
+        CP_Font_DrawText("Main Menu", pmenu_button_x, mainmenu_button_y);
+
+        // continue 
+        if (continueClicked) {
+            is_paused = 0; 
+        }
+        // settings 
+        else if (settingsClicked) {
+            // todo
+        } 
+        // restart
+        else if (restartClicked) {
+            is_paused = 0;
+            current_round = 1;
+            current_level = 1;
+            showUpgrade = false; 
+            upgradeTriggered = false;
+            gameOver = false;
+
+            Reset_Characters();
+            Check_Current_Enemy(current_level);
+   
+        }
+        else if (mainMenuClicked) {
+            is_paused = 0;
+            CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
         }
     }
 }

@@ -42,6 +42,9 @@
     <ClCompile Include="..\credits.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pause.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\credits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
