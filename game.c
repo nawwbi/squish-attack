@@ -295,9 +295,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 			current_attacker = true;
 
             // resets current_attacker to true for next round which allows player to attack first
-            if (soundwaveHitPlayer) {
-                return 1; //allows current round to increment when player is hit by soundwave
-            }
+            return 1; //allows current round to increment when player is hit by soundwave
         }
     }
     return 0;
