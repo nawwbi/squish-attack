@@ -45,6 +45,9 @@
     <ClCompile Include="pause.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\losemenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pause.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\losemenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,6 +143,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\heal-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\digipen-logo-red.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

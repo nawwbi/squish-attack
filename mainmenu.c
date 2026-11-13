@@ -12,6 +12,8 @@ CP_Image background;
 CP_Image banner;
 CP_Image game_button;
 
+bool main_confirm_quit = false;
+
 void Main_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -20,6 +22,9 @@ void Main_Menu_Init(void)
 	background = CP_Image_Load("./Assets/background.png");
 	banner = CP_Image_Load("./Assets/title-banner1.png");
 	game_button = CP_Image_Load("./Assets/game_button.png");
+
+	// confirmation popup starts closed
+	main_confirm_quit = false;
 }
 
 void Main_Menu_Update(void)
@@ -51,17 +56,71 @@ void Main_Menu_Update(void)
 	CP_Font_DrawText("Credits", 800.0f, 515.0f);
 	CP_Font_DrawText("Quit", 800.0f, 630.0f);
 
-	int playClicked = IsAreaClicked(800.0f, 300.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
+    // normal menu buttons only work when confirmation popup is closed
+    if (main_confirm_quit == false)
+    {
+        int playClicked = IsAreaClicked(800.0f, 300.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-	int controlsClicked = IsAreaClicked(800.0f, 415.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-    if (controlsClicked == 1) { CP_Engine_SetNextGameState(Controls_Init, Controls_Update, Controls_Exit); }
+        if (playClicked == 1)
+        {
+            CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+        }
 
-	int creditsClicked = IsAreaClicked(800.0f, 530.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (creditsClicked == 1) { CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit); }
+        int controlsClicked = IsAreaClicked(800.0f, 415.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-	int quitClicked = IsAreaClicked(800.0f, 645.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (quitClicked == 1) { CP_Engine_Terminate(); }
+        if (controlsClicked == 1)
+        {
+            CP_Engine_SetNextGameState(Controls_Init, Controls_Update, Controls_Exit);
+        }
+
+        int creditsClicked = IsAreaClicked(800.0f, 530.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        if (creditsClicked == 1)
+        {
+            CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit);
+        }
+
+        int quitClicked = IsAreaClicked(800.0f, 645.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        if (quitClicked == 1)
+        {
+            main_confirm_quit = true;
+        }
+    }
+
+    // confirmation popup
+    else
+    {
+        DrawRectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
+
+        CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+        CP_Settings_TextSize(45);
+        CP_Font_DrawText("Are you sure you want to quit?", 800.0f, 370.0f);
+
+        // yes and no buttons
+        CP_Image_Draw(game_button, 680, 500, 250, 260, 255);
+        CP_Image_Draw(game_button, 920, 500, 250, 260, 255);
+
+        CP_Settings_TextSize(40);
+        CP_Font_DrawText("Yes", 680.0f, 490.0f);
+        CP_Font_DrawText("No", 920.0f, 490.0f);
+
+        int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        // yes closes the application
+        if (yesClicked == 1)
+        {
+            CP_Engine_Terminate();
+        }
+
+        // no closes popup and stays on main menu
+        if (noClicked == 1)
+        {
+            main_confirm_quit = false;
+        }
+    }
 }
 
 void Main_Menu_Exit(void)

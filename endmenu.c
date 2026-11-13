@@ -10,6 +10,8 @@ CP_Image end_background;
 CP_Image end_banner;
 CP_Image end_button;
 
+bool end_confirm_quit = false;
+
 void End_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -18,6 +20,9 @@ void End_Menu_Init(void)
 	end_background = CP_Image_Load("./Assets/background.png");
 	end_banner = CP_Image_Load("./Assets/title-banner1.png");
 	end_button = CP_Image_Load("./Assets/game_button.png");
+
+	// confirmation popup starts closed
+	end_confirm_quit = false;
 }
 
 void End_Menu_Update(void)
@@ -58,11 +63,62 @@ void End_Menu_Update(void)
 	CP_Font_DrawText("Play Again", 800.0f, 465.0f);
 	CP_Font_DrawText("Quit", 800.0f, 585.0f);
 
-	int playClicked = IsAreaClicked(800.0f, 450.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (playClicked == 1) { CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit); }
+    // normal buttons only work when confirmation popup is closed
+    if (end_confirm_quit == false)
+    {
+        int playClicked = IsAreaClicked(800.0f, 480.0f, 400.0f, 120.0f,
+            CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-	int quitClicked = IsAreaClicked(800.0f, 590.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-	if (quitClicked == 1) { CP_Engine_Terminate(); }
+        if (playClicked == 1)
+        {
+            CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+        }
+
+        int quitClicked = IsAreaClicked(800.0f, 600.0f, 400.0f, 120.0f,
+            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        if (quitClicked == 1)
+        {
+            end_confirm_quit = true;
+        }
+    }
+
+    // confirmation popup
+    else
+    {
+        DrawRectangle(CP_Color_Create(0, 0, 0, 220),
+            800, 450, 600, 300, 0);
+
+        CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+        CP_Settings_TextSize(45);
+        CP_Font_DrawText("Are you sure you want to quit?", 800.0f, 370.0f);
+
+        // yes and no buttons
+        CP_Image_Draw(end_button, 680, 500, 250, 260, 255);
+        CP_Image_Draw(end_button, 920, 500, 250, 260, 255);
+
+        CP_Settings_TextSize(40);
+        CP_Font_DrawText("Yes", 680.0f, 490.0f);
+        CP_Font_DrawText("No", 920.0f, 490.0f);
+
+        int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f,
+            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f,
+            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        // yes closes the application
+        if (yesClicked == 1)
+        {
+            CP_Engine_Terminate();
+        }
+
+        // no closes popup and stays on win screen
+        if (noClicked == 1)
+        {
+            end_confirm_quit = false;
+        }
+    }
 }
 
 void End_Menu_Exit(void)

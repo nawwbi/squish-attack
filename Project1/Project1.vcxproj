@@ -110,6 +110,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\credits.c" />
     <ClCompile Include="..\endmenu.c" />
     <ClCompile Include="..\game.c" />
+    <ClCompile Include="..\losemenu.c" />
     <ClCompile Include="..\main.c" />
     <ClCompile Include="..\mainmenu.c" />
     <ClCompile Include="..\upgrades.c" />
@@ -122,6 +123,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\credits.h" />
     <ClInclude Include="..\endmenu.h" />
     <ClInclude Include="..\game.h" />
+    <ClInclude Include="..\losemenu.h" />
     <ClInclude Include="..\mainmenu.h" />
     <ClInclude Include="..\upgrades.h" />
     <ClInclude Include="..\utils.h" />
@@ -139,6 +141,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\butter-close.png" />
     <Image Include="..\Assets\butter-open.png" />
     <Image Include="..\Assets\defence-icon.png" />
+    <Image Include="..\Assets\digipen-logo-red.png" />
     <Image Include="..\Assets\dumpling-closed.png" />
     <Image Include="..\Assets\dumpling-open.png" />
     <Image Include="..\Assets\fireball.png" />

@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "game.h"
 #include "endmenu.h"
+#include "losemenu.h"
 #include "constants.h"
 #include "upgrades.h"
 #include "mainmenu.h"
@@ -44,6 +45,8 @@ int highscore = 0;
 int is_paused = 0; // pause state initialize 
 int numSkills;
 bool showUpgrade = false;
+
+bool gameOver = false;
 
 //player's attack, defence, current hp, max hp
 #define PLAYER_ATTACK                 200.0
@@ -346,6 +349,8 @@ void Game_Init(void)
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");
+
+    gameOver = false; // reset game over state for a new game
      
     darkRed = CP_Color_Create(255, 0, 0, 255);
     darkGreen = CP_Color_Create(0, 255, 0, 255);
@@ -361,7 +366,7 @@ void Game_Update(void)
     float dt = CP_System_GetDt();
     static int current_round = 1;      // track current round number
     static int current_level = 1;      // track current level number
-    static bool gameOver = false;      // check if game is over (for both win and lose)
+    //static bool gameOver = false;      // check if game is over (for both win and lose)
 
     // checking for lose conditions for player and enemy 
     // check if player has killed dumpling , with health over 0 and current round is less than 10
@@ -403,15 +408,47 @@ void Game_Update(void)
     }
 
     // player loses if they have lesser hp than dumpling
-    if (player.current_hp <= 0 && current_enemy->current_hp > 0) {
+    if (player.current_hp <= 0 && current_enemy->current_hp > 0)
+    {
         gameOver = true;
-        CP_Font_DrawText("GAME OVER (died before dumpling)", 500, 500); // temporary test
+
+        if (highscore < score)
+        {
+            highscore = score;
+        }
+
+        CP_Engine_SetNextGameState(Lose_Menu_Init, Lose_Menu_Update, Lose_Menu_Exit);
+
+        current_level = 1;
+        current_round = 1;
+        showUpgrade = false;
+        upgradeTriggered = false;
+
+        Reset_Characters();
+        Check_Current_Enemy(current_level);
+
         return;
     }
     // if current round exceeds 10, game is over
-    if (current_round > 10) {
+    if (current_round > 10)
+    {
         gameOver = true;
-        CP_Font_DrawText("GAME OVER (Went over 10 rounds)", 500, 500); // temporary test
+
+        if (highscore < score)
+        {
+            highscore = score;
+        }
+
+        CP_Engine_SetNextGameState(Lose_Menu_Init, Lose_Menu_Update, Lose_Menu_Exit);
+
+        current_level = 1;
+        current_round = 1;
+        showUpgrade = false;
+        upgradeTriggered = false;
+
+        Reset_Characters();
+        Check_Current_Enemy(current_level);
+
         return;
     }
     // update the round for each hit when game is not over
