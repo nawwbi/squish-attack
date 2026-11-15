@@ -8,7 +8,7 @@ typedef enum SkillEnum {
 
 // int skill_enum, int iteration, char* details
 typedef struct Skills {
-	int skill_enum;
+	enum SkillEnum skill_enum;
 	int iteration;
 	int charge; // only used for ultimate skill
 } Skills;

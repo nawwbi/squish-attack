@@ -11,7 +11,8 @@ int numSkills = 0;
 int clicked = 0;
 int minimum = 0;
 int maximum;
-int random_list[3] = {0, 0, 0};
+enum { ARRAY_SIZE = 3 };
+int random_list[ARRAY_SIZE] = {0, 0, 0};
 
 CP_Image
 defence_icon,
@@ -31,9 +32,11 @@ struct Upgrades upgrades[] = {
     { HEAL, "+30% HP Heal" },
 };
 
-struct Upgrades displaying_upgrades[3];
+struct Upgrades displaying_upgrades[ARRAY_SIZE];
 
-CP_Image upgrade_icon(int upgrade_enum) {
+// helper funtion to only be used in this file
+// returns the image of the upgrade based on the upgrade_enum
+static CP_Image upgrade_icon(int upgrade_enum) {
     CP_Image image;
     switch (upgrade_enum) {
 
@@ -83,7 +86,7 @@ void Upgrades_Init(void) {
     int current_text_x = DEFENCE_TEXT_X;
     int current_text_y = DEFENCE_TEXT_Y;
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < ARRAY_SIZE; ++i) {
         displaying_upgrades[i].upgrade_enum = upgrades[random_list[i]].upgrade_enum;
         displaying_upgrades[i].details = upgrades[random_list[i]].details;
         displaying_upgrades[i].image_x = current_image_x;
@@ -102,7 +105,7 @@ void Upgrades_Update(void) {
 
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < ARRAY_SIZE; ++i) {
         CP_Settings_Fill(CP_Color_Create(100, 100, 100, 255));
         CP_Settings_RectMode(CP_POSITION_CENTER);
 

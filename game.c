@@ -38,17 +38,20 @@ float speed = 400.0f;
 int speed_multiplier = 1;
 int fireball_x = 300;
 int soundwave_x = 1300;
+int enemy_x = 1300;
 int score = 0;
 int highscore = 0;
 
-int is_paused = 0; // pause state initialize 
+int is_paused = 0;
 int numSkills;
 bool showUpgrade = false;
 
 bool gameOver = false;
 
+static float boss_current_x = 1300.0f;
+
 //player's attack, defence, current hp, max hp
-#define PLAYER_ATTACK                 200.0
+#define PLAYER_ATTACK                 300.0
 #define PLAYER_DEFENCE                50.0
 #define PLAYER_CURRENT_HP             1000.0
 #define PLAYER_MAX_HP                 1000.0
@@ -143,9 +146,52 @@ void Progress_Bar(int current_level, float dt) {
     DrawRectangle(grey, progress_x, 95, 37, 10, 10);
 }
 
-int Game_Per_Round(float dt, int current_round, int current_level) {
+int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
+    static enum BossState {
+        BOSS_DASH_FORWARD,
+        BOSS_STUN_PAUSE,
+        BOSS_DASH_BACK
+    } boss_state = BOSS_DASH_FORWARD;
+    
+    float dash_speed = speed * 2.0f;
+    
+    if (boss_state == BOSS_DASH_FORWARD) {
+        boss_current_x -= dash_speed * dt;
+        bool bossHitPlayer = AreCirclesIntersecting(boss_current_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
 
-    static bool current_attacker = true; // true for player turn, false for enemy turn
+        if (!bossHitPlayer) {
+            CP_Image_Draw(current_enemy_opened_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+        }
+        else {
+            player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack * 1.5f, player.defence);
+            boss_state = BOSS_STUN_PAUSE;
+        }
+        return 0;
+    }
+    else if (boss_state == BOSS_STUN_PAUSE) {
+        CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+        boss_state = BOSS_DASH_BACK;
+        CP_Settings_Fill(CP_Color_Create(255, 0, 0, 255));
+        return 0;
+    }
+    else if (boss_state == BOSS_DASH_BACK) {
+        boss_current_x += dash_speed * dt;
+        CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+
+        if (boss_current_x >= ENEMY_X_AXIS) {
+            boss_current_x = ENEMY_X_AXIS;
+            boss_state = BOSS_DASH_FORWARD;
+            *player_turn = false;
+            *enemy_basic_attack_shot = 0;
+            return 1;
+        }
+        return 0;
+    }
+
+    return 0;
+}
+
+int Game_Per_Round(float dt, int current_round, int current_level) {
 
     //setting background
     CP_Image_Draw(background, 800, 450, 1600, 900, 255);
@@ -222,9 +268,10 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
+	//--------------------------------------------PLAYER ATTACK--------------------------------------------//
+    static bool player_turn = true; // true for player turn, false for enemy turn
     static int player_basic_attack_shot = 0;
-    // if its players turn to attack
-    if (current_attacker == true) { 
+    if (player_turn == true) {
 
         if (player_basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
             //collision check for player fireball and enemy
@@ -253,23 +300,26 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
         }
         else {
             player_basic_attack_shot = 0;
-            current_attacker = false;
+            player_turn = false;
         }
         
     }
+    //--------------------------------------------PLAYER ATTACK--------------------------------------------//
+    
     //shadow for enemy
     CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
     CP_Graphics_DrawEllipse(ENEMY_X_AXIS + 25, ENEMY_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
+    CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 
-    //enemy closed mouth
-    CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-
+    //--------------------------------------------ENEMY ATTACK--------------------------------------------//
 	static int enemy_basic_attack_shot = 0;
-    if (current_attacker == false) {
+    if (player_turn == false) {
 
         //collision check for enemy soundwave and player
         bool soundwaveHitPlayer = AreCirclesIntersecting(soundwave_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
+        bool enemyHitPlayer = AreCirclesIntersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
 
+        //enemy has not done all of its basic attack shots
         if (enemy_basic_attack_shot < current_enemy->skills[BASIC_ATTACK].iteration) {
 
             //if not colliding, soundwave continues to travel forward. else, player's hp is reduced based off enemy's attack
@@ -277,12 +327,12 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 soundwave_x -= speed * dt;
                 CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
                 // enemy open mouth when shooting soundwave
-                CP_Image_Draw(current_enemy_opened_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, ENEMY_WIDTH, ENEMY_HEIGHT, 255);
+                CP_Image_Draw(current_enemy_opened_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
                 HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
             }
             else {
                 // enemy closed mouth when soundwave is shot
-                CP_Image_Draw(current_enemy_closed_img, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                CP_Image_Draw(current_enemy_closed_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
                 // update current hp with reduced health
                 player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
                 HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
@@ -292,14 +342,24 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 				++enemy_basic_attack_shot;
             }
         }
+        //enemy has done all basic attack shots
         else {
-			enemy_basic_attack_shot = 0;
-			current_attacker = true;
-
-            // resets current_attacker to true for next round which allows player to attack first
-            return 1; //allows current round to increment when player is hit by soundwave
+            //if current enemy is a boss and current round is divisible by ultimate charge, trigger boss ultimate
+            if (current_enemy == &boss && (current_round % boss.skills[ULTIMATE].charge == 0)) {
+                return Boss_Ultimate(current_round, dt, &player_turn, &enemy_basic_attack_shot);
+            }
+            //current enemy is not boss or current round is not divisible by ultimate charge, resets enemy's basic attack,
+            //changes back to player's turn, and increments round
+            else {
+                CP_Image_Draw(current_enemy_closed_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                enemy_basic_attack_shot = 0;
+                player_turn = true;
+                return 1;
+            }
         }
     }
+    //--------------------------------------------ENEMY ATTACK--------------------------------------------//
+
     return 0;
 }
 
@@ -366,9 +426,6 @@ void Game_Update(void)
     static int current_round = 1;      // track current round number
     static int current_level = 1;      // track current level number
     //static bool gameOver = false;      // check if game is over (for both win and lose)
-
-    // checking for lose conditions for player and enemy 
-    // check if player has killed dumpling , with health over 0 and current round is less than 10
 
     static bool showUpgrade = false;
     static bool upgradeTriggered = false;

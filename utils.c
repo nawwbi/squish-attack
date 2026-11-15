@@ -111,6 +111,7 @@ bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float 
 
 void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char*const string) {
 	CP_Settings_TextSize(font_size);
+	CP_Settings_Fill(colour);
 	char text[50];
 	snprintf(text, sizeof(text), string, value);
 	CP_Font_DrawText(text, text_x, text_y);
