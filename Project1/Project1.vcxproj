@@ -115,7 +115,6 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\splash.c" />
     <ClCompile Include="..\upgrades.c" />
     <ClCompile Include="..\utils.c" />
-    <ClCompile Include="pause.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\constants.h" />
@@ -127,7 +126,6 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\splash.h" />
     <ClInclude Include="..\upgrades.h" />
     <ClInclude Include="..\utils.h" />
-    <ClInclude Include="pause.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
