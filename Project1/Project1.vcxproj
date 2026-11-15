@@ -108,10 +108,12 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\constants.c" />
     <ClCompile Include="..\controls.c" />
     <ClCompile Include="..\credits.c" />
+    <ClCompile Include="..\debug.c" />
     <ClCompile Include="..\endmenu.c" />
     <ClCompile Include="..\game.c" />
     <ClCompile Include="..\main.c" />
     <ClCompile Include="..\mainmenu.c" />
+    <ClCompile Include="..\pause.c" />
     <ClCompile Include="..\splash.c" />
     <ClCompile Include="..\upgrades.c" />
     <ClCompile Include="..\utils.c" />
@@ -120,9 +122,11 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\constants.h" />
     <ClInclude Include="..\controls.h" />
     <ClInclude Include="..\credits.h" />
+    <ClInclude Include="..\debug.h" />
     <ClInclude Include="..\endmenu.h" />
     <ClInclude Include="..\game.h" />
     <ClInclude Include="..\mainmenu.h" />
+    <ClInclude Include="..\pause.h" />
     <ClInclude Include="..\splash.h" />
     <ClInclude Include="..\upgrades.h" />
     <ClInclude Include="..\utils.h" />
