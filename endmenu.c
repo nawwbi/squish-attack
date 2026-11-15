@@ -11,6 +11,13 @@ CP_Image end_banner;
 CP_Image end_button;
 
 bool end_confirm_quit = false;
+bool player_won = false;
+
+// stores whether the player won or lost
+void Set_End_Result(bool won)
+{
+    player_won = won;
+}
 
 void End_Menu_Init(void)
 {
@@ -39,11 +46,23 @@ void End_Menu_Update(void)
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 	CP_Font_Set(end_font);
 
-	CP_Settings_TextSize(60);
-	CP_Font_DrawText("Game Complete", 800.0f, 70.0f);
+    // display win or lose message
+    if (player_won == true)
+    {
+        CP_Settings_TextSize(60);
+        CP_Font_DrawText("Game Complete", 800.0f, 70.0f);
 
-	CP_Settings_TextSize(100);
-	CP_Font_DrawText("You Win!", 800.0f, 260.0f);
+        CP_Settings_TextSize(100);
+        CP_Font_DrawText("You Win!", 800.0f, 260.0f);
+    }
+    else
+    {
+        CP_Settings_TextSize(60);
+        CP_Font_DrawText("Game Over", 800.0f, 70.0f);
+
+        CP_Settings_TextSize(100);
+        CP_Font_DrawText("You Lose!", 800.0f, 260.0f);
+    }
 
 	CP_Settings_TextSize(40);
 	char score_val[50];

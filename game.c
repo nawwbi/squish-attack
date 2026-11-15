@@ -2,7 +2,6 @@
 #include "utils.h"
 #include "game.h"
 #include "endmenu.h"
-#include "losemenu.h"
 #include "constants.h"
 #include "upgrades.h"
 #include "mainmenu.h"
@@ -390,7 +389,12 @@ void Game_Update(void)
         if (highscore < score) {
             highscore = score;
         }
+
+        // player won
+        Set_End_Result(true);
+
         CP_Engine_SetNextGameState(End_Menu_Init, End_Menu_Update, End_Menu_Exit);
+
         current_level = 1;
         current_round = 1;
         showUpgrade = false;
@@ -417,7 +421,10 @@ void Game_Update(void)
             highscore = score;
         }
 
-        CP_Engine_SetNextGameState(Lose_Menu_Init, Lose_Menu_Update, Lose_Menu_Exit);
+        // player lost
+        Set_End_Result(false);
+
+        CP_Engine_SetNextGameState(End_Menu_Init, End_Menu_Update, End_Menu_Exit);
 
         current_level = 1;
         current_round = 1;
@@ -439,7 +446,10 @@ void Game_Update(void)
             highscore = score;
         }
 
-        CP_Engine_SetNextGameState(Lose_Menu_Init, Lose_Menu_Update, Lose_Menu_Exit);
+        // player lost
+        Set_End_Result(false);
+
+        CP_Engine_SetNextGameState(End_Menu_Init, End_Menu_Update, End_Menu_Exit);
 
         current_level = 1;
         current_round = 1;
