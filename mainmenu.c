@@ -8,7 +8,6 @@
 #include "credits.h"
 #include "audio.h"
 
-CP_Font font;
 CP_Image background;
 CP_Image banner;
 CP_Image game_button;
@@ -19,7 +18,6 @@ void Main_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 
-	font = CP_Font_Load("Assets/Exo2-Regular.ttf");
 	background = CP_Image_Load("./Assets/background.png");
 	banner = CP_Image_Load("./Assets/title-banner1.png");
 	game_button = CP_Image_Load("./Assets/game_button.png");
@@ -41,14 +39,15 @@ void Main_Menu_Update(void)
 	CP_Settings_Tint(CP_Color_Create(0, 0, 0, 100));
 	CP_Image_Draw(background, 800, 450, 1600, 900, 255);
 	CP_Settings_NoTint();
-	CP_Image_Draw(banner, 800, 450, 1600, 900, 255);
+	CP_Image_Draw(banner, 800, 650, 1800, 1300, 255);
 
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Font_Set(font);
+    
+	//CP_Font_Set(font);
 
-	CP_Settings_TextSize(60);
+	CP_Settings_TextSize(80);
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
-	CP_Font_DrawText("Squish Attack!", 800.0f, 70.0f);
+	CP_Font_DrawText("Squish Attack!", 800.0f, 100.0f);
 
 	CP_Image_Draw(game_button, 800, 300, 350, 360, 255); // play button
 	CP_Image_Draw(game_button, 800, 415, 350, 360, 255); // controls button

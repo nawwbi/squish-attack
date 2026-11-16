@@ -6,7 +6,8 @@ typedef enum UpgradeEnum {
 	DEFENCE,
 	ATTACK,
 	HP,
-	HEAL
+	HEAL,
+	BASIC_ATTACK_ITERATION
 };
 
 // int upgrade_enum, char* details, 
@@ -14,6 +15,8 @@ typedef enum UpgradeEnum {
 struct Upgrades {
 	int      upgrade_enum;
 	char*    details;
+	float    value;
+	float    rarity;
 	int      image_x;
 	int      text_x;
 	int      icon_x;

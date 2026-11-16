@@ -28,6 +28,13 @@ void DrawRectangle(CP_Color colour, float x, float y, float width, float height,
 	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, cornerRadius);
 }
 
+void DrawCircle(float x, float y, float diameter, char* text, CP_Color colour) {
+	CP_Settings_Fill(colour);
+	CP_Graphics_DrawCircle(x, y, diameter);
+	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+	CP_Font_DrawText(text, x, y);
+}
+
 // calculates current hp based on healing recieved 
 double CalculateHealing(double previous_hp, double max_hp, double healing_percentage)
 {
@@ -83,16 +90,36 @@ void SkillUpgradeButton(
 	int skillEnum,
 	float image_x, float image_y, float image_width, float image_height,
 	CP_Color colour,
-	char* text, float text_x, float text_y,
-	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height
+	char* description_text, float description_text_x, float description_text_y,
+	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height,
+	float value, CP_Color circle_colour, int rarity
 ) {
-	CP_Image button = CP_Image_Load("./Assets/defence_button.png");
-	CP_Image_Draw(button, image_x, image_y, image_width, image_height, 255);
+	CP_Image common_button = CP_Image_Load("./Assets/defence_button.png");
+	CP_Image rare_button = CP_Image_Load("./Assets/attack_button.png");
+	CP_Image very_rare_button = CP_Image_Load("./Assets/hp_button.png");
+	
+	CP_Image_Draw(
+		(rarity == VERY_RARE) ? very_rare_button : 
+		(rarity == RARE) ? rare_button :
+		common_button, 
+		
+		(rarity == RARE) ? (image_x + 10) : image_x,
+		
+		(rarity == RARE) ? (image_y - 23) : image_y,
+		
+		image_width, image_height, 255);
 	CP_Image_Draw(icon, icon_x, icon_y, icon_width, icon_height, 255);
+
+	char value_text[3];
+	if (skillEnum == BASIC_ATTACK_ITERATION && (value >= 1)) {
+		snprintf(value_text, sizeof(value_text), "%+f", value); //auto positive numbers has a +
+		DrawCircle(icon_x + 80, icon_y + 40, 60, value_text, circle_colour);
+	}
+	
 	CP_Settings_Fill(colour);
-	CP_Settings_TextSize(45);
+	CP_Settings_TextSize(40);
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Font_DrawTextBox(text, text_x, text_y, 250);
+	CP_Font_DrawTextBox(description_text, description_text_x, description_text_y, 250);
 }
 
 void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {

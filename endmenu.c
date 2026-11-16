@@ -6,7 +6,6 @@
 #include "audio.h"
 #include <stdio.h>
 
-CP_Font end_font;
 CP_Image end_background;
 CP_Image end_banner;
 CP_Image end_button;
@@ -24,7 +23,6 @@ void End_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
 
-	end_font = CP_Font_Load("Assets/Exo2-Regular.ttf");
 	end_background = CP_Image_Load("./Assets/background.png");
 	end_banner = CP_Image_Load("./Assets/title-banner1.png");
 	end_button = CP_Image_Load("./Assets/game_button.png");
@@ -48,7 +46,6 @@ void End_Menu_Update(void)
 
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-	CP_Font_Set(end_font);
 
     // display win or lose message
     if (player_won == true)

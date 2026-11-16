@@ -6,6 +6,12 @@ typedef enum SkillEnum {
 	ULTIMATE
 } SkillEnum;
 
+typedef enum Rarity {
+	COMMON = 85,
+	RARE = 10,
+	VERY_RARE = 5
+} Rarity;
+
 // int skill_enum, int iteration, char* details
 typedef struct Skills {
 	enum SkillEnum skill_enum;

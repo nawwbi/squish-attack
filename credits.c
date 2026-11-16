@@ -3,7 +3,6 @@
 #include "mainmenu.h"
 #include "utils.h"
 
-CP_Font credits_font;
 CP_Image credits_background;
 CP_Image credits_banner;
 CP_Image credits_button;
@@ -15,7 +14,6 @@ void Credits_Init(void)
 {
     CP_Settings_RectMode(CP_POSITION_CENTER);
 
-    credits_font = CP_Font_Load("Assets/Exo2-Regular.ttf");
     credits_background = CP_Image_Load("./Assets/background.png");
     credits_banner = CP_Image_Load("./Assets/title-banner1.png");
     credits_button = CP_Image_Load("./Assets/game_button.png");
@@ -34,8 +32,6 @@ void Credits_Update(void)
     DrawRectangle(CP_Color_Create(0, 0, 0, 170), 800, 430, 700, 560, 0);
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-
-    CP_Font_Set(credits_font);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
     CP_Settings_TextSize(60);

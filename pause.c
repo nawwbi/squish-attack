@@ -78,10 +78,10 @@ void Pause_Menu_Update(void) {
             int mainMenuClicked = IsAreaClicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
             // menu buttons 
-            CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, 220.0f, 255);
-            CP_Image_Draw(menu_button, pmenu_button_x, settings_button_y, pmenu_button_w, 220.0f, 255);
-            CP_Image_Draw(menu_button, pmenu_button_x, restart_button_y, pmenu_button_w, 220.0f, 255);
-            CP_Image_Draw(menu_button, pmenu_button_x, mainmenu_button_y, pmenu_button_w, 220.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, 280.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, settings_button_y, pmenu_button_w, 280.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, restart_button_y, pmenu_button_w, 280.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, mainmenu_button_y, pmenu_button_w, 280.0f, 255);
 
             CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
             CP_Settings_TextSize(30.0f);

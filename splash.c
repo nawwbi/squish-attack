@@ -4,7 +4,7 @@
 
 CP_Image splash_digipen_logo;
 CP_Image splash_team_logo;
-CP_Font splash_font;
+CP_Font font;
 
 float splash_timer = 0.0f;
 
@@ -18,7 +18,7 @@ void Splash_Init(void)
     // team logo
     splash_team_logo = CP_Image_Load("./Assets/moonsstudio-logo.png");
 
-    splash_font = CP_Font_Load("./Assets/Exo2-Regular.ttf");
+    font = CP_Font_Load("./Assets/Jersey15-Regular.ttf");
 
     // start timer from 0
     splash_timer = 0.0f;
@@ -39,8 +39,7 @@ void Splash_Update(void)
     if (splash_timer < 2.0f)
     {
         CP_Image_Draw(splash_digipen_logo,800, 400, 500, 170, 255);
-
-        CP_Font_Set(splash_font);
+        CP_Font_Set(font);
         CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
         CP_Settings_TextSize(24);
 

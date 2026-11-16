@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "audio.h"
 
-CP_Font controls_font;
 CP_Image controls_background;
 CP_Image controls_banner;
 CP_Image controls_button;
@@ -13,7 +12,6 @@ void Controls_Init(void)
 {
     CP_Settings_RectMode(CP_POSITION_CENTER);
 
-    controls_font = CP_Font_Load("Assets/Exo2-Regular.ttf");
     controls_background = CP_Image_Load("./Assets/background.png");
     controls_banner = CP_Image_Load("./Assets/title-banner1.png");
     controls_button = CP_Image_Load("./Assets/game_button.png");
@@ -27,7 +25,6 @@ void Controls_Update(void)
     DrawRectangle(CP_Color_Create(0, 0, 0, 150), 800, 420, 700, 500, 0);
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-    CP_Font_Set(controls_font);
 
     CP_Settings_TextSize(60);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));

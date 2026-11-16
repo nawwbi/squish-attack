@@ -252,10 +252,6 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     snprintf(roundText, sizeof(roundText), "Round: %d/10", current_round);
     CP_Font_DrawText(roundText, 800, 130);
 
-    char levelText[50];
-    snprintf(levelText, sizeof(levelText), "Level: %d/3", current_level);
-    CP_Font_DrawText(levelText, 800, 170);
-
     //--------------------------------------------PLAYER--------------------------------------------\\
     //defence text
     Text(30, white, player.defence, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 30, "Defence: %.2f");
@@ -408,6 +404,7 @@ void Reset_Characters(void)
     player.defence = PLAYER_DEFENCE;
     player.current_hp = PLAYER_CURRENT_HP;
     player.max_hp = PLAYER_MAX_HP;
+	player.skills[BASIC_ATTACK].iteration = PLAYER_BASIC_ATTACK_ITERATION;
 
     // dumpling
     dumpling.attack = DUMPLING_ATTACK;
