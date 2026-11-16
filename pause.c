@@ -2,16 +2,21 @@
 #include "utils.h"
 #include "game.h"
 #include "mainmenu.h"
+#include "settings.h"
+#include "audio.h"
 #include "pause.h"
 #include <stdbool.h>
 
+CP_Font font;
 CP_Image
 pause_button,
 menu_button;
 
+extern CP_Image background;
+
 extern int is_paused;
-int is_settings = 0; 
-int confirm_quit = 0;
+bool is_settings = false; 
+bool confirm_quit = false;
 
 extern int fireball_x;
 extern int soundwave_x;
@@ -23,11 +28,13 @@ extern bool gameOver;
 extern int player_basic_attack_shot;
 extern int enemy_basic_attack_shot;
 extern bool player_turn;
-extern bool current_attacker; 
+// extern bool current_attacker; 
 
 void Pause_Menu_Init(void) {
+    font = CP_Font_Load("Assets/Exo2-Regular.ttf");
 	pause_button = CP_Image_Load("./Assets/pause-button.png");
 	menu_button = CP_Image_Load("./Assets/game_button.png");
+    Settings_Init(); // Load settings assets here
 }
 
 void Pause_Menu_Update(void) {
@@ -41,19 +48,19 @@ void Pause_Menu_Update(void) {
         CP_Image_Draw(pause_button, pause_button_x, pause_button_y, pause_button_w, pause_button_h, 255);
 
         if (IsAreaClicked(pause_button_x, pause_button_y, pause_button_w, pause_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
+            Audio_Play_Button_Click();
+            CP_Sound_PauseGroup(CP_SOUND_GROUP_MUSIC);
             is_paused = 1; // pause state true if pause button clicked
         }
     }
 
-    /*if (is_paused) {
-        dt = 0.0f; // freeze time in pause state
-    }*/
-
     // pause menu (continue, settings, restart, exit)
     if (is_paused == 1) {
-        CP_Settings_RectMode(CP_POSITION_CENTER);
 
-        if (!is_settings && !confirm_quit) {
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        CP_Image_Draw(background, 800, 450, 1600, 900, 255);
+
+        if (is_settings == false && confirm_quit == false) {
             DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 500, 20);
 
             CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
@@ -95,14 +102,20 @@ void Pause_Menu_Update(void) {
 
             // continue 
             if (continueClicked == 1) {
+                Audio_Play_Button_Click();
+                CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
                 is_paused = 0;
             }
             // settings 
             else if (settingsClicked == 1) {
-                is_settings = 1;
+               Audio_Play_Button_Click();
+               is_settings = true;
             }
             // restart
             else if (restartClicked == 1) {
+                Audio_Play_Button_Click();
+
+                // set everything back to start of game state
                 is_paused = 0; // not paused state
                 current_round = 1; // restart to round 1
                 current_level = 1; // restart to level 1
@@ -113,45 +126,31 @@ void Pause_Menu_Update(void) {
                 fireball_x = 300;
                 soundwave_x = 1300;
                 player_basic_attack_shot = 0;
-                enemy_basic_attack_shot = 0;
-                current_attacker = true;
+                enemy_basic_attack_shot = 1; // false if enemy attacks first once game restart
+                player_turn = true;
+                //current_attacker = true;
 
                 Reset_Characters();
                 Check_Current_Enemy(current_level);
 
+                // audio
+                CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
+                Audio_Play_Level(current_level);
+
+
             }
             else if (mainMenuClicked == 1) {
-                confirm_quit = 1;
+                Audio_Play_Button_Click();
+                confirm_quit = true;
             }
         }
 
-        if (is_settings == 1) {
-            CP_Settings_RectMode(CP_POSITION_CENTER);
-            DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 600, 700, 20);
-
-            CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
-            CP_Settings_TextSize(50);
-            CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-            CP_Font_DrawText("SETTINGS", 800, 150);
-
-            // back button in settings 
-            float settings_back_w = 250.0f;
-            float settings_back_h = 80.0f;
-            float settings_back_x = 800.0f;
-            float settings_back_y = 650.0f;
-
-            CP_Image_Draw(menu_button, settings_back_x, settings_back_y, settings_back_w, settings_back_h, 255);
-            CP_Settings_TextSize(25.0f);
-            CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-            CP_Font_DrawText("Back", settings_back_x, settings_back_y - 10.0f);
-
-            if (IsAreaClicked(settings_back_x, settings_back_y, settings_back_w, settings_back_h, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
-                is_settings = 0;
-                return;
-            }
+        if (is_settings == true) {
+            Settings_Update();
+            return;
         }
         
-        if (confirm_quit == 1) {
+        if (confirm_quit == true) {
                 DrawRectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
 
                 CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
@@ -172,6 +171,7 @@ void Pause_Menu_Update(void) {
 
                 // yes resets game and go back to main menu
                 if (yesClicked == 1){
+                    Audio_Play_Button_Click();
                     confirm_quit = 0;
                     is_paused = 0;
 
@@ -185,19 +185,21 @@ void Pause_Menu_Update(void) {
                     fireball_x = 300;
                     soundwave_x = 1300;
                     player_basic_attack_shot = 0;
-                    enemy_basic_attack_shot = 0;
-                    current_attacker = true;
+                    enemy_basic_attack_shot = 1;
                     player_turn = true;
+                    //current_attacker = true;
 
                     Reset_Characters();
                     Check_Current_Enemy(current_level);
+
+                    CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
                     CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
                 }
 
                 // closes popup and stays on pause menu
                 if (noClicked == 1){
-                    confirm_quit = 0;
-                    return;
+                    Audio_Play_Button_Click();
+                    confirm_quit = false;
                 }
          }
      }
@@ -206,4 +208,5 @@ void Pause_Menu_Update(void) {
 void Pause_Menu_Exit(void) {
 	CP_Image_Free(pause_button);
 	CP_Image_Free(menu_button);
+    Settings_Exit();
 }

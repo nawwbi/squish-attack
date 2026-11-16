@@ -7,6 +7,7 @@
 #include "mainmenu.h"
 #include "pause.h"
 #include "audio.h"
+#include "debug.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -454,6 +455,7 @@ void Game_Init(void)
     // play background music for current level
     Audio_Play_Level(current_level);
 
+    Debug_Init();
     Pause_Menu_Init();
 }
 
@@ -566,6 +568,7 @@ void Game_Update(void)
         }
     }
 
+    Debug_Update();
     Pause_Menu_Update();
 }
 
