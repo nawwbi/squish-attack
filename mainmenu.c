@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "controls.h"
 #include "credits.h"
+#include "audio.h"
 
 CP_Font font;
 CP_Image background;
@@ -25,6 +26,12 @@ void Main_Menu_Init(void)
 
 	// confirmation popup starts closed
 	main_confirm_quit = false;
+
+    // load audio
+    Audio_Load();
+
+    // play main menu music
+    Audio_Play_Main_Menu();
 }
 
 void Main_Menu_Update(void)
@@ -63,6 +70,7 @@ void Main_Menu_Update(void)
 
         if (playClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
         }
 
@@ -70,6 +78,7 @@ void Main_Menu_Update(void)
 
         if (controlsClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_SetNextGameState(Controls_Init, Controls_Update, Controls_Exit);
         }
 
@@ -77,6 +86,7 @@ void Main_Menu_Update(void)
 
         if (creditsClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_SetNextGameState(Credits_Init, Credits_Update, Credits_Exit);
         }
 
@@ -84,6 +94,7 @@ void Main_Menu_Update(void)
 
         if (quitClicked == 1)
         {
+            Audio_Play_Button_Click();
             main_confirm_quit = true;
         }
     }
@@ -112,12 +123,14 @@ void Main_Menu_Update(void)
         // yes closes the application
         if (yesClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_Terminate();
         }
 
         // no closes popup and stays on main menu
         if (noClicked == 1)
         {
+            Audio_Play_Button_Click();
             main_confirm_quit = false;
         }
     }

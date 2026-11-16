@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Audio">
+      <UniqueIdentifier>{a65d0599-9bcc-4619-b60a-3391fcaecf02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game.c">
@@ -51,6 +54,9 @@
     <ClCompile Include="..\pause.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\audio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -84,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\pause.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -154,5 +163,43 @@
     <Image Include="..\Assets\digipen-logo-red.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\moonsstudio-logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Assets\boss-fight.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\boss-ultimate.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\butter-fight.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\button-click.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\button-hover.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\dumpling-fight.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\enemy-soundwave.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\lose-screen.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\main-menu.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\player-projectile.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
+    <Media Include="..\Assets\win-screen.mp3">
+      <Filter>Resource Files\Audio</Filter>
+    </Media>
   </ItemGroup>
 </Project>

@@ -15,8 +15,8 @@ void Splash_Init(void)
     // load assets
     splash_digipen_logo = CP_Image_Load("./Assets/digipen-logo-red.png");
 
-    // temporary asset, to replace with our team logo later
-    splash_team_logo = CP_Image_Load("./Assets/dumpling-open.png");
+    // team logo
+    splash_team_logo = CP_Image_Load("./Assets/moonsstudio-logo.png");
 
     splash_font = CP_Font_Load("./Assets/Exo2-Regular.ttf");
 
@@ -50,7 +50,7 @@ void Splash_Update(void)
     // next 2 seconds, team logo
     else if (splash_timer < 4.0f)
     {
-        CP_Image_Draw(splash_team_logo, 800, 450, 300, 300, 255);
+        CP_Image_Draw(splash_team_logo, 800, 450, 500, 300, 255);
     }
 
     // after 4 seconds, main menu

@@ -6,6 +6,7 @@
 #include "upgrades.h"
 #include "mainmenu.h"
 #include "pause.h"
+#include "audio.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -160,10 +161,19 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         BOSS_STUN_PAUSE,
         BOSS_DASH_BACK
     } boss_state = BOSS_DASH_FORWARD;
+
+    static bool boss_ultimate_sound_played = false;
     
     float dash_speed = speed * 2.0f;
     
     if (boss_state == BOSS_DASH_FORWARD) {
+
+        // play boss ultimate sound once when boss moves towards player
+        if (boss_ultimate_sound_played == false) {
+            Audio_Play_Boss_Ultimate();
+            boss_ultimate_sound_played = true;
+        }
+
         boss_current_x -= dash_speed * dt;
         bool bossHitPlayer = AreCirclesIntersecting(boss_current_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
 
@@ -189,6 +199,10 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         if (boss_current_x >= ENEMY_X_AXIS) {
             boss_current_x = ENEMY_X_AXIS;
             boss_state = BOSS_DASH_FORWARD;
+
+            // reset sound for the next boss ultimate
+            boss_ultimate_sound_played = false;
+
             *player_turn = false;
             *enemy_basic_attack_shot = 0;
             return 1;
@@ -215,6 +229,9 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 
 
     if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+
+        Audio_Play_Button_Click();
+
 		if (speed < 1200.0) {
 			speed += 400.0;
             speed_multiplier += 1;
@@ -288,6 +305,11 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
             //collision check for player fireball and enemy
             bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
 
+            // play sound when player launches a new fireball
+            if (fireball_x == 300) {
+                Audio_Play_Player_Projectile();
+            }
+
             //if not colliding, fireball continues to travel forward. else, enemy's hp is reduced based off player's attack
             if (!fireballHitEnemy) {
                 fireball_x += speed * dt;
@@ -333,6 +355,11 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
         //enemy has not done all of its basic attack shots
         if (enemy_basic_attack_shot < current_enemy->skills[BASIC_ATTACK].iteration) {
 
+            // play sound when enemy launches a new soundwave
+            if (soundwave_x == 1300) {
+                Audio_Play_Enemy_Soundwave();
+            }
+            
             //if not colliding, soundwave continues to travel forward. else, player's hp is reduced based off enemy's attack
             if (!soundwaveHitPlayer) {
                 soundwave_x -= speed * dt;
@@ -426,6 +453,9 @@ void Game_Init(void)
     lightGrey = CP_Color_Create(100, 100, 100, 100);
     black = CP_Color_Create(0, 0, 0, 255);
     white = CP_Color_Create(255, 255, 255, 255);
+
+    // play background music for current level
+    Audio_Play_Level(current_level);
 
     Pause_Menu_Init();
 }

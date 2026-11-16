@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "endmenu.h"
 #include "constants.h"
+#include "audio.h"
 #include <stdio.h>
 
 CP_Font end_font;
@@ -30,6 +31,9 @@ void End_Menu_Init(void)
 
 	// confirmation popup starts closed
 	end_confirm_quit = false;
+
+    // play win or lose music
+    Audio_Play_End_Screen(player_won);
 }
 
 void End_Menu_Update(void)
@@ -85,19 +89,19 @@ void End_Menu_Update(void)
     // normal buttons only work when confirmation popup is closed
     if (end_confirm_quit == false)
     {
-        int playClicked = IsAreaClicked(800.0f, 480.0f, 400.0f, 120.0f,
-            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int playClicked = IsAreaClicked(800.0f, 480.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (playClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
         }
 
-        int quitClicked = IsAreaClicked(800.0f, 600.0f, 400.0f, 120.0f,
-            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int quitClicked = IsAreaClicked(800.0f, 600.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (quitClicked == 1)
         {
+            Audio_Play_Button_Click();
             end_confirm_quit = true;
         }
     }
@@ -105,8 +109,7 @@ void End_Menu_Update(void)
     // confirmation popup
     else
     {
-        DrawRectangle(CP_Color_Create(0, 0, 0, 220),
-            800, 450, 600, 300, 0);
+        DrawRectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
 
         CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
         CP_Settings_TextSize(45);
@@ -120,21 +123,21 @@ void End_Menu_Update(void)
         CP_Font_DrawText("Yes", 680.0f, 490.0f);
         CP_Font_DrawText("No", 920.0f, 490.0f);
 
-        int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f,
-            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-        int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f,
-            CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         // yes closes the application
         if (yesClicked == 1)
         {
+            Audio_Play_Button_Click();
             CP_Engine_Terminate();
         }
 
         // no closes popup and stays on win screen
         if (noClicked == 1)
         {
+            Audio_Play_Button_Click();
             end_confirm_quit = false;
         }
     }

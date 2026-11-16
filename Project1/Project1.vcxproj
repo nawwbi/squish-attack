@@ -105,6 +105,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\audio.c" />
     <ClCompile Include="..\constants.c" />
     <ClCompile Include="..\controls.c" />
     <ClCompile Include="..\credits.c" />
@@ -119,6 +120,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\audio.h" />
     <ClInclude Include="..\constants.h" />
     <ClInclude Include="..\controls.h" />
     <ClInclude Include="..\credits.h" />
@@ -152,10 +154,24 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\home-background.png" />
     <Image Include="..\Assets\hp-icon.png" />
     <Image Include="..\Assets\hp_button.png" />
+    <Image Include="..\Assets\moonsstudio-logo.png" />
     <Image Include="..\Assets\player-closed.png" />
     <Image Include="..\Assets\player-open.png" />
     <Image Include="..\Assets\title-banner1.png" />
     <Image Include="..\Assets\title-banner2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\Assets\boss-fight.mp3" />
+    <Media Include="..\Assets\boss-ultimate.mp3" />
+    <Media Include="..\Assets\butter-fight.mp3" />
+    <Media Include="..\Assets\button-click.mp3" />
+    <Media Include="..\Assets\button-hover.mp3" />
+    <Media Include="..\Assets\dumpling-fight.mp3" />
+    <Media Include="..\Assets\enemy-soundwave.mp3" />
+    <Media Include="..\Assets\lose-screen.mp3" />
+    <Media Include="..\Assets\main-menu.mp3" />
+    <Media Include="..\Assets\player-projectile.mp3" />
+    <Media Include="..\Assets\win-screen.mp3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -126,7 +126,11 @@ void Credits_Update(void)
 
     int backClicked = IsAreaClicked(250.0f, 750.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-    if (backClicked == 1) { CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); }
+    if (backClicked == 1) 
+    { 
+        Audio_Play_Button_Click();
+        CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit); 
+    }
 }
 
 void Credits_Exit(void)
