@@ -60,6 +60,8 @@ int is_paused = 0; // pause state initialize
 
 bool gameOver = false;
 
+float game_fade = 255.0f;
+
 static float boss_current_x = 1300.0f;
 
 //player's attack, defence, current hp, max hp
@@ -476,6 +478,9 @@ void Game_Init(void)
     black = CP_Color_Create(0, 0, 0, 255);
     white = CP_Color_Create(255, 255, 255, 255);
 
+    // start fade in
+    game_fade = 255.0f;
+
     // play background music for current level
     Audio_Play_Level(current_level);
 
@@ -594,6 +599,20 @@ void Game_Update(void)
 
     Debug_Update();
     Pause_Menu_Update();
+
+    // fade in effect
+    if (game_fade > 0.0f)
+    {
+        game_fade -= 510.0f * dt;
+
+        if (game_fade < 0.0f)
+        {
+            game_fade = 0.0f;
+        }
+
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        DrawRectangle(CP_Color_Create(0, 0, 0, (int)game_fade), 800, 450, 1600, 900, 0);
+    }
 }
 
 void Game_Exit(void)

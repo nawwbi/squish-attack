@@ -14,6 +14,8 @@ CP_Image game_button;
 
 bool main_confirm_quit = false;
 
+float main_menu_fade = 255.0f;
+
 void Main_Menu_Init(void)
 {
 	CP_Settings_RectMode(CP_POSITION_CENTER);
@@ -24,6 +26,9 @@ void Main_Menu_Init(void)
 
 	// confirmation popup starts closed
 	main_confirm_quit = false;
+
+    // start fade in
+    main_menu_fade = 255.0f;
 
     // load audio
     Audio_Load();
@@ -132,6 +137,22 @@ void Main_Menu_Update(void)
             Audio_Play_Button_Click();
             main_confirm_quit = false;
         }
+    }
+
+    // fade in effect
+    if (main_menu_fade > 0.0f)
+    {
+        float dt = CP_System_GetDt();
+
+        main_menu_fade -= 510.0f * dt;
+
+        if (main_menu_fade < 0.0f)
+        {
+            main_menu_fade = 0.0f;
+        }
+
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        DrawRectangle(CP_Color_Create(0, 0, 0, (int)main_menu_fade), 800, 450, 1600, 900, 0);
     }
 }
 

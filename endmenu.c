@@ -13,6 +13,8 @@ CP_Image end_button;
 bool end_confirm_quit = false;
 bool player_won = false;
 
+float end_menu_fade = 255.0f;
+
 // stores whether the player won or lost
 void Set_End_Result(bool won)
 {
@@ -29,6 +31,9 @@ void End_Menu_Init(void)
 
 	// confirmation popup starts closed
 	end_confirm_quit = false;
+
+    // start fade in
+    end_menu_fade = 255.0f;
 
     // play win or lose music
     Audio_Play_End_Screen(player_won);
@@ -142,6 +147,22 @@ void End_Menu_Update(void)
             Audio_Play_Button_Click();
             end_confirm_quit = false;
         }
+    }
+
+    // fade in effect
+    if (end_menu_fade > 0.0f)
+    {
+        float dt = CP_System_GetDt();
+
+        end_menu_fade -= 510.0f * dt;
+
+        if (end_menu_fade < 0.0f)
+        {
+            end_menu_fade = 0.0f;
+        }
+
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        DrawRectangle(CP_Color_Create(0, 0, 0, (int)end_menu_fade), 800, 450, 1600, 900, 0);
     }
 }
 
