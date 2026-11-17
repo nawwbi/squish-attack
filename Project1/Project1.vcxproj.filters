@@ -57,6 +57,9 @@
     <ClCompile Include="..\audio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\settings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -95,6 +98,9 @@
     <ClInclude Include="..\audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
@@ -115,31 +121,10 @@
     <Image Include="..\Assets\title-banner2.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\player-open.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\player-closed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\background.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\dumpling-closed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\dumpling-open.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\home-background.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\boss-closed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\boss-open.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\fireball.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\game_button.png">
@@ -151,19 +136,46 @@
     <Image Include="..\Assets\hp-icon.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\butter-open.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\butter-close.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\heal-icon.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\digipen-logo-red.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\moonsstudio-logo.png">
+    <Image Include="..\Assets\moonsstudios-logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\boss-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\boss-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\butter-close.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\butter-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\fireball.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\player-closed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\player-open.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\soundwave.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\skip-button.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

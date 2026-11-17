@@ -24,7 +24,9 @@ fireball,
 soundwave,
 current_enemy_closed_img,
 current_enemy_opened_img,
-skip_button;
+skip_button,
+defence_icon,
+hp_icon;
 
 CP_Color 
 darkRed, 
@@ -254,25 +256,45 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Font_DrawText(roundText, 800, 130);
 
     //--------------------------------------------PLAYER--------------------------------------------\\
+    
+    //player stats background
+    CP_Settings_RectMode(CP_POSITION_CENTER);
+    DrawRectangle(grey, 270, 410, 260, 95, 10);
+
+    //player stat icons
+    CP_Image_Draw(defence_icon, 165, PLAYER_Y_AXIS - PLAYER_HEIGHT - 40, 25, 25, 255);
+    CP_Image_Draw(fireball, 165, PLAYER_Y_AXIS - PLAYER_HEIGHT - 10, 25, 25, 255);
+    CP_Image_Draw(hp_icon, 165, PLAYER_Y_AXIS - PLAYER_HEIGHT + 20, 25, 25, 255);
+
     //defence text
-    Text(30, white, player.defence, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 30, "Defence: %.2f");
+    Text(30, white, player.defence, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 40, "Defence: %.2f");
 
     //attack text
-    Text(30, white, player.attack, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT, "Attack: %.2f");
+    Text(30, white, player.attack, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT - 10, "Attack: %.2f");
 
     //max hp text
-    Text(30, white, player.max_hp, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT + 30, "Max HP: %.2f");
+    Text(30, white, player.max_hp, PLAYER_X_AXIS - 20, PLAYER_Y_AXIS - PLAYER_HEIGHT + 20, "Max HP: %.2f");
     //--------------------------------------------PLAYER--------------------------------------------\\
 
     //--------------------------------------------ENEMY--------------------------------------------\\
+    
+    //enemy stats background
+    CP_Settings_RectMode(CP_POSITION_CENTER);
+    DrawRectangle(grey, 1300, 480, 260, 95, 10);
+
+    //enemy stat icons
+    CP_Image_Draw(defence_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, 25, 25, 255);
+    CP_Image_Draw(fireball, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, 25, 25, 255);
+    CP_Image_Draw(hp_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, 25, 25, 255);
+ 
     //defence text
-    Text(30, white, current_enemy->defence, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Defence: %.2f");
+    Text(30, white, current_enemy->defence, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Defence: %.2f");
 
     //attack text
-    Text(30, white, current_enemy->attack, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Attack: %.2f");
+    Text(30, white, current_enemy->attack, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Attack: %.2f");
 
     //max hp text
-    Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS - 20, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
+    Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
     //--------------------------------------------ENEMY--------------------------------------------\\
 
     //current level status, progress bar
@@ -439,6 +461,8 @@ void Game_Init(void)
     fireball = CP_Image_Load("./Assets/fireball.png");
     soundwave = CP_Image_Load("./Assets/soundwave.png");
 	skip_button = CP_Image_Load("./Assets/skip-button.png");
+    defence_icon = CP_Image_Load("./Assets/defence-icon.png");
+    hp_icon = CP_Image_Load("./Assets/hp-icon.png");
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");

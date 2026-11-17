@@ -47,45 +47,50 @@ void End_Menu_Update(void)
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
 
-    // display win or lose message
     if (player_won == true)
     {
         CP_Settings_TextSize(60);
         CP_Font_DrawText("Game Complete", 800.0f, 70.0f);
-
-        CP_Settings_TextSize(100);
-        CP_Font_DrawText("You Win!", 800.0f, 260.0f);
     }
     else
     {
         CP_Settings_TextSize(60);
         CP_Font_DrawText("Game Over", 800.0f, 70.0f);
-
-        CP_Settings_TextSize(100);
-        CP_Font_DrawText("You Lose!", 800.0f, 260.0f);
     }
-
-	CP_Settings_TextSize(40);
-	char score_val[50];
-	snprintf(score_val,50, "Score: %d", score);
-	CP_Font_DrawText(score_val, 800.0f, 330.0f);
-
-	CP_Settings_TextSize(40);
-	char highscore_val[50];
-	snprintf(highscore_val, 50, "High Score: %d", highscore);
-	CP_Font_DrawText(highscore_val, 800.0f, 370.0f);
-
-
-	CP_Image_Draw(end_button, 800, 480, 350, 360, 255); // play again button
-	CP_Image_Draw(end_button, 800, 600, 350, 360, 255); // quit button
-
-	CP_Settings_TextSize(50);
-	CP_Font_DrawText("Play Again", 800.0f, 465.0f);
-	CP_Font_DrawText("Quit", 800.0f, 585.0f);
 
     // normal buttons only work when confirmation popup is closed
     if (end_confirm_quit == false)
     {
+        // display win or lose message
+        if (player_won == true)
+        {
+            CP_Settings_TextSize(100);
+            CP_Font_DrawText("You Win!", 800.0f, 260.0f);
+        }
+        else
+        {
+            CP_Settings_TextSize(100);
+            CP_Font_DrawText("You Lose!", 800.0f, 260.0f);
+        }
+
+        CP_Settings_TextSize(40);
+        char score_val[50];
+        snprintf(score_val, 50, "Score: %d", score);
+        CP_Font_DrawText(score_val, 800.0f, 330.0f);
+
+        CP_Settings_TextSize(40);
+        char highscore_val[50];
+        snprintf(highscore_val, 50, "High Score: %d", highscore);
+        CP_Font_DrawText(highscore_val, 800.0f, 370.0f);
+
+
+        CP_Image_Draw(end_button, 800, 480, 350, 360, 255); // play again button
+        CP_Image_Draw(end_button, 800, 600, 350, 360, 255); // quit button
+
+        CP_Settings_TextSize(50);
+        CP_Font_DrawText("Play Again", 800.0f, 465.0f);
+        CP_Font_DrawText("Quit", 800.0f, 585.0f);
+        
         int playClicked = IsAreaClicked(800.0f, 480.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (playClicked == 1)

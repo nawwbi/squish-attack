@@ -41,30 +41,30 @@ void Main_Menu_Update(void)
 	CP_Settings_NoTint();
 	CP_Image_Draw(banner, 800, 650, 1800, 1300, 255);
 
+    CP_Settings_TextSize(80);
+    CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+    CP_Font_DrawText("Squish Attack!", 800.0f, 100.0f);
+
 	CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
     
 	//CP_Font_Set(font);
 
-	CP_Settings_TextSize(80);
-	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
-	CP_Font_DrawText("Squish Attack!", 800.0f, 100.0f);
-
-	CP_Image_Draw(game_button, 800, 300, 350, 360, 255); // play button
-	CP_Image_Draw(game_button, 800, 415, 350, 360, 255); // controls button
-	CP_Image_Draw(game_button, 800, 530, 350, 360, 255); // credits button
-	CP_Image_Draw(game_button, 800, 645, 350, 360, 255); // quit button
-
-	CP_Settings_TextSize(60);
-	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
-
-	CP_Font_DrawText("Play", 800.0f, 285.0f);
-	CP_Font_DrawText("Controls", 800.0f, 400.0f);
-	CP_Font_DrawText("Credits", 800.0f, 515.0f);
-	CP_Font_DrawText("Quit", 800.0f, 630.0f);
-
     // normal menu buttons only work when confirmation popup is closed
     if (main_confirm_quit == false)
     {
+        CP_Image_Draw(game_button, 800, 300, 350, 360, 255); // play button
+        CP_Image_Draw(game_button, 800, 415, 350, 360, 255); // controls button
+        CP_Image_Draw(game_button, 800, 530, 350, 360, 255); // credits button
+        CP_Image_Draw(game_button, 800, 645, 350, 360, 255); // quit button
+
+        CP_Settings_TextSize(60);
+        CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+
+        CP_Font_DrawText("Play", 800.0f, 285.0f);
+        CP_Font_DrawText("Controls", 800.0f, 400.0f);
+        CP_Font_DrawText("Credits", 800.0f, 515.0f);
+        CP_Font_DrawText("Quit", 800.0f, 630.0f);
+        
         int playClicked = IsAreaClicked(800.0f, 300.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (playClicked == 1)

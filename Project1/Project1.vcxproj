@@ -156,9 +156,11 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\home-background.png" />
     <Image Include="..\Assets\hp-icon.png" />
     <Image Include="..\Assets\hp_button.png" />
-    <Image Include="..\Assets\moonsstudio-logo.png" />
+    <Image Include="..\Assets\moonsstudios-logo.png" />
     <Image Include="..\Assets\player-closed.png" />
     <Image Include="..\Assets\player-open.png" />
+    <Image Include="..\Assets\skip-button.png" />
+    <Image Include="..\Assets\soundwave.png" />
     <Image Include="..\Assets\title-banner1.png" />
     <Image Include="..\Assets\title-banner2.png" />
   </ItemGroup>

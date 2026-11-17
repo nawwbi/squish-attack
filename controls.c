@@ -31,21 +31,21 @@ void Controls_Update(void)
     CP_Font_DrawText("Game Summary", 800.0f, 70.0f);
 
     CP_Settings_TextSize(40);
-    CP_Font_DrawText("HOW TO PLAY", 800.0f, 210.0f);
+    CP_Font_DrawText("HOW TO PLAY", 800.0f, 230.0f);
 
     CP_Settings_TextSize(25);
-    CP_Font_DrawText("Choose one of three upgrades before combat begins.", 800.0f, 270.0f);
-    CP_Font_DrawText("Your character attacks automatically.", 800.0f, 320.0f);
-    CP_Font_DrawText("Enemies will counterattack.", 800.0f, 355.0f);
-    CP_Font_DrawText("Defeat all enemies within 10 rounds to progress.", 800.0f, 405.0f);
-    CP_Font_DrawText("Clear all levels and defeat the boss in the final level to win!", 800.0f, 455.0f);
+    CP_Font_DrawText("Choose one of three upgrades before combat begins.", 800.0f, 290.0f);
+    CP_Font_DrawText("Your character attacks automatically.", 800.0f, 340.0f);
+    CP_Font_DrawText("Enemies will counterattack.", 800.0f, 375.0f);
+    CP_Font_DrawText("Defeat all enemies within 10 rounds to progress.", 800.0f, 425.0f);
+    CP_Font_DrawText("Clear all levels and defeat the boss in the final level to win!", 800.0f, 475.0f);
 
     CP_Settings_TextSize(30);
-    CP_Font_DrawText("CONTROLS", 800.0f, 515.0f);
+    CP_Font_DrawText("CONTROLS", 800.0f, 535.0f);
 
     CP_Settings_TextSize(25);
-    CP_Font_DrawText("LMB - Select upgrades", 800.0f, 555.0f);
-    CP_Font_DrawText("LMB - Navigate buttons", 800.0f, 590.0f);
+    CP_Font_DrawText("LMB - Select upgrades", 800.0f, 575.0f);
+    CP_Font_DrawText("LMB - Navigate buttons", 800.0f, 610.0f);
 
     CP_Image_Draw(controls_button, 250, 750, 350, 360, 255);
 

@@ -16,7 +16,7 @@ void Splash_Init(void)
     splash_digipen_logo = CP_Image_Load("./Assets/digipen-logo-red.png");
 
     // team logo
-    splash_team_logo = CP_Image_Load("./Assets/moonsstudio-logo.png");
+    splash_team_logo = CP_Image_Load("./Assets/moonsstudios-logo.png");
 
     font = CP_Font_Load("./Assets/Jersey15-Regular.ttf");
 
@@ -49,7 +49,7 @@ void Splash_Update(void)
     // next 2 seconds, team logo
     else if (splash_timer < 4.0f)
     {
-        CP_Image_Draw(splash_team_logo, 800, 450, 500, 300, 255);
+        CP_Image_Draw(splash_team_logo, 800, 450, 600, 300, 255);
     }
 
     // after 4 seconds, main menu
