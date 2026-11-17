@@ -141,14 +141,20 @@ void Settings_Update(void) {
 
         CP_Settings_Fill(white); // reset text fill color back to white after drawing green volume boxes
 
+        // BGM and SFX settings text
+        CP_Settings_Fill(white);
+        CP_Settings_TextSize(50);
+        CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+        CP_Font_DrawText("BGM & SFX", 800, 420);
+
         // background music on / off
         CP_Settings_RectMode(CP_POSITION_CENTER);
-        CP_Image_Draw(menu_button, 800, 420, 350, 220, 255);
+        CP_Image_Draw(menu_button, 660, 510, 350, 220, 255);
         CP_Settings_TextSize(25.0f);
         CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-        CP_Font_DrawText(bgm_on ? "Background Music: On" : "Background Music: Off", 800, 410);
+        CP_Font_DrawText(bgm_on ? "Background Music: On" : "Background Music: Off", 660, 500);
 
-        if (IsAreaClicked(800, 420, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+        if (IsAreaClicked(660, 510, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
             bgm_on = !bgm_on;
             Update_Audio();
             Audio_Play_Button_Click();
@@ -156,12 +162,12 @@ void Settings_Update(void) {
 
         // sound effect on / off
         CP_Settings_RectMode(CP_POSITION_CENTER);
-        CP_Image_Draw(menu_button, 800, 510, 350, 220, 255);
+        CP_Image_Draw(menu_button, 940, 510, 350, 220, 255);
         CP_Settings_TextSize(25.0f);
         CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-        CP_Font_DrawText(sfx_on ? "Sound Effects: On" : "Sound Effects: Off", 800, 500);
+        CP_Font_DrawText(sfx_on ? "Sound Effects: On" : "Sound Effects: Off", 940, 500);
 
-        if (IsAreaClicked(800, 510, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+        if (IsAreaClicked(940, 510, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
             sfx_on = !sfx_on;
             Update_Audio();
             Audio_Play_Button_Click();
