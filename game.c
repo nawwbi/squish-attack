@@ -499,7 +499,7 @@ void Game_Update(void)
     // checking for lose conditions for player and enemy 
     // check if player has killed dumpling , with health over 0 and current round is less than 10
 
-    static bool showUpgrade = false;
+    // static bool showUpgrade = false; // moved out of game_update to global variable
     // static bool upgradeTriggered = false; // moved out of game_update to global variable
 
     Check_Current_Enemy(current_level);
