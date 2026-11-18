@@ -26,3 +26,8 @@ void HealthBar(CP_Color current_colour, float x, float y, float current_hp, floa
 bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2);
 
 void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char* const string);
+
+void FadingText(
+	float current_timer, float total_timer, float value,
+	float x, float y
+);

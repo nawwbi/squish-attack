@@ -64,6 +64,13 @@ float game_fade = 255.0f;
 
 static float boss_current_x = 1300.0f;
 
+float enemy_damage_text_timer = 0.0f;
+float enemy_damage_text_value = 0.0f;
+
+float player_damage_text_timer = 0.0f;
+float player_damage_text_value = 0.0f;
+#define DAMAGE_TEXT_DURATION 1.0f
+
 //player's attack, defence, current hp, max hp
 #define PLAYER_ATTACK                 300.0
 #define PLAYER_DEFENCE                50.0
@@ -229,9 +236,9 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Settings_Fill(black);
     char speedMultiplierText[100];
+    CP_Settings_TextSize(40);
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
     CP_Font_DrawText(speedMultiplierText, 1500 , 720);
-
 
     if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 
@@ -255,7 +262,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     // update the round for each hit when game is not over
     char roundText[50];
     snprintf(roundText, sizeof(roundText), "Round: %d/10", current_round);
-    CP_Font_DrawText(roundText, 800, 130);
+    CP_Font_DrawText(roundText, 800, 130);   
 
     //--------------------------------------------PLAYER--------------------------------------------\\
     
@@ -318,8 +325,6 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
 	//--------------------------------------------PLAYER ATTACK--------------------------------------------//
-    // static bool player_turn = true; // true for player turn, false for enemy turn
-    // static int player_basic_attack_shot = 0; 
     if (player_turn == true) {
 
         if (player_basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
@@ -340,6 +345,9 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(current_enemy->current_hp, 0, current_enemy->defence), CalculateCurrentMaxHP(current_enemy->max_hp, 0));
             }
             else {
+                enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
+                enemy_damage_text_value = player.attack - current_enemy->defence;
+
                 //player close mouth when fireball is shot
                 CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
                 //base health should be current enemy health, and base attack should be current player attack
@@ -350,6 +358,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 
                 player_basic_attack_shot++;
                 score += (player.attack - current_enemy->defence);
+                
             }
         }
         else {
@@ -365,10 +374,21 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Graphics_DrawEllipse(ENEMY_X_AXIS + 25, ENEMY_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
     CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 
-    //--------------------------------------------ENEMY ATTACK--------------------------------------------//
-	//static int enemy_basic_attack_shot = 0;
-    if (player_turn == false) {
+    //display damage after hitting enemy
+    if (enemy_damage_text_timer > 0.0f) {
+        enemy_damage_text_timer -= dt;
 
+        FadingText(
+            enemy_damage_text_timer,
+            DAMAGE_TEXT_DURATION,
+            enemy_damage_text_value,
+            ENEMY_X_AXIS - 110,
+            ENEMY_Y_AXIS + 50
+        );
+    }
+
+    //--------------------------------------------ENEMY ATTACK--------------------------------------------//
+    if (player_turn == false) {
         //collision check for enemy soundwave and player
         bool soundwaveHitPlayer = AreCirclesIntersecting(soundwave_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
         bool enemyHitPlayer = AreCirclesIntersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
@@ -390,6 +410,8 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
             }
             else {
+                player_damage_text_timer = DAMAGE_TEXT_DURATION;
+                player_damage_text_value = current_enemy->attack - player.defence;
                 // enemy closed mouth when soundwave is shot
                 CP_Image_Draw(current_enemy_closed_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
                 // update current hp with reduced health
@@ -418,6 +440,18 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
         }
     }
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
+
+    if (player_damage_text_timer > 0.0f) {
+        player_damage_text_timer -= dt;
+
+        FadingText(
+            player_damage_text_timer, 
+            DAMAGE_TEXT_DURATION, 
+            player_damage_text_value,
+            PLAYER_X_AXIS + 100,
+            PLAYER_Y_AXIS + 50
+        );
+    }
 
     return 0;
 }
@@ -481,6 +515,10 @@ void Game_Init(void)
     // start fade in
     game_fade = 255.0f;
 
+    enemy_damage_text_timer = 0.0f;
+    player_damage_text_timer = 0.0f;
+
+
     // play background music for current level
     Audio_Play_Level(current_level);
 
@@ -492,6 +530,7 @@ void Game_Update(void)
 {
     //get delta time
     float dt = CP_System_GetDt();
+
     // int current_round = 1;      // track current round number  // moved out of game_update to global variable
     // int current_level = 1;      // track current level number  // moved out of game_update to global variable
     //static bool gameOver = false;      // check if game is over (for both win and lose)
@@ -592,6 +631,7 @@ void Game_Update(void)
     }
     // update the round for each hit when game is not over
     if (!is_paused && !gameOver && current_round <= 10) {
+
         if (Game_Per_Round(dt, current_round, current_level) == 1) {
             ++current_round;
         }

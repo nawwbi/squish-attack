@@ -143,3 +143,21 @@ void Text(int font_size, CP_Color colour, double value, float text_x, float text
 	snprintf(text, sizeof(text), string, value);
 	CP_Font_DrawText(text, text_x, text_y);
 }
+
+void FadingText(
+	float current_timer, float total_timer, float value,
+	float x, float y
+) {
+	//fading out
+	int alpha = (int)(255 * (current_timer / total_timer));
+	if (alpha < 0) alpha = 0;
+
+	//floating up
+	float rise = (total_timer - current_timer) * 60.0f;
+
+	char text[50];
+	snprintf(text, sizeof(text), "-%.0f", value);
+	CP_Settings_Fill(CP_Color_Create(255, 255, 255, alpha));
+	CP_Settings_TextSize(80);
+	CP_Font_DrawText(text, x, y - rise);
+}
