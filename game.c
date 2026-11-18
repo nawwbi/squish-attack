@@ -240,6 +240,8 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
     CP_Font_DrawText(speedMultiplierText, 1500 , 720);
 
+    enemy_x = ENEMY_X_AXIS;
+
     if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 
         Audio_Play_Button_Click();
