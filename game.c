@@ -222,6 +222,7 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         return 0;
     }
 
+    boss_state = BOSS_DASH_BACK;
     return 0;
 }
 
