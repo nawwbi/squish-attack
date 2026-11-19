@@ -252,7 +252,7 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
     else if (boss_state == BOSS_DASH_BACK) {
         enemy_x += dash_speed * dt;
         EnemyState = ENEMY_IDLE;
-        Check_Current_Enemy_State(EnemyState);
+        
         if (enemy_x >= ENEMY_X_AXIS) {
             enemy_x = ENEMY_X_AXIS;
             boss_state = BOSS_DASH_FORWARD;
@@ -264,6 +264,7 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
             *enemy_basic_attack_shot = 0;
             return 1;
         }
+        Check_Current_Enemy_State(EnemyState);
         return 0;
     }
 
@@ -548,6 +549,7 @@ void Game_Init(void)
     enemy_damage_text_timer = 0.0f;
     player_damage_text_timer = 0.0f;
 
+    enemy_x = 1300;
 
     // play background music for current level
     Audio_Play_Level(current_level);
