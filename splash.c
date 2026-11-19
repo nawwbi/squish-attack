@@ -4,6 +4,7 @@
 
 CP_Image splash_digipen_logo;
 CP_Image splash_team_logo;
+CP_Image splash_skip_button;
 CP_Font font;
 
 float splash_timer = 0.0f;
@@ -12,11 +13,12 @@ void Splash_Init(void)
 {
     CP_Settings_RectMode(CP_POSITION_CENTER);
 
-    // load assets
     splash_digipen_logo = CP_Image_Load("./Assets/digipen-logo-red.png");
 
     // team logo
     splash_team_logo = CP_Image_Load("./Assets/moonsstudios-logo.png");
+
+    splash_skip_button = CP_Image_Load("./Assets/skip-button.png");
 
     font = CP_Font_Load("./Assets/Jersey15-Regular.ttf");
 
@@ -101,10 +103,21 @@ void Splash_Update(void)
     {
         CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
     }
+
+    // skip button
+    CP_Image_Draw(splash_skip_button, 1500, 820, 100, 100, 255);
+
+    int skipClicked = IsAreaClicked(1500.0f, 820.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+    if (skipClicked == 1)
+    {
+        CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
+    }
 }
 
 void Splash_Exit(void)
 {
     CP_Image_Free(splash_digipen_logo);
     CP_Image_Free(splash_team_logo);
+    CP_Image_Free(splash_skip_button);
 }

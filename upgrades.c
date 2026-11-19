@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "mainmenu.h"
 #include "game.h"
+#include "levelintro.h"
+#include "pause.h"
 #include <stdbool.h>
 
 int numSkills = 0;
@@ -216,7 +218,7 @@ void Upgrades_Update(void) {
         selectedValue = 0;
         clicked = 0;
         
-        CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+        CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
 
         return;
     }

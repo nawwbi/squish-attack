@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "audio.h"
 #include "pause.h"
+#include "levelintro.h"
 #include <stdbool.h>
 
 CP_Font font;
@@ -126,18 +127,18 @@ void Pause_Menu_Update(void) {
                 fireball_x = 300;
                 soundwave_x = 1300;
                 player_basic_attack_shot = 0;
-                enemy_basic_attack_shot = 1; // false if enemy attacks first once game restart
+                enemy_basic_attack_shot = 1;
                 player_turn = true;
                 //current_attacker = true;
 
                 Reset_Characters();
                 Check_Current_Enemy(current_level);
 
-                // audio
+                // resume music group so next level music can play
                 CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
-                Audio_Play_Level(current_level);
 
-
+                // go to level 1 intro
+                CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
             }
             else if (mainMenuClicked == 1) {
                 Audio_Play_Button_Click();

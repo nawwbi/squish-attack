@@ -4,6 +4,7 @@
 #include "endmenu.h"
 #include "constants.h"
 #include "audio.h"
+#include "levelintro.h"
 #include <stdio.h>
 
 CP_Image end_background;
@@ -101,7 +102,7 @@ void End_Menu_Update(void)
         if (playClicked == 1)
         {
             Audio_Play_Button_Click();
-            CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+            CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
         }
 
         int quitClicked = IsAreaClicked(800.0f, 600.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());

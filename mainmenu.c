@@ -7,6 +7,7 @@
 #include "controls.h"
 #include "credits.h"
 #include "audio.h"
+#include "levelintro.h"
 
 CP_Image background;
 CP_Image banner;
@@ -75,7 +76,7 @@ void Main_Menu_Update(void)
         if (playClicked == 1)
         {
             Audio_Play_Button_Click();
-            CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
+            CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
         }
 
         int controlsClicked = IsAreaClicked(800.0f, 415.0f, 300.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());

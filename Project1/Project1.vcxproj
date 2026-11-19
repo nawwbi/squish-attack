@@ -113,6 +113,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\debug.c" />
     <ClCompile Include="..\endmenu.c" />
     <ClCompile Include="..\game.c" />
+    <ClCompile Include="..\levelintro.c" />
     <ClCompile Include="..\main.c" />
     <ClCompile Include="..\mainmenu.c" />
     <ClCompile Include="..\pause.c" />
@@ -130,6 +131,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\debug.h" />
     <ClInclude Include="..\endmenu.h" />
     <ClInclude Include="..\game.h" />
+    <ClInclude Include="..\levelintro.h" />
     <ClInclude Include="..\mainmenu.h" />
     <ClInclude Include="..\pause.h" />
     <ClInclude Include="..\settings.h" />
