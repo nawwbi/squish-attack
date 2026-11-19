@@ -9,7 +9,7 @@ const double PLAYER_Y_AXIS = 600;
 
 //----------enemy character details----------//
 const double ENEMY_X_AXIS = 1300;
-const double ENEMY_Y_AXIS = 600;
+const double ENEMY_Y_AXIS = 630;
 const double ENEMY_WIDTH = 180;
 const double ENEMY_HEIGHT = 180;
 

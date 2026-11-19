@@ -105,6 +105,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\animation.c" />
     <ClCompile Include="..\audio.c" />
     <ClCompile Include="..\constants.c" />
     <ClCompile Include="..\controls.c" />
@@ -121,6 +122,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\animation.h" />
     <ClInclude Include="..\audio.h" />
     <ClInclude Include="..\constants.h" />
     <ClInclude Include="..\controls.h" />
@@ -144,12 +146,14 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\background.png" />
     <Image Include="..\Assets\boss-closed.png" />
     <Image Include="..\Assets\boss-open.png" />
+    <Image Include="..\Assets\boss_sprite.png" />
     <Image Include="..\Assets\butter-close.png" />
     <Image Include="..\Assets\butter-open.png" />
     <Image Include="..\Assets\defence-icon.png" />
     <Image Include="..\Assets\digipen-logo-red.png" />
     <Image Include="..\Assets\dumpling-closed.png" />
     <Image Include="..\Assets\dumpling-open.png" />
+    <Image Include="..\Assets\dumpling_sprite.png" />
     <Image Include="..\Assets\fireball.png" />
     <Image Include="..\Assets\game_button.png" />
     <Image Include="..\Assets\heal-icon.png" />
@@ -159,6 +163,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\moonsstudios-logo.png" />
     <Image Include="..\Assets\player-closed.png" />
     <Image Include="..\Assets\player-open.png" />
+    <Image Include="..\Assets\player_sprite.png" />
     <Image Include="..\Assets\skip-button.png" />
     <Image Include="..\Assets\soundwave.png" />
     <Image Include="..\Assets\title-banner1.png" />

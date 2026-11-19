@@ -60,6 +60,9 @@
     <ClCompile Include="..\settings.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\animation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -176,6 +182,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\skip-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\player_sprite.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

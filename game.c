@@ -8,22 +8,23 @@
 #include "pause.h"
 #include "audio.h"
 #include "debug.h"
+#include "animation.h"
 #include <stdio.h>
 #include <stdbool.h>
 
+CP_Image player_sprite = NULL;
+CP_Image dumpling_sprite = NULL;
+CP_Image butter_sprite = NULL;
+CP_Image boss_sprite = NULL;
+CP_Image current_enemy_sprite = NULL;
+
 CP_Image
-player_closed,
 player_opened,
-dumpling_closed,
 dumpling_opened,
-butter_closed,
 butter_opened,
-boss_closed,
 boss_opened,
 fireball,
 soundwave,
-current_enemy_closed_img,
-current_enemy_opened_img,
 skip_button,
 defence_icon,
 hp_icon;
@@ -50,19 +51,17 @@ int numSkills;
 bool showUpgrade = false;
 int player_basic_attack_shot = 0; 
 int enemy_basic_attack_shot = 0; 
-bool player_turn = true; 
-bool current_attacker = true;
+bool player_turn = true;
 int current_round = 1;
 int current_level = 1;
 bool upgradeTriggered = false;
-int is_paused = 0; // pause state initialize 
-//int is_settings = 0; // settings menu
+int is_paused = 0; // pause state initialize
 
 bool gameOver = false;
 
 float game_fade = 255.0f;
 
-static float boss_current_x = 1300.0f;
+static float current_x = 1300.0f;
 
 float enemy_damage_text_timer = 0.0f;
 float enemy_damage_text_value = 0.0f;
@@ -121,22 +120,61 @@ struct Characters boss = { BOSS_ATTACK, BOSS_DEFENCE, BOSS_CURRENT_HP, BOSS_MAX_
 };
 struct Characters* current_enemy;
 
+static enum PlayerState {
+    PLAYER_IDLE,
+    PLAYER_ATTACKING
+} PlayerState = PLAYER_IDLE;
+
+void Check_Current_Player_State(int player_state) {
+    switch (player_state) {
+    case PLAYER_IDLE:
+        Animation(player_sprite, true, true, PLAYER_X_AXIS);
+        break;
+
+    case PLAYER_ATTACKING:
+        Animation(player_sprite, true, false, PLAYER_X_AXIS);
+        break;
+
+    default:
+        Animation(player_sprite, true, true, PLAYER_X_AXIS);
+        break;
+    }
+}
+
+static enum EnemyState {
+    ENEMY_IDLE,
+    ENEMY_ATTACKING
+} EnemyState = ENEMY_IDLE;
+
+void Check_Current_Enemy_State(int enemy_state) {
+    switch (enemy_state) {
+    case ENEMY_IDLE:
+        Animation(current_enemy_sprite, false, true, enemy_x);
+        break;
+
+    case ENEMY_ATTACKING:
+        Animation(current_enemy_sprite, false, false, enemy_x);
+        break;
+
+    default:
+        Animation(current_enemy_sprite, false, true, enemy_x);
+        break;
+    }
+}
+
 void Check_Current_Enemy(int current_level) {
     switch (current_level) {
     case 1:
         current_enemy = &dumpling;
-        current_enemy_closed_img = dumpling_closed;
-        current_enemy_opened_img = dumpling_opened;
+        current_enemy_sprite = dumpling_sprite;
         break;
     case 2:
         current_enemy = &butter;
-        current_enemy_closed_img = butter_closed;
-        current_enemy_opened_img = butter_opened;
+        current_enemy_sprite = butter_sprite;
         break;
     case 3:
         current_enemy = &boss;
-        current_enemy_closed_img = boss_closed;
-        current_enemy_opened_img = boss_opened;
+        current_enemy_sprite = boss_sprite;
         break;
     }
 }
@@ -165,6 +203,12 @@ void Progress_Bar(int current_level, float dt) {
     }
 
     DrawRectangle(grey, progress_x, 95, 37, 10, 10);
+
+    CP_Settings_RectMode(CP_POSITION_CENTER);
+    CP_Image_Draw(player_opened, PLAYER_X_AXIS, 100, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
+    CP_Image_Draw(dumpling_opened, 630, 85, MINI_PLAYER_WIDTH + 10, MINI_PLAYER_HEIGHT + 10, 255);
+    CP_Image_Draw(butter_opened, 950, 80, MINI_PLAYER_WIDTH + 15, MINI_PLAYER_HEIGHT + 15, 255);
+    CP_Image_Draw(boss_opened, 1300, 85, MINI_PLAYER_WIDTH + 10, MINI_PLAYER_HEIGHT + 10, 255);
 }
 
 int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
@@ -179,18 +223,18 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
     float dash_speed = speed * 2.0f;
     
     if (boss_state == BOSS_DASH_FORWARD) {
-
+        Check_Current_Enemy_State(EnemyState);
         // play boss ultimate sound once when boss moves towards player
         if (boss_ultimate_sound_played == false) {
             Audio_Play_Boss_Ultimate();
             boss_ultimate_sound_played = true;
         }
 
-        boss_current_x -= dash_speed * dt;
-        bool bossHitPlayer = AreCirclesIntersecting(boss_current_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
+        enemy_x -= dash_speed * dt;
+        bool bossHitPlayer = AreCirclesIntersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
 
         if (!bossHitPlayer) {
-            CP_Image_Draw(current_enemy_opened_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+            EnemyState = ENEMY_ATTACKING;
         }
         else {
             player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack * 1.5f, player.defence);
@@ -199,17 +243,18 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         return 0;
     }
     else if (boss_state == BOSS_STUN_PAUSE) {
-        CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+        EnemyState = ENEMY_IDLE;
         boss_state = BOSS_DASH_BACK;
         CP_Settings_Fill(CP_Color_Create(255, 0, 0, 255));
+        Check_Current_Enemy_State(EnemyState);
         return 0;
     }
     else if (boss_state == BOSS_DASH_BACK) {
-        boss_current_x += dash_speed * dt;
-        CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-
-        if (boss_current_x >= ENEMY_X_AXIS) {
-            boss_current_x = ENEMY_X_AXIS;
+        enemy_x += dash_speed * dt;
+        EnemyState = ENEMY_IDLE;
+        Check_Current_Enemy_State(EnemyState);
+        if (enemy_x >= ENEMY_X_AXIS) {
+            enemy_x = ENEMY_X_AXIS;
             boss_state = BOSS_DASH_FORWARD;
 
             // reset sound for the next boss ultimate
@@ -223,14 +268,14 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
     }
 
     boss_state = BOSS_DASH_BACK;
+    Check_Current_Enemy_State(EnemyState);
     return 0;
 }
 
 int Game_Per_Round(float dt, int current_round, int current_level) {
 
-    // static bool current_attacker = true; // true for player turn, false for enemy turn
-    // removed static
-    
+    int round_finished = 0;
+
     //setting background
     CP_Image_Draw(background, 800, 450, 1600, 900, 255);
     CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
@@ -240,8 +285,6 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Settings_TextSize(40);
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
     CP_Font_DrawText(speedMultiplierText, 1500 , 720);
-
-    enemy_x = ENEMY_X_AXIS;
 
     if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 
@@ -295,37 +338,22 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     DrawRectangle(grey, 1300, 480, 260, 95, 10);
 
     //enemy stat icons
-    CP_Image_Draw(defence_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, 25, 25, 255);
-    CP_Image_Draw(fireball, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, 25, 25, 255);
-    CP_Image_Draw(hp_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, 25, 25, 255);
+    CP_Image_Draw(defence_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT, 25, 25, 255);
+    CP_Image_Draw(fireball, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, 25, 25, 255);
+    CP_Image_Draw(hp_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, 25, 25, 255);
  
     //defence text
-    Text(30, white, current_enemy->defence, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Defence: %.2f");
+    Text(30, white, current_enemy->defence, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT, "Defence: %.2f");
 
     //attack text
-    Text(30, white, current_enemy->attack, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Attack: %.2f");
+    Text(30, white, current_enemy->attack, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 30, "Attack: %.2f");
 
     //max hp text
-    Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 90, "Max HP: %.2f");
+    Text(30, white, current_enemy->max_hp, ENEMY_X_AXIS + 10, ENEMY_Y_AXIS - ENEMY_HEIGHT + 60, "Max HP: %.2f");
     //--------------------------------------------ENEMY--------------------------------------------\\
 
     //current level status, progress bar
     Progress_Bar(current_level, dt);
-
-    CP_Settings_RectMode(CP_POSITION_CENTER);
-    CP_Image_Draw(player_opened, PLAYER_X_AXIS, 100, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
-    CP_Image_Draw(dumpling_opened, 630, 85, MINI_PLAYER_WIDTH+10, MINI_PLAYER_HEIGHT+10, 255);
-    CP_Image_Draw(butter_opened, 950, 80, MINI_PLAYER_WIDTH+15, MINI_PLAYER_HEIGHT+15, 255);
-    CP_Image_Draw(boss_opened, 1300, 85, MINI_PLAYER_WIDTH+10, MINI_PLAYER_HEIGHT+10, 255);
-
-    //shadow for player
-    CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
-    CP_Graphics_DrawEllipse(PLAYER_X_AXIS + 25, PLAYER_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
-
-    CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-    // display healthbar before rounds
-    HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
-    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
 	//--------------------------------------------PLAYER ATTACK--------------------------------------------//
     if (player_turn == true) {
@@ -343,26 +371,24 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
             if (!fireballHitEnemy) {
                 fireball_x += speed * dt;
                 CP_Image_Draw(fireball, fireball_x, PLAYER_Y_AXIS, 90, 90, 255);
-                //player open mouth when shooting fireball
-                CP_Image_Draw(player_opened, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-                HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, CalculateCurrentHP(current_enemy->current_hp, 0, current_enemy->defence), CalculateCurrentMaxHP(current_enemy->max_hp, 0));
+				PlayerState = PLAYER_ATTACKING;
             }
             else {
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = player.attack - current_enemy->defence;
 
-                //player close mouth when fireball is shot
-                CP_Image_Draw(player_closed, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
                 //base health should be current enemy health, and base attack should be current player attack
                 // update current hp with reduced health
                 current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, player.attack, current_enemy->defence);
-                HealthBar(darkRed, 1250, ENEMY_Y_AXIS - PLAYER_HEIGHT + 120, current_enemy->current_hp, current_enemy->max_hp);
+                
                 fireball_x = 300; // reset fireball position after hitting enemy
                 
                 player_basic_attack_shot++;
                 score += (player.attack - current_enemy->defence);
-                
+                PlayerState = PLAYER_IDLE;
             }
+
+            
         }
         else {
             player_basic_attack_shot = 0;
@@ -371,24 +397,8 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
         
     }
     //--------------------------------------------PLAYER ATTACK--------------------------------------------//
-    
-    //shadow for enemy
-    CP_Settings_Fill(CP_Color_Create(0, 0, 0, 100));
-    CP_Graphics_DrawEllipse(ENEMY_X_AXIS + 25, ENEMY_Y_AXIS + 90, PLAYER_WIDTH, 20.0f);
-    CP_Image_Draw(current_enemy_closed_img, boss_current_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
 
-    //display damage after hitting enemy
-    if (enemy_damage_text_timer > 0.0f) {
-        enemy_damage_text_timer -= dt;
-
-        FadingText(
-            enemy_damage_text_timer,
-            DAMAGE_TEXT_DURATION,
-            enemy_damage_text_value,
-            ENEMY_X_AXIS - 110,
-            ENEMY_Y_AXIS + 50
-        );
-    }
+    Check_Current_Player_State(PlayerState);
 
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
     if (player_turn == false) {
@@ -408,23 +418,21 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
             if (!soundwaveHitPlayer) {
                 soundwave_x -= speed * dt;
                 CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
-                // enemy open mouth when shooting soundwave
-                CP_Image_Draw(current_enemy_opened_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
-                HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+                EnemyState = ENEMY_ATTACKING;
             }
             else {
                 player_damage_text_timer = DAMAGE_TEXT_DURATION;
                 player_damage_text_value = current_enemy->attack - player.defence;
-                // enemy closed mouth when soundwave is shot
-                CP_Image_Draw(current_enemy_closed_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                EnemyState = ENEMY_IDLE;
                 // update current hp with reduced health
                 player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
-                HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+                
                 soundwave_x = 1300; // reset soundwave position after hitting player
 
                 score -= (current_enemy->attack - player.defence);
 				++enemy_basic_attack_shot;
             }
+            
         }
         //enemy has done all basic attack shots
         else {
@@ -435,14 +443,19 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
             //current enemy is not boss or current round is not divisible by ultimate charge, resets enemy's basic attack,
             //changes back to player's turn, and increments round
             else {
-                CP_Image_Draw(current_enemy_closed_img, enemy_x, ENEMY_Y_AXIS, PLAYER_WIDTH, PLAYER_HEIGHT, 255);
+                EnemyState = ENEMY_IDLE;
                 enemy_basic_attack_shot = 0;
                 player_turn = true;
-                return 1;
+                round_finished = 1;
             }
         }
     }
+    
+    Check_Current_Enemy_State(EnemyState);
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
+
+    HealthBar(darkRed, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
+    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
 
     if (player_damage_text_timer > 0.0f) {
         player_damage_text_timer -= dt;
@@ -456,7 +469,20 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
         );
     }
 
-    return 0;
+    //display damage after hitting enemy
+    if (enemy_damage_text_timer > 0.0f) {
+        enemy_damage_text_timer -= dt;
+
+        FadingText(
+            enemy_damage_text_timer,
+            DAMAGE_TEXT_DURATION,
+            enemy_damage_text_value,
+            ENEMY_X_AXIS - 110,
+            ENEMY_Y_AXIS + 50
+        );
+    }
+
+    return round_finished;
 }
 
 void Reset_Characters(void)
@@ -489,19 +515,20 @@ void Reset_Characters(void)
 
 void Game_Init(void)
 {
-    player_closed = CP_Image_Load("./Assets/player-closed.png");
     player_opened = CP_Image_Load("./Assets/player-open.png");
-    dumpling_closed = CP_Image_Load("./Assets/dumpling-closed.png");
     dumpling_opened = CP_Image_Load("./Assets/dumpling-open.png");
-    butter_closed = CP_Image_Load("./Assets/butter-close.png");
     butter_opened = CP_Image_Load("./Assets/butter-open.png");
-    boss_closed = CP_Image_Load("./Assets/boss-closed.png");
     boss_opened = CP_Image_Load("./Assets/boss-open.png");
     fireball = CP_Image_Load("./Assets/fireball.png");
     soundwave = CP_Image_Load("./Assets/soundwave.png");
 	skip_button = CP_Image_Load("./Assets/skip-button.png");
     defence_icon = CP_Image_Load("./Assets/defence-icon.png");
     hp_icon = CP_Image_Load("./Assets/hp-icon.png");
+
+    player_sprite = CP_Image_Load("./Assets/player_sprite.png");
+    dumpling_sprite = CP_Image_Load("./Assets/dumpling_sprite.png");
+    butter_sprite = CP_Image_Load("./Assets/butter_sprite.png");
+    boss_sprite = CP_Image_Load("./Assets/boss_sprite.png");
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");
@@ -661,12 +688,8 @@ void Game_Update(void)
 void Game_Exit(void)
 {
     CP_Image_Free(player_opened);
-    CP_Image_Free(player_closed);
-    CP_Image_Free(dumpling_closed);
     CP_Image_Free(dumpling_opened);
-    CP_Image_Free(butter_closed);
     CP_Image_Free(butter_opened);
-    CP_Image_Free(boss_closed);
     CP_Image_Free(boss_opened);
     Pause_Menu_Exit();
 }
