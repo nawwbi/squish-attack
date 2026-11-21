@@ -18,7 +18,7 @@ void Splash_Init(void)
     // team logo
     splash_team_logo = CP_Image_Load("./Assets/moonsstudios-logo.png");
 
-    splash_skip_button = CP_Image_Load("./Assets/skip-button.png");
+    splash_skip_button = CP_Image_Load("./Assets/game_button.png");;
 
     font = CP_Font_Load("./Assets/Jersey15-Regular.ttf");
 
@@ -105,9 +105,17 @@ void Splash_Update(void)
     }
 
     // skip button
-    CP_Image_Draw(splash_skip_button, 1500, 820, 100, 100, 255);
+    CP_Image_Draw(splash_skip_button, 1450, 820, 220, 200, 255);
 
-    int skipClicked = IsAreaClicked(1500.0f, 820.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    // skip text
+    CP_Font_Set(font);
+    CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
+    CP_Settings_TextSize(35);
+    CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+    CP_Font_DrawText("Skip", 1450.0f, 810.0f);
+
+    // skip button click
+    int skipClicked = IsAreaClicked(1450.0f, 820.0f, 220.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
     if (skipClicked == 1)
     {

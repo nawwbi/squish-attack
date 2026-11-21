@@ -58,6 +58,7 @@ int enemy_basic_attack_shot = 0;
 bool player_turn = true;
 int current_round = 1;
 int current_level = 1;
+int count_round = 0;
 bool upgradeTriggered = false;
 int is_paused = 0; // pause state initialize
 
@@ -226,7 +227,7 @@ void Progress_Bar(int current_level, float dt) {
 void Skill_Button(int round_finished) {
     int button_x = 220;
     int icon_x = 270;
-    static int count_round = 0;
+    //static int count_round = 0;
 
     if (round_finished == 1) {
         count_round++;
@@ -541,6 +542,9 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 
 void Reset_Characters(void)
 {
+    // reset player skill charge
+    count_round = 0;
+    
     // player
     player.attack = PLAYER_ATTACK;
     player.defence = PLAYER_DEFENCE;

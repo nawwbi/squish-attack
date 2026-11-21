@@ -211,6 +211,12 @@
     <Image Include="..\Assets\skill_button_grey.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\Assets\controls-skills-charged.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\controls-skills-uncharged.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\Assets\boss-fight.mp3">

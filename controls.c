@@ -12,6 +12,8 @@ CP_Image controls_right_arrow;
 CP_Image controls_gameplay;
 CP_Image controls_speed;
 CP_Image controls_upgrades;
+CP_Image controls_skill_uncharged;
+CP_Image controls_skill_charged;
 
 int controls_page = 1;
 
@@ -29,6 +31,9 @@ void Controls_Init(void)
     controls_gameplay = CP_Image_Load("./Assets/controls-gameplay.png");
     controls_speed = CP_Image_Load("./Assets/controls-speed.png");
     controls_upgrades = CP_Image_Load("./Assets/controls-upgrades.png");
+
+    controls_skill_uncharged = CP_Image_Load("./Assets/controls-skills-uncharged.png");
+    controls_skill_charged = CP_Image_Load("./Assets/controls-skills-charged.png");
 
     controls_page = 1;
 
@@ -52,7 +57,7 @@ void Controls_Update(void)
     // page 1: auto combat
     if (controls_page == 1)
     {
-        CP_Image_Draw(controls_gameplay, 800, 350, 650, 325, 255);
+        CP_Image_Draw(controls_gameplay, 800, 350, 650, 350, 255);
 
         CP_Settings_TextSize(25);
         CP_Font_DrawText("Combat happens automatically.", 800.0f, 555.0f);
@@ -62,7 +67,7 @@ void Controls_Update(void)
     // page 2: speed button
     else if (controls_page == 2)
     {
-        CP_Image_Draw(controls_speed, 800, 350, 650, 325, 255);
+        CP_Image_Draw(controls_speed, 800, 350, 650, 350, 255);
 
         CP_Settings_TextSize(25);
         CP_Font_DrawText("Click the speed button to speed up combat.", 800.0f, 555.0f);
@@ -72,28 +77,42 @@ void Controls_Update(void)
     // page 3: skills/upgrades
     else if (controls_page == 3)
     {
-        CP_Image_Draw(controls_upgrades, 800, 350, 650, 325, 255);
+        CP_Image_Draw(controls_upgrades, 800, 350, 650, 350, 255);
 
         CP_Settings_TextSize(25);
         CP_Font_DrawText("Click to choose 1 of the 3 upgrades shown.", 800.0f, 555.0f);
         CP_Font_DrawText("Your chosen upgrade stacks until the end of the game.", 800.0f, 590.0f);
     }
 
+    // page 4: player skill
+    else if (controls_page == 4)
+    {
+        CP_Image_Draw(controls_skill_uncharged, 610, 350, 370, 208, 255);
+        CP_Image_Draw(controls_skill_charged, 990, 350, 370, 208, 255);
+
+        CP_Settings_TextSize(25);
+        CP_Font_DrawText("The player skill charges after every 2 rounds.", 800.0f, 555.0f);
+        CP_Font_DrawText("Click the skill when it lights up to damage the enemy.", 800.0f, 590.0f);
+    }
 
     // page number
     CP_Settings_TextSize(22);
 
     if (controls_page == 1)
     {
-        CP_Font_DrawText("Page 1 / 3", 800.0f, 635.0f);
+        CP_Font_DrawText("Page 1 / 4", 800.0f, 635.0f);
     }
     else if (controls_page == 2)
     {
-        CP_Font_DrawText("Page 2 / 3", 800.0f, 635.0f);
+        CP_Font_DrawText("Page 2 / 4", 800.0f, 635.0f);
     }
     else if (controls_page == 3)
     {
-        CP_Font_DrawText("Page 3 / 3", 800.0f, 635.0f);
+        CP_Font_DrawText("Page 3 / 4", 800.0f, 635.0f);
+    }
+    else if (controls_page == 4)
+    {
+        CP_Font_DrawText("Page 4 / 4", 800.0f, 635.0f);
     }
 
 
@@ -117,7 +136,7 @@ void Controls_Update(void)
 
         if (controls_page < 1)
         {
-            controls_page = 3;
+            controls_page = 4;
         }
     }
 
@@ -128,7 +147,7 @@ void Controls_Update(void)
 
         controls_page++;
 
-        if (controls_page > 3)
+        if (controls_page > 4)
         {
             controls_page = 1;
         }
