@@ -3,7 +3,8 @@
 // existing skill enums: basic attack, ultimate
 typedef enum SkillEnum {
 	BASIC_ATTACK,
-	ULTIMATE
+	ULTIMATE,
+	SPACESHIP
 } SkillEnum;
 
 typedef enum Rarity {

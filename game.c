@@ -17,6 +17,10 @@ CP_Image dumpling_sprite = NULL;
 CP_Image butter_sprite = NULL;
 CP_Image boss_sprite = NULL;
 CP_Image current_enemy_sprite = NULL;
+CP_Image spaceship_sprite = NULL;
+CP_Image spaceship_icon = NULL;
+CP_Image skill_button = NULL;
+CP_Image skill_button_grey = NULL;
 
 CP_Image
 player_opened,
@@ -71,28 +75,32 @@ float player_damage_text_value = 0.0f;
 #define DAMAGE_TEXT_DURATION 1.0f
 
 //player's attack, defence, current hp, max hp
-#define PLAYER_ATTACK                 300.0
+#define PLAYER_ATTACK                 350.0
 #define PLAYER_DEFENCE                50.0
-#define PLAYER_CURRENT_HP             1000.0
-#define PLAYER_MAX_HP                 1000.0
+#define PLAYER_CURRENT_HP             3000.0
+#define PLAYER_MAX_HP                 3000.0
 #define PLAYER_BASIC_ATTACK_ITERATION 2
+
 #define PLAYER_ULTIMATE_ITERATION     1
 #define PLAYER_ULTIMATE_CHARGE        2
+
+#define PLAYER_SPACESHIP_ITERATION    1
+#define PLAYER_SPACESHIP_CHARGE       2
 
 //dumpling's attack, defence, current hp, max hp
 #define DUMPLING_ATTACK                 80.0
 #define DUMPLING_DEFENCE                0.0
-#define DUMPLING_CURRENT_HP             1000.0
-#define DUMPLING_MAX_HP                 1000.0
+#define DUMPLING_CURRENT_HP             4000.0
+#define DUMPLING_MAX_HP                 4000.0
 #define DUMPLING_BASIC_ATTACK_ITERATION 3
 #define DUMPLING_ULTIMATE_ITERATION     1
 #define DUMPLING_ULTIMATE_CHARGE        2
 
 //butter's attack, defence, current hp, max hp
 #define BUTTER_ATTACK                 100.0
-#define BUTTER_DEFENCE                50.0
-#define BUTTER_CURRENT_HP             1500.0
-#define BUTTER_MAX_HP                 1500.0
+#define BUTTER_DEFENCE                30.0
+#define BUTTER_CURRENT_HP             5000.0
+#define BUTTER_MAX_HP                 5000.0
 #define BUTTER_BASIC_ATTACK_ITERATION 2
 #define BUTTER_ULTIMATE_ITERATION     1
 #define BUTTER_ULTIMATE_CHARGE        2
@@ -100,14 +108,18 @@ float player_damage_text_value = 0.0f;
 //boss's attack, defence, current hp, max hp
 #define BOSS_ATTACK                 120.0
 #define BOSS_DEFENCE                60.0
-#define BOSS_CURRENT_HP             1800.0
-#define BOSS_MAX_HP                 1800.0
+#define BOSS_CURRENT_HP             6000.0
+#define BOSS_MAX_HP                 6000.0
 #define BOSS_BASIC_ATTACK_ITERATION 1
 #define BOSS_ULTIMATE_ITERATION     1
-#define BOSS_ULTIMATE_CHARGE        2
+#define BOSS_ULTIMATE_CHARGE        3
 
 struct Characters player = { PLAYER_ATTACK, PLAYER_DEFENCE, PLAYER_CURRENT_HP, PLAYER_MAX_HP,
-    {{ BASIC_ATTACK, PLAYER_BASIC_ATTACK_ITERATION }, { ULTIMATE, PLAYER_ULTIMATE_ITERATION }}
+    {
+        { BASIC_ATTACK, PLAYER_BASIC_ATTACK_ITERATION }, 
+        { ULTIMATE, PLAYER_ULTIMATE_ITERATION },
+        { SPACESHIP, PLAYER_SPACESHIP_ITERATION, PLAYER_SPACESHIP_CHARGE}
+    }
 };
 struct Characters dumpling = { DUMPLING_ATTACK, DUMPLING_DEFENCE, DUMPLING_CURRENT_HP, DUMPLING_MAX_HP,
     {{ BASIC_ATTACK, DUMPLING_BASIC_ATTACK_ITERATION }, { ULTIMATE, DUMPLING_ULTIMATE_ITERATION }}
@@ -128,15 +140,15 @@ static enum PlayerState {
 void Check_Current_Player_State(int player_state) {
     switch (player_state) {
     case PLAYER_IDLE:
-        Animation(player_sprite, true, true, PLAYER_X_AXIS);
+        CharacterAnimation(player_sprite, true, true, PLAYER_X_AXIS);
         break;
 
     case PLAYER_ATTACKING:
-        Animation(player_sprite, true, false, PLAYER_X_AXIS);
+        CharacterAnimation(player_sprite, true, false, PLAYER_X_AXIS);
         break;
 
     default:
-        Animation(player_sprite, true, true, PLAYER_X_AXIS);
+        CharacterAnimation(player_sprite, true, true, PLAYER_X_AXIS);
         break;
     }
 }
@@ -149,15 +161,15 @@ static enum EnemyState {
 void Check_Current_Enemy_State(int enemy_state) {
     switch (enemy_state) {
     case ENEMY_IDLE:
-        Animation(current_enemy_sprite, false, true, enemy_x);
+        CharacterAnimation(current_enemy_sprite, false, true, enemy_x);
         break;
 
     case ENEMY_ATTACKING:
-        Animation(current_enemy_sprite, false, false, enemy_x);
+        CharacterAnimation(current_enemy_sprite, false, false, enemy_x);
         break;
 
     default:
-        Animation(current_enemy_sprite, false, true, enemy_x);
+        CharacterAnimation(current_enemy_sprite, false, true, enemy_x);
         break;
     }
 }
@@ -209,6 +221,47 @@ void Progress_Bar(int current_level, float dt) {
     CP_Image_Draw(dumpling_opened, 630, 85, MINI_PLAYER_WIDTH + 10, MINI_PLAYER_HEIGHT + 10, 255);
     CP_Image_Draw(butter_opened, 950, 80, MINI_PLAYER_WIDTH + 15, MINI_PLAYER_HEIGHT + 15, 255);
     CP_Image_Draw(boss_opened, 1300, 85, MINI_PLAYER_WIDTH + 10, MINI_PLAYER_HEIGHT + 10, 255);
+}
+
+void Skill_Button(int round_finished) {
+    int button_x = 220;
+    int icon_x = 270;
+    static int count_round = 0;
+
+    if (round_finished == 1) {
+        count_round++;
+    }
+
+    for (int i = SPACESHIP; i < SPACESHIP+1; i++) {
+        bool enough_round = (count_round >= PLAYER_SPACESHIP_CHARGE);
+        if (enough_round) {
+            CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
+        }
+        else {
+            CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
+        }
+
+        CP_Image_Draw(spaceship_icon, icon_x, 800, 150, 170, 255);
+        int clicked = IsAreaClicked(icon_x, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+
+        if (clicked) {
+            if ((i == SPACESHIP) && enough_round) {
+                TriggerSkillAnimation();
+                enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
+                enemy_damage_text_value = (player.attack * 3) - current_enemy->defence;
+                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
+                score += ((player.attack * 3) - current_enemy->defence);
+
+                count_round = 0;
+            }
+        }
+
+        button_x += 120;
+        icon_x += 120;
+    }
+    
+    // Call this every frame to update and display the animation
+    SkillAnimation(spaceship_sprite);
 }
 
 int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
@@ -274,7 +327,6 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
 }
 
 int Game_Per_Round(float dt, int current_round, int current_level) {
-
     int round_finished = 0;
 
     //setting background
@@ -457,6 +509,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 
     HealthBar(darkRed, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
     HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+    Skill_Button(round_finished);
 
     if (player_damage_text_timer > 0.0f) {
         player_damage_text_timer -= dt;
@@ -530,6 +583,10 @@ void Game_Init(void)
     dumpling_sprite = CP_Image_Load("./Assets/dumpling_sprite.png");
     butter_sprite = CP_Image_Load("./Assets/butter_sprite.png");
     boss_sprite = CP_Image_Load("./Assets/boss_sprite.png");
+    spaceship_sprite = CP_Image_Load("./Assets/spaceship_sprite.png");
+    spaceship_icon = CP_Image_Load("./Assets/spaceship_icon.png");
+    skill_button = CP_Image_Load("./Assets/skill_button.png");
+    skill_button_grey = CP_Image_Load("./Assets/skill_button_grey.png");
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");
