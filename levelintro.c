@@ -2,6 +2,7 @@
 #include "levelintro.h"
 #include "game.h"
 #include "audio.h"
+#include "debug.h"
 
 extern int current_level;
 
@@ -58,6 +59,9 @@ void Level_Intro_Update(void)
     {
         CP_Engine_SetNextGameState(Game_Init, Game_Update, Game_Exit);
     }
+
+    Debug_Update();
+    Debug_Draw();
 }
 
 void Level_Intro_Exit(void)

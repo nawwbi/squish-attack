@@ -6,7 +6,7 @@
 #include "mainmenu.h"
 #include "game.h"
 #include "levelintro.h"
-#include "pause.h"
+#include "debug.h"
 #include <stdbool.h>
 
 int numSkills = 0;
@@ -222,6 +222,9 @@ void Upgrades_Update(void) {
 
         return;
     }
+
+    Debug_Update();
+    Debug_Draw();
 }
 
 void Upgrades_Exit(void) { 
