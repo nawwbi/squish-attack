@@ -733,7 +733,7 @@ void Game_Update(void)
     Debug_Update();
 
     // Debug_StartTimer(0);
-    if (!is_paused && !gameOver && current_round <= 10) {
+    /*if (!is_paused && !gameOver && current_round <= 10) {
         float active_dt = Debug_ShouldUpdateGame() ? dt : 0.0f;
 
         if (Game_Per_Round(active_dt, current_round, current_level) == 1) {
