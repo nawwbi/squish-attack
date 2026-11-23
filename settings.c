@@ -5,6 +5,7 @@
 #include "pause.h"
 #include "audio.h"
 #include "settings.h"
+#include "settingscontrols.h"
 #include "debug.h"
 #include <stdbool.h>
 
@@ -23,9 +24,12 @@ float main_volume = 1.0f; // 1.0f = 100%
 bool bgm_on = true;
 bool sfx_on = true;
 
+// controls page 
+bool is_controls = false; // initialization to open controls page
+
 // debug mode button in settings 
 float debug_mode_x = 800.0f;
-float debug_mode_y = 600.0f;
+float debug_mode_y = 675.0f;
 float debug_mode_w = 350.0f;
 float debug_mode_h = 220.0f;
 
@@ -40,10 +44,12 @@ void Settings_Init(void) {
     green = CP_Color_Create(100, 255, 100, 255);
 
     Update_Audio();
+    Settings_Controls_Init(); // load controls 
 }
 
 void Settings_Update(void) {
     if (is_settings == true) {
+
         DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 600, 700, 20);
 
         CP_Settings_Fill(white);
@@ -173,6 +179,25 @@ void Settings_Update(void) {
             Audio_Play_Button_Click();
         }
 
+        // controls button
+        CP_Settings_RectMode(CP_POSITION_CENTER);
+        CP_Image_Draw(menu_button, 800, 600, 350, 220, 255);
+        CP_Settings_TextSize(25.0f);
+        CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
+        CP_Font_DrawText("Controls", 800, 600 - 10.0f);
+
+        if (IsAreaClicked(800, 600, 350, 220, CP_Input_GetMouseX(), CP_Input_GetMouseY())) 
+        {
+            Audio_Play_Button_Click();
+            is_controls = true;
+        }
+
+        if (is_controls == true)
+        {
+            Settings_Controls_Update();
+            return;
+        }
+
         // debug mode button 
         CP_Settings_RectMode(CP_POSITION_CENTER);
         CP_Image_Draw(menu_button, debug_mode_x, debug_mode_y, debug_mode_w, debug_mode_h, 255);
@@ -186,12 +211,12 @@ void Settings_Update(void) {
 
         // back button
         CP_Settings_RectMode(CP_POSITION_CENTER);
-        CP_Image_Draw(menu_button, 800, 690, 350, 220, 255);
+        CP_Image_Draw(menu_button, 800, 750, 350, 220, 255);
         CP_Settings_TextSize(25.0f);
         CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-        CP_Font_DrawText("Back", 800, 680);
+        CP_Font_DrawText("Back", 800, 740);
 
-        if (IsAreaClicked(800, 690, 350, 220, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+        if (IsAreaClicked(800, 750, 350, 220, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
             Audio_Play_Button_Click();
             is_settings = false;
         }

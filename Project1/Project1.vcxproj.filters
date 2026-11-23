@@ -66,6 +66,9 @@
     <ClCompile Include="..\levelintro.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\settingscontrols.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\levelintro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\settingscontrols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

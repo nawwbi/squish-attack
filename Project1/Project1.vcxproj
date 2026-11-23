@@ -118,6 +118,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\mainmenu.c" />
     <ClCompile Include="..\pause.c" />
     <ClCompile Include="..\settings.c" />
+    <ClCompile Include="..\settingscontrols.c" />
     <ClCompile Include="..\splash.c" />
     <ClCompile Include="..\upgrades.c" />
     <ClCompile Include="..\utils.c" />
@@ -135,6 +136,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\mainmenu.h" />
     <ClInclude Include="..\pause.h" />
     <ClInclude Include="..\settings.h" />
+    <ClInclude Include="..\settingscontrols.h" />
     <ClInclude Include="..\splash.h" />
     <ClInclude Include="..\upgrades.h" />
     <ClInclude Include="..\utils.h" />

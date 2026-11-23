@@ -6,6 +6,7 @@
 #include "audio.h"
 #include "pause.h"
 #include "levelintro.h"
+#include "settingscontrols.h"
 #include <stdbool.h>
 
 CP_Font font;
@@ -18,6 +19,7 @@ extern CP_Image background;
 extern int is_paused;
 bool is_settings = false; 
 bool confirm_quit = false;
+extern bool is_controls;
 
 extern int fireball_x;
 extern int soundwave_x;
@@ -111,6 +113,7 @@ void Pause_Menu_Update(void) {
             else if (settingsClicked == 1) {
                Audio_Play_Button_Click();
                is_settings = true;
+               is_controls = false;
             }
             // restart
             else if (restartClicked == 1) {
