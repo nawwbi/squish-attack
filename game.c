@@ -731,6 +731,29 @@ void Game_Update(void)
     }
 
     Debug_Update();
+
+    // Debug_StartTimer(0);
+    if (!is_paused && !gameOver && current_round <= 10) {
+        float active_dt = Debug_ShouldUpdateGame() ? dt : 0.0f;
+
+        if (Game_Per_Round(active_dt, current_round, current_level) == 1) {
+            ++current_round;
+        }
+        Debug_RecordFrame(); // save frame for rewinding
+    }
+    //Debug_EndTimer(0);
+
+    // draw collision circles if F7 hitboxes on
+    Debug_DrawCollisionCircles();
+
+    /* profile UI& pause Menu(once per frame)
+    Debug_StartTimer(1);
+    Pause_Menu_Update();
+    Debug_EndTimer(1);
+    */
+
+    // debug console
+    Debug_Draw();
     Pause_Menu_Update();
 
     // fade in effect
