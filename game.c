@@ -21,6 +21,8 @@ CP_Image spaceship_sprite = NULL;
 CP_Image spaceship_icon = NULL;
 CP_Image meteorite_sprite = NULL;
 CP_Image meteorite_icon = NULL;
+CP_Image bubble_sprite = NULL;
+CP_Image bubble_icon = NULL;
 CP_Image skill_button = NULL;
 CP_Image skill_button_grey = NULL;
 
@@ -89,10 +91,13 @@ float stunned_text_timer = 0.0f;
 #define PLAYER_ULTIMATE_CHARGE        2
 
 #define PLAYER_SPACESHIP_ITERATION    1
-#define PLAYER_SPACESHIP_CHARGE       30
+#define PLAYER_SPACESHIP_CHARGE       35
 
 #define PLAYER_METEORITE_ITERATION    1
 #define PLAYER_METEORITE_CHARGE       40
+
+#define PLAYER_BUBBLE_ITERATION       1
+#define PLAYER_BUBBLE_CHARGE          15
 
 //dumpling's attack, defence, current hp, max hp
 #define DUMPLING_ATTACK                 80.0
@@ -238,6 +243,8 @@ void Skill_Button(int round_finished) {
 
     if (round_finished == 1) {
         mana+=10;
+        TriggerBubbleAnimation();
+        EndBubbleAnimation();
     }
 
     char text[50];
@@ -248,9 +255,10 @@ void Skill_Button(int round_finished) {
 
     int skill_charge_amt = PLAYER_SPACESHIP_CHARGE;
 
-    for (int i = SPACESHIP; i < SPACESHIP+2; i++) {
+    for (int i = SPACESHIP; i < SPACESHIP+3; i++) {
         bool spaceship_charged = (mana >= PLAYER_SPACESHIP_CHARGE);
         bool meteorite_charged = (mana >= PLAYER_METEORITE_CHARGE);
+        bool bubble_charged = (mana >= PLAYER_BUBBLE_CHARGE);
 
         char cost[50];
         CP_Settings_TextSize(30);
@@ -286,8 +294,26 @@ void Skill_Button(int round_finished) {
                 CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
             }
 
-			CP_Image_Draw(meteorite_icon, icon_x, 800, 100, 100, 255);
+			CP_Image_Draw(meteorite_icon, icon_x, 800, 110, 120, 255);
 		}
+
+        if (i == BUBBLE) {
+            skill_charge_amt = PLAYER_BUBBLE_CHARGE;
+
+            if (bubble_charged) {
+                CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
+                CP_Settings_Fill(darkGreen);
+                CP_Font_DrawText("Available!", icon_x, cost_y);
+            }
+            else {
+                CP_Settings_Fill(white);
+                snprintf(cost, sizeof(cost), "Cost: %d", skill_charge_amt);
+                CP_Font_DrawText(cost, icon_x, cost_y);
+                CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
+            }
+
+            CP_Image_Draw(bubble_icon, icon_x, 800, 100, 100, 255);
+        }
 
         int clicked = IsAreaClicked(icon_x, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
@@ -307,6 +333,9 @@ void Skill_Button(int round_finished) {
                 current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
                 score += ((player.attack * 3) - current_enemy->defence);
                 mana -= PLAYER_METEORITE_CHARGE;
+            } else if ((i == BUBBLE) && bubble_charged) {
+                TriggerBubbleAnimation();
+                mana -= PLAYER_BUBBLE_CHARGE;
             }
         }
 
@@ -316,6 +345,7 @@ void Skill_Button(int round_finished) {
     
     SpaceshipAnimation(spaceship_sprite);
     MeteoriteAnimation(meteorite_sprite);
+    BubbleAnimation(bubble_sprite);
 }
 
 int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
@@ -527,19 +557,24 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 soundwave_x -= speed * dt;
                 CP_Image_Draw(soundwave, soundwave_x, ENEMY_Y_AXIS, 90, 90, 255);
                 EnemyState = ENEMY_ATTACKING;
-            }
-            else {
-                player_damage_text_timer = DAMAGE_TEXT_DURATION;
-                player_damage_text_value = current_enemy->attack - player.defence;
-                EnemyState = ENEMY_IDLE;
-                // update current hp with reduced health
-                player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
-                
-                soundwave_x = 1300; // reset soundwave position after hitting player
+			}
+			else {
+				EnemyState = ENEMY_IDLE;
 
-                score -= (current_enemy->attack - player.defence);
+				if (IsBubbleAnimationActive()) {
+					player_damage_text_timer = DAMAGE_TEXT_DURATION;
+					player_damage_text_value = 0.0f;
+				} else {
+					player_damage_text_timer = DAMAGE_TEXT_DURATION;
+					player_damage_text_value = current_enemy->attack - player.defence;
+					// update current hp with reduced health
+					player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
+					score -= (current_enemy->attack - player.defence);
+				}
+
+				soundwave_x = 1300; // reset soundwave position after hitting player
 				++enemy_basic_attack_shot;
-            }
+			}
             
         }
         //enemy has done all basic attack shots
@@ -569,13 +604,23 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     if (player_damage_text_timer > 0.0f) {
         player_damage_text_timer -= dt;
 
-        DamageText(
-            player_damage_text_timer, 
-            DAMAGE_TEXT_DURATION, 
-            player_damage_text_value,
-            PLAYER_X_AXIS + 100,
-            PLAYER_Y_AXIS + 50
-        );
+        if (player_damage_text_value == 0.0f && IsBubbleAnimationActive()) {
+            FadingText(
+                player_damage_text_timer,
+                DAMAGE_TEXT_DURATION,
+                "Blocked!",
+                PLAYER_X_AXIS + 100,
+                PLAYER_Y_AXIS + 50
+            );
+        } else {
+            DamageText(
+                player_damage_text_timer, 
+                DAMAGE_TEXT_DURATION, 
+                player_damage_text_value,
+                PLAYER_X_AXIS + 100,
+                PLAYER_Y_AXIS + 50
+            );
+        }
     }
 
     //display damage after hitting enemy
@@ -658,6 +703,8 @@ void Game_Init(void)
     spaceship_icon = CP_Image_Load("./Assets/spaceship_icon.png");
     meteorite_sprite = CP_Image_Load("./Assets/meteorite_sprite.png");
     meteorite_icon = CP_Image_Load("./Assets/meteorite_icon.png");
+    bubble_sprite = CP_Image_Load("./Assets/bubble_sprite.png");
+    bubble_icon = CP_Image_Load("./Assets/bubble_icon.png");
     skill_button = CP_Image_Load("./Assets/skill_button.png");
     skill_button_grey = CP_Image_Load("./Assets/skill_button_grey.png");
 

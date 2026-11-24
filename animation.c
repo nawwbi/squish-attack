@@ -10,6 +10,7 @@ const int frameCount = 3;
 static int skillAnimationFrameCount = 0;
 static bool isSpaceshipAnimationActive = false;
 static bool isMeteoriteAnimationActive = false;
+static bool isBubbleAnimationActive = false;
 static float skillTimer = 0.0f;
 const float skillFrameDuration = 0.30f;
 const int SKILL_ANIMATION_FRAMES = 3;
@@ -154,4 +155,55 @@ void TriggerMeteoriteAnimation(void) {
         frame = 0;
         meteoriteMovementTimer = 0.0f;
     }
+}
+
+void BubbleAnimation(CP_Image sprite) {
+
+    if (!isBubbleAnimationActive) {
+        return;
+    }
+
+    int imageWidth = CP_Image_GetWidth(sprite);
+    int imageHeight = CP_Image_GetHeight(sprite);
+
+    float frameWidth = imageWidth / (float)frameCount;
+
+    CP_Image_DrawSubImage(
+        sprite,
+        PLAYER_X_AXIS,
+        PLAYER_Y_AXIS,   // where to draw
+        300,
+        300,                       // size on screen
+        frame * frameWidth,
+        0,          // top-left of the source frame (u0, v0)
+        (frame + 1) * frameWidth,       // right edge of the source frame (u1)
+        imageHeight,                    // bottom edge (v1)
+        225
+    );
+
+    skillTimer += CP_System_GetDt();
+    if (skillTimer >= frameDuration) {
+        skillTimer -= frameDuration;
+        frame = (frame + 1) % frameCount;
+    }
+}
+
+void TriggerBubbleAnimation(void) {
+    if (!isBubbleAnimationActive) {
+        isBubbleAnimationActive = true;
+        skillAnimationFrameCount = 0;
+        frame = 0;
+        skillTimer = 0.0f;
+    }
+}
+
+void EndBubbleAnimation(void) {
+    isBubbleAnimationActive = false;
+    skillAnimationFrameCount = 0;
+    frame = 0;
+    skillTimer = 0.0f;
+}
+
+bool IsBubbleAnimationActive(void) {
+    return isBubbleAnimationActive;
 }

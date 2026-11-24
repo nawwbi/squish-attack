@@ -5,7 +5,8 @@ typedef enum SkillEnum {
 	BASIC_ATTACK,
 	ULTIMATE,
 	SPACESHIP,
-	METEORITE
+	METEORITE,
+	BUBBLE
 } SkillEnum;
 
 typedef enum Rarity {

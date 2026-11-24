@@ -151,6 +151,8 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <Image Include="..\Assets\boss-closed.png" />
     <Image Include="..\Assets\boss-open.png" />
     <Image Include="..\Assets\boss_sprite.png" />
+    <Image Include="..\Assets\bubble_icon.png" />
+    <Image Include="..\Assets\bubble_sprite.png" />
     <Image Include="..\Assets\butter-close.png" />
     <Image Include="..\Assets\butter-open.png" />
     <Image Include="..\Assets\controls-skills-charged.png" />
