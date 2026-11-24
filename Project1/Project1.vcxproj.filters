@@ -217,16 +217,28 @@
     <Image Include="..\Assets\skill_button_grey.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\controls-skills-charged.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\controls-skills-uncharged.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\meteorite_sprite.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\meteorite_icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\bubble_icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\bubble_sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\controls-gameplay.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\controls-skills.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\controls-speed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\controls-upgrades.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

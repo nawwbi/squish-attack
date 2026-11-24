@@ -13,8 +13,7 @@ CP_Image controls_right_arrow;
 CP_Image controls_gameplay;
 CP_Image controls_speed;
 CP_Image controls_upgrades;
-CP_Image controls_skill_uncharged;
-CP_Image controls_skill_charged;
+CP_Image controls_skills;
 
 int settings_controls_page = 1;
 extern bool is_controls;
@@ -34,8 +33,7 @@ void Settings_Controls_Init(void)
     controls_speed = CP_Image_Load("./Assets/controls-speed.png");
     controls_upgrades = CP_Image_Load("./Assets/controls-upgrades.png");
 
-    controls_skill_uncharged = CP_Image_Load("./Assets/controls-skills-uncharged.png");
-    controls_skill_charged = CP_Image_Load("./Assets/controls-skills-charged.png");
+    controls_skills = CP_Image_Load("./Assets/controls-skills.png");
 
     settings_controls_page = 1;
     is_controls = true;
@@ -90,15 +88,14 @@ void Settings_Controls_Update(void)
             CP_Font_DrawText("Your chosen upgrade stacks until the end of the game.", 800.0f, 590.0f);
         }
 
-        // page 4: player skill
+        // page 4: player skills
         else if (settings_controls_page == 4)
         {
-            CP_Image_Draw(controls_skill_uncharged, 610, 350, 370, 208, 255);
-            CP_Image_Draw(controls_skill_charged, 990, 350, 370, 208, 255);
+            CP_Image_Draw(controls_skills, 800, 350, 650, 350, 255);
 
             CP_Settings_TextSize(25);
-            CP_Font_DrawText("The player skill charges after every 2 rounds.", 800.0f, 555.0f);
-            CP_Font_DrawText("Click the skill when it lights up to damage the enemy.", 800.0f, 590.0f);
+            CP_Font_DrawText("Use mana to activate skills during combat.", 800.0f, 555.0f);
+            CP_Font_DrawText("Each skill has a different mana cost and effect.", 800.0f, 590.0f);
         }
 
         // page number
