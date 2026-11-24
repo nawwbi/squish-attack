@@ -27,7 +27,12 @@ bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float 
 
 void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char* const string);
 
-void FadingText(
+void DamageText(
 	float current_timer, float total_timer, float value,
+	float x, float y
+);
+
+void FadingText(
+	float current_timer, float total_timer, char* string,
 	float x, float y
 );

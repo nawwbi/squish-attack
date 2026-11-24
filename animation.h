@@ -1,4 +1,5 @@
 #pragma once
 void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x);
 
-void SkillAnimation(CP_Image sprite);
+void SpaceshipAnimation(CP_Image sprite);
+void MeteoriteAnimation(CP_Image sprite);

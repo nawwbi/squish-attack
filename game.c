@@ -19,6 +19,8 @@ CP_Image boss_sprite = NULL;
 CP_Image current_enemy_sprite = NULL;
 CP_Image spaceship_sprite = NULL;
 CP_Image spaceship_icon = NULL;
+CP_Image meteorite_sprite = NULL;
+CP_Image meteorite_icon = NULL;
 CP_Image skill_button = NULL;
 CP_Image skill_button_grey = NULL;
 
@@ -58,7 +60,7 @@ int enemy_basic_attack_shot = 0;
 bool player_turn = true;
 int current_round = 1;
 int current_level = 1;
-int count_round = 0;
+int mana = 0;
 bool upgradeTriggered = false;
 int is_paused = 0; // pause state initialize
 
@@ -73,6 +75,7 @@ float enemy_damage_text_value = 0.0f;
 
 float player_damage_text_timer = 0.0f;
 float player_damage_text_value = 0.0f;
+float stunned_text_timer = 0.0f;
 #define DAMAGE_TEXT_DURATION 1.0f
 
 //player's attack, defence, current hp, max hp
@@ -86,7 +89,10 @@ float player_damage_text_value = 0.0f;
 #define PLAYER_ULTIMATE_CHARGE        2
 
 #define PLAYER_SPACESHIP_ITERATION    1
-#define PLAYER_SPACESHIP_CHARGE       2
+#define PLAYER_SPACESHIP_CHARGE       30
+
+#define PLAYER_METEORITE_ITERATION    1
+#define PLAYER_METEORITE_CHARGE       40
 
 //dumpling's attack, defence, current hp, max hp
 #define DUMPLING_ATTACK                 80.0
@@ -119,7 +125,8 @@ struct Characters player = { PLAYER_ATTACK, PLAYER_DEFENCE, PLAYER_CURRENT_HP, P
     {
         { BASIC_ATTACK, PLAYER_BASIC_ATTACK_ITERATION }, 
         { ULTIMATE, PLAYER_ULTIMATE_ITERATION },
-        { SPACESHIP, PLAYER_SPACESHIP_ITERATION, PLAYER_SPACESHIP_CHARGE}
+        { SPACESHIP, PLAYER_SPACESHIP_ITERATION, PLAYER_SPACESHIP_CHARGE},
+        { METEORITE, PLAYER_METEORITE_ITERATION, PLAYER_METEORITE_CHARGE}
     }
 };
 struct Characters dumpling = { DUMPLING_ATTACK, DUMPLING_DEFENCE, DUMPLING_CURRENT_HP, DUMPLING_MAX_HP,
@@ -227,33 +234,79 @@ void Progress_Bar(int current_level, float dt) {
 void Skill_Button(int round_finished) {
     int button_x = 220;
     int icon_x = 270;
-    //static int count_round = 0;
+    int cost_y = 865;
 
     if (round_finished == 1) {
-        count_round++;
+        mana+=10;
     }
 
-    for (int i = SPACESHIP; i < SPACESHIP+1; i++) {
-        bool enough_round = (count_round >= PLAYER_SPACESHIP_CHARGE);
-        if (enough_round) {
-            CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
-        }
-        else {
-            CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
-        }
+    char text[50];
+    snprintf(text, sizeof(text), "Mana: %d", mana);
+    CP_Settings_Fill(white);
+    CP_Settings_TextSize(50);
+    CP_Font_DrawText(text, 100, 830);
 
-        CP_Image_Draw(spaceship_icon, icon_x, 800, 150, 170, 255);
+    int skill_charge_amt = PLAYER_SPACESHIP_CHARGE;
+
+    for (int i = SPACESHIP; i < SPACESHIP+2; i++) {
+        bool spaceship_charged = (mana >= PLAYER_SPACESHIP_CHARGE);
+        bool meteorite_charged = (mana >= PLAYER_METEORITE_CHARGE);
+
+        char cost[50];
+        CP_Settings_TextSize(30);
+
+		if (i == SPACESHIP) {
+            if (spaceship_charged) {
+                CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
+                CP_Settings_Fill(darkGreen);
+                CP_Font_DrawText("Available!", icon_x, cost_y);
+            }
+            else {
+                CP_Settings_Fill(white);
+                snprintf(cost, sizeof(cost), "Cost: %d", skill_charge_amt);
+                CP_Font_DrawText(cost, icon_x, cost_y);
+                CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
+            }
+
+			CP_Image_Draw(spaceship_icon, icon_x, 800, 150, 170, 255);
+		}
+
+		if (i == METEORITE) {
+            skill_charge_amt = PLAYER_METEORITE_CHARGE;
+
+            if (meteorite_charged) {
+                CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
+                CP_Settings_Fill(darkGreen);
+                CP_Font_DrawText("Available!", icon_x, cost_y);
+            }
+            else {
+                CP_Settings_Fill(white);
+                snprintf(cost, sizeof(cost), "Cost: %d", skill_charge_amt);
+                CP_Font_DrawText(cost, icon_x, cost_y);
+                CP_Image_Draw(skill_button_grey, icon_x, 800, 100, 100, 255);
+            }
+
+			CP_Image_Draw(meteorite_icon, icon_x, 800, 100, 100, 255);
+		}
+
         int clicked = IsAreaClicked(icon_x, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (clicked) {
-            if ((i == SPACESHIP) && enough_round) {
-                TriggerSkillAnimation();
+            if ((i == SPACESHIP) && spaceship_charged) {
+                TriggerSpaceshipAnimation();
+                enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
+                enemy_damage_text_value = (player.attack * 2) - current_enemy->defence;
+                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 2), current_enemy->defence);
+                score += ((player.attack * 2) - current_enemy->defence);
+                mana -= PLAYER_SPACESHIP_CHARGE;
+            }
+            else if ((i == METEORITE) && meteorite_charged) {
+                TriggerMeteoriteAnimation();
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = (player.attack * 3) - current_enemy->defence;
                 current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
                 score += ((player.attack * 3) - current_enemy->defence);
-
-                count_round = 0;
+                mana -= PLAYER_METEORITE_CHARGE;
             }
         }
 
@@ -261,8 +314,8 @@ void Skill_Button(int round_finished) {
         icon_x += 120;
     }
     
-    // Call this every frame to update and display the animation
-    SkillAnimation(spaceship_sprite);
+    SpaceshipAnimation(spaceship_sprite);
+    MeteoriteAnimation(meteorite_sprite);
 }
 
 int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
@@ -292,6 +345,7 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         }
         else {
             player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack * 1.5f, player.defence);
+            stunned_text_timer = DAMAGE_TEXT_DURATION;
             boss_state = BOSS_STUN_PAUSE;
         }
         return 0;
@@ -515,7 +569,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     if (player_damage_text_timer > 0.0f) {
         player_damage_text_timer -= dt;
 
-        FadingText(
+        DamageText(
             player_damage_text_timer, 
             DAMAGE_TEXT_DURATION, 
             player_damage_text_value,
@@ -528,12 +582,25 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     if (enemy_damage_text_timer > 0.0f) {
         enemy_damage_text_timer -= dt;
 
-        FadingText(
+        DamageText(
             enemy_damage_text_timer,
             DAMAGE_TEXT_DURATION,
             enemy_damage_text_value,
             ENEMY_X_AXIS - 110,
             ENEMY_Y_AXIS + 50
+        );
+    }
+
+    //display damage after hitting enemy
+    if (stunned_text_timer > 0.0f) {
+        stunned_text_timer -= dt;
+
+        FadingText(
+            stunned_text_timer,
+            DAMAGE_TEXT_DURATION,
+            "STUNNED!",
+            PLAYER_X_AXIS + 100,
+            PLAYER_Y_AXIS + 100
         );
     }
 
@@ -543,7 +610,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 void Reset_Characters(void)
 {
     // reset player skill charge
-    count_round = 0;
+    mana = 0;
     
     // player
     player.attack = PLAYER_ATTACK;
@@ -589,6 +656,8 @@ void Game_Init(void)
     boss_sprite = CP_Image_Load("./Assets/boss_sprite.png");
     spaceship_sprite = CP_Image_Load("./Assets/spaceship_sprite.png");
     spaceship_icon = CP_Image_Load("./Assets/spaceship_icon.png");
+    meteorite_sprite = CP_Image_Load("./Assets/meteorite_sprite.png");
+    meteorite_icon = CP_Image_Load("./Assets/meteorite_icon.png");
     skill_button = CP_Image_Load("./Assets/skill_button.png");
     skill_button_grey = CP_Image_Load("./Assets/skill_button_grey.png");
 

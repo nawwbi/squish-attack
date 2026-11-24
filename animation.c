@@ -7,12 +7,15 @@ static float timer = 0.0f;
 const float frameDuration = 0.50f;   // seconds per frame
 const int frameCount = 3;
 
-// Skill animation state
 static int skillAnimationFrameCount = 0;
-static bool isSkillAnimationActive = false;
+static bool isSpaceshipAnimationActive = false;
+static bool isMeteoriteAnimationActive = false;
 static float skillTimer = 0.0f;
 const float skillFrameDuration = 0.30f;
-const int SKILL_ANIMATION_FRAMES = 3;  // Display for 3 frames
+const int SKILL_ANIMATION_FRAMES = 3;
+
+static float meteoriteMovementTimer = 0.0f;
+const float meteoriteMovementDuration = 0.60f;
 
 void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x) {
     //int width = CP_System_GetWindowWidth();
@@ -43,10 +46,10 @@ void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x) {
     );
 }
 
-void SkillAnimation(CP_Image sprite) {
+void SpaceshipAnimation(CP_Image sprite) {
 
-    if (!isSkillAnimationActive) {
-        return;  // Don't draw if animation isn't active
+    if (!isSpaceshipAnimationActive) {
+        return;
     }
 
     int imageWidth = CP_Image_GetWidth(sprite);
@@ -67,14 +70,13 @@ void SkillAnimation(CP_Image sprite) {
         225
     );
 
-    // Update timer and advance frames
     skillTimer += CP_System_GetDt();
     if (skillTimer >= frameDuration) {
         skillTimer -= frameDuration;
     skillAnimationFrameCount++;
 
     if (skillAnimationFrameCount > SKILL_ANIMATION_FRAMES) {
-        isSkillAnimationActive = false;
+        isSpaceshipAnimationActive = false;
         skillAnimationFrameCount = 0;
         frame = 0;
             skillTimer = 0.0f;
@@ -84,10 +86,72 @@ void SkillAnimation(CP_Image sprite) {
     }
 }
 
-void TriggerSkillAnimation(void) {
-    if (!isSkillAnimationActive) {
-        isSkillAnimationActive = true;
+void TriggerSpaceshipAnimation(void) {
+    if (!isSpaceshipAnimationActive) {
+        isSpaceshipAnimationActive = true;
         skillAnimationFrameCount = 0;
         frame = 0;
+    }
+}
+
+void MeteoriteAnimation(CP_Image sprite) {
+
+    if (!isMeteoriteAnimationActive) {
+        return;
+    }
+
+    int imageWidth = CP_Image_GetWidth(sprite);
+    int imageHeight = CP_Image_GetHeight(sprite);
+
+    float frameWidth = imageWidth / (float)frameCount;
+    float movementProgress = meteoriteMovementTimer / meteoriteMovementDuration;
+    if (movementProgress > 1.0f) movementProgress = 1.0f;
+
+    float startX = PLAYER_X_AXIS;
+    float startY = PLAYER_Y_AXIS;
+    float endX = ENEMY_X_AXIS;
+    float endY = ENEMY_Y_AXIS;
+
+    float currentX = startX + (endX - startX) * movementProgress;
+    float currentY = startY + (endY - startY) * movementProgress;
+
+    CP_Image_DrawSubImage(
+        sprite,
+        currentX,
+        currentY,   // where to draw (interpolated position)
+        200,
+        150,                       // size on screen
+        frame * frameWidth,
+        0,          // top-left of the source frame (u0, v0)
+        (frame + 1) * frameWidth,       // right edge of the source frame (u1)
+        imageHeight,                    // bottom edge (v1)
+        225
+    );
+
+    meteoriteMovementTimer += CP_System_GetDt();
+    skillTimer += CP_System_GetDt();
+    if (skillTimer >= skillFrameDuration) {
+        skillTimer -= skillFrameDuration;
+        skillAnimationFrameCount++;
+
+        if (skillAnimationFrameCount > SKILL_ANIMATION_FRAMES) {
+            isMeteoriteAnimationActive = false;
+            skillAnimationFrameCount = 0;
+            frame = 0;
+            skillTimer = 0.0f;
+            meteoriteMovementTimer = 0.0f;
+        }
+        else {
+            frame = skillAnimationFrameCount % frameCount;
+        }
+    }
+}
+
+void TriggerMeteoriteAnimation(void) {
+    if (!isMeteoriteAnimationActive) {
+        isMeteoriteAnimationActive = true;
+        skillAnimationFrameCount = 0;
+        frame = 0;
+        meteoriteMovementTimer = 0.0f;
     }
 }
