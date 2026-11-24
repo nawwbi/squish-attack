@@ -19,7 +19,9 @@ extern CP_Image background;
 extern int is_paused;
 bool is_settings = false; 
 bool confirm_quit = false;
-extern bool is_controls;
+
+// controls page 
+bool is_controls = false; // initialization to open controls page
 
 extern int fireball_x;
 extern int soundwave_x;
@@ -54,6 +56,7 @@ void Pause_Menu_Update(void) {
             Audio_Play_Button_Click();
             CP_Sound_PauseGroup(CP_SOUND_GROUP_MUSIC);
             is_paused = 1; // pause state true if pause button clicked
+            is_controls = false; // makes sure when opening pause it doesnt open controls auto 
         }
     }
 
@@ -64,33 +67,36 @@ void Pause_Menu_Update(void) {
         CP_Image_Draw(background, 800, 450, 1600, 900, 255);
 
         if (is_settings == false && confirm_quit == false) {
-            DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 500, 20);
+            DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 650, 20);
 
             CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
             CP_Settings_TextSize(50);
             CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
-            CP_Font_DrawText("PAUSED", 800, 245); // pause menu background
+            CP_Font_DrawText("PAUSED", 800, 195); // pause menu background
 
             // menu buttons coordinates in pause menu 
             float pmenu_button_w = 320.0f;
             float pmenu_button_h = 90.0f;
             float pmenu_button_x = 800.0f;
 
-            float continue_button_y = 330.0f; // 340
-            float settings_button_y = 435.0f; // 430
-            float restart_button_y = 540.0f; // 520 
-            float mainmenu_button_y = 645.0f; // 610
+            float continue_button_y = 300.0f; // 340 -> 105 diff
+            float settings_button_y = 405.0f; // 430
+            float pmenu_controls_button_y = 510.0f; // 610
+            float restart_button_y = 615.0f; // 520
+            float mainmenu_button_y = 720.0f;
 
             // clicks for menu buttons 
             int continueClicked = IsAreaClicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
             int settingsClicked = IsAreaClicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int pmenuControlsClicked = IsAreaClicked(pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
             int restartClicked = IsAreaClicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
             int mainMenuClicked = IsAreaClicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
             // menu buttons 
             CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, 280.0f, 255);
             CP_Image_Draw(menu_button, pmenu_button_x, settings_button_y, pmenu_button_w, 280.0f, 255);
-            CP_Image_Draw(menu_button, pmenu_button_x, restart_button_y, pmenu_button_w, 280.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, 280.0f, 255);
+            CP_Image_Draw(menu_button, pmenu_button_x, restart_button_y, pmenu_button_w, 280.0f, 255);         
             CP_Image_Draw(menu_button, pmenu_button_x, mainmenu_button_y, pmenu_button_w, 280.0f, 255);
 
             CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
@@ -100,6 +106,7 @@ void Pause_Menu_Update(void) {
 
             CP_Font_DrawText("Continue", pmenu_button_x, continue_button_y - 10.0f);
             CP_Font_DrawText("Settings", pmenu_button_x, settings_button_y - 10.0f);
+            CP_Font_DrawText("Controls", pmenu_button_x, pmenu_controls_button_y - 10.0f);
             CP_Font_DrawText("Restart", pmenu_button_x, restart_button_y - 10.0f);
             CP_Font_DrawText("Main Menu", pmenu_button_x, mainmenu_button_y - 10.0f);
 
@@ -109,12 +116,20 @@ void Pause_Menu_Update(void) {
                 CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
                 is_paused = 0;
             }
+
             // settings 
             else if (settingsClicked == 1) {
                Audio_Play_Button_Click();
                is_settings = true;
-               is_controls = false;
+               //is_controls = false;
             }
+
+            // controls
+            else if (pmenuControlsClicked == 1) {
+                Audio_Play_Button_Click();
+                is_controls = true;
+            }
+
             // restart
             else if (restartClicked == 1) {
                 Audio_Play_Button_Click();
@@ -143,6 +158,7 @@ void Pause_Menu_Update(void) {
                 // go to level 1 intro
                 CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
             }
+
             else if (mainMenuClicked == 1) {
                 Audio_Play_Button_Click();
                 confirm_quit = true;
@@ -151,6 +167,11 @@ void Pause_Menu_Update(void) {
 
         if (is_settings == true) {
             Settings_Update();
+            return;
+        }
+
+        if (is_controls == true) {
+            Settings_Controls_Update();
             return;
         }
         

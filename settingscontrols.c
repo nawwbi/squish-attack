@@ -1,7 +1,7 @@
 #include "cprocessing.h"
 #include "settingscontrols.h"
 #include "controls.h"
-#include "settings.h"
+#include "pause.h"
 #include "utils.h"
 #include "audio.h"
 
