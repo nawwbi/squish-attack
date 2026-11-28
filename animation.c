@@ -4,19 +4,19 @@
 
 static int frame = 0;
 static float timer = 0.0f;
-const float frame_duration = 0.50f;   // seconds per frame
-const int frame_count = 3;
+const float FRAME_DURATION = 0.50f;   // seconds per frame
+const int FRAME_COUNT = 3;
 
 static int skill_animation_frame_count = 0;
 static bool is_spaceship_animation_active = false;
 static bool is_meteorite_animation_active = false;
 static bool is_bubble_animation_active = false;
 static float skill_timer = 0.0f;
-const float skill_frame_duration = 0.30f;
+const float SKILL_FRAME_DURATION = 0.30f;
 const int SKILL_ANIMATION_FRAMES = 3;
 
 static float meteorite_movement_timer = 0.0f;
-const float meteorite_movement_duration = 0.60f;
+const float METEORITE_MOVEMENT_DURATION = 0.60f;
 
 void Character_Animation(CP_Image sprite, bool is_player, bool top, float x) {
 
@@ -24,12 +24,12 @@ void Character_Animation(CP_Image sprite, bool is_player, bool top, float x) {
     int imageHeight = CP_Image_GetHeight(sprite);
 
     timer += CP_System_GetDt();
-    if (timer >= frame_duration) {
-        timer -= frame_duration;
-        frame = (frame + 1) % frame_count;
+    if (timer >= FRAME_DURATION) {
+        timer -= FRAME_DURATION;
+        frame = (frame + 1) % FRAME_COUNT;
     }
 
-    float frameWidth = imageWidth / (float)frame_count;
+    float frameWidth = imageWidth / (float)FRAME_COUNT;
 
     CP_Image_DrawSubImage(
         sprite,
@@ -54,7 +54,7 @@ void Spaceship_Animation(CP_Image sprite) {
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frame_count;
+    float frameWidth = imageWidth / (float)FRAME_COUNT;
 
     CP_Image_DrawSubImage(
         sprite,
@@ -70,8 +70,8 @@ void Spaceship_Animation(CP_Image sprite) {
     );
 
     skill_timer += CP_System_GetDt();
-    if (skill_timer >= skill_frame_duration) {
-        skill_timer -= skill_frame_duration;
+    if (skill_timer >= SKILL_FRAME_DURATION) {
+        skill_timer -= SKILL_FRAME_DURATION;
     skill_animation_frame_count++;
 
     if (skill_animation_frame_count > SKILL_ANIMATION_FRAMES) {
@@ -80,7 +80,7 @@ void Spaceship_Animation(CP_Image sprite) {
         frame = 0;
             skill_timer = 0.0f;
     } else {
-            frame = skill_animation_frame_count % frame_count;
+            frame = skill_animation_frame_count % FRAME_COUNT;
         }
     }
 }
@@ -102,8 +102,8 @@ void Meteorite_Animation(CP_Image sprite) {
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frame_count;
-    float movementProgress = meteorite_movement_timer / meteorite_movement_duration;
+    float frameWidth = imageWidth / (float)FRAME_COUNT;
+    float movementProgress = meteorite_movement_timer / METEORITE_MOVEMENT_DURATION;
     if (movementProgress > 1.0f) movementProgress = 1.0f;
 
     float startX = PLAYER_X_AXIS;
@@ -129,8 +129,8 @@ void Meteorite_Animation(CP_Image sprite) {
 
     meteorite_movement_timer += CP_System_GetDt();
     skill_timer += CP_System_GetDt();
-    if (skill_timer >= skill_frame_duration) {
-        skill_timer -= skill_frame_duration;
+    if (skill_timer >= SKILL_FRAME_DURATION) {
+        skill_timer -= SKILL_FRAME_DURATION;
         skill_animation_frame_count++;
 
         if (skill_animation_frame_count > SKILL_ANIMATION_FRAMES) {
@@ -141,7 +141,7 @@ void Meteorite_Animation(CP_Image sprite) {
             meteorite_movement_timer = 0.0f;
         }
         else {
-            frame = skill_animation_frame_count % frame_count;
+            frame = skill_animation_frame_count % FRAME_COUNT;
         }
     }
 }
@@ -164,7 +164,7 @@ void Bubble_Animation(CP_Image sprite) {
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frame_count;
+    float frameWidth = imageWidth / (float)FRAME_COUNT;
 
     CP_Image_DrawSubImage(
         sprite,
@@ -180,9 +180,9 @@ void Bubble_Animation(CP_Image sprite) {
     );
 
     skill_timer += CP_System_GetDt();
-    if (skill_timer >= skill_frame_duration) {
-        skill_timer -= skill_frame_duration;
-        frame = (frame + 1) % frame_count;
+    if (skill_timer >= SKILL_FRAME_DURATION) {
+        skill_timer -= SKILL_FRAME_DURATION;
+        frame = (frame + 1) % FRAME_COUNT;
     }
 }
 
