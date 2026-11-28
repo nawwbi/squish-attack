@@ -121,16 +121,16 @@ void Audio_Stop_All(void)
 // free all audio files
 void Audio_Free(void)
 {
-    CP_Sound_Free(&main_menu_music);
-    CP_Sound_Free(&dumpling_fight_music);
-    CP_Sound_Free(&butter_fight_music);
-    CP_Sound_Free(&boss_fight_music);
-    CP_Sound_Free(&win_screen_music);
-    CP_Sound_Free(&lose_screen_music);
+    CP_Sound_Free(main_menu_music);
+    CP_Sound_Free(dumpling_fight_music);
+    CP_Sound_Free(butter_fight_music);
+    CP_Sound_Free(boss_fight_music);
+    CP_Sound_Free(win_screen_music);
+    CP_Sound_Free(lose_screen_music);
 
-    CP_Sound_Free(&button_click_sound);
-    CP_Sound_Free(&button_hover_sound);
-    CP_Sound_Free(&player_projectile_sound);
-    CP_Sound_Free(&enemy_soundwave_sound);
-    CP_Sound_Free(&boss_ultimate_sound);
+    CP_Sound_Free(button_click_sound);
+    CP_Sound_Free(button_hover_sound);
+    CP_Sound_Free(player_projectile_sound);
+    CP_Sound_Free(enemy_soundwave_sound);
+    CP_Sound_Free(boss_ultimate_sound);
 }

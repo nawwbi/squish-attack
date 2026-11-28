@@ -29,32 +29,32 @@ heal_icon;
 #define DEFENCE_TEXT_Y    360
 
 struct Upgrades upgrades[] = {
-    { DEFENCE, "+5% Defence", 0.05, COMMON },
-    { DEFENCE, "+10% Defence", 0.1, RARE },
-    { DEFENCE, "+15% Defence", 0.15, VERY_RARE },
+    { DEFENCE, "+5% Defence", 0.05f, COMMON },
+    { DEFENCE, "+10% Defence", 0.1f, RARE },
+    { DEFENCE, "+15% Defence", 0.15f, VERY_RARE },
 
-    { ATTACK, "+5% Attack", 0.05, COMMON },
-    { ATTACK, "+10% Attack", 0.1, RARE },
-    { ATTACK, "+15% Attack", 0.15, VERY_RARE },
+    { ATTACK, "+5% Attack", 0.05f, COMMON },
+    { ATTACK, "+10% Attack", 0.1f, RARE },
+    { ATTACK, "+15% Attack", 0.15f, VERY_RARE },
 
-    { HP, "+10% Max HP", 0.1, COMMON },
-    { HP, "+15% Max HP", 0.15, RARE },
-    { HP, "+20% Max HP", 0.2, VERY_RARE },
+    { HP, "+10% Max HP", 0.1f, COMMON },
+    { HP, "+15% Max HP", 0.15f, RARE },
+    { HP, "+20% Max HP", 0.2f, VERY_RARE },
 
-    { HEAL, "+10% HP Heal", 0.1, COMMON },
-    { HEAL, "+20% HP Heal", 0.2, RARE },
-    { HEAL, "+30% HP Heal", 0.3, VERY_RARE },
+    { HEAL, "+10% HP Heal", 0.1f, COMMON },
+    { HEAL, "+20% HP Heal", 0.2f, RARE },
+    { HEAL, "+30% HP Heal", 0.3f, VERY_RARE },
 
-    { BASIC_ATTACK_ITERATION, "+1 Attack", 1.0, COMMON },
-    { BASIC_ATTACK_ITERATION, "+2 Attack", 2.0, RARE },
-    { BASIC_ATTACK_ITERATION, "+3 Attack", 3.0, VERY_RARE },
+    { BASIC_ATTACK_ITERATION, "+1 Attack", 1.0f, COMMON },
+    { BASIC_ATTACK_ITERATION, "+2 Attack", 2.0f, RARE },
+    { BASIC_ATTACK_ITERATION, "+3 Attack", 3.0f, VERY_RARE },
 };
 
 struct Upgrades displaying_upgrades[ARRAY_SIZE];
 
 // helper funtion to only be used in this file
 // returns the image of the upgrade based on the upgrade_enum
-static CP_Image upgrade_icon(int upgrade_enum, int value) {
+static CP_Image upgrade_icon(int upgrade_enum) {
     CP_Image image;
     switch (upgrade_enum) {
 
@@ -123,9 +123,9 @@ void Upgrades_Init(void) {
 
 	PickRandomUpgrades();
 
-    int current_image_x = DEFENCE_IMAGE_X;
-    int current_text_x = DEFENCE_TEXT_X;
-    int current_text_y = DEFENCE_TEXT_Y;
+    float current_image_x = DEFENCE_IMAGE_X;
+    float current_text_x = DEFENCE_TEXT_X;
+    float current_text_y = DEFENCE_TEXT_Y;
 
 	for (int i = 0; i < ARRAY_SIZE; ++i) {
         displaying_upgrades[i].upgrade_enum = upgrades[random_list[i]].upgrade_enum;
@@ -135,7 +135,7 @@ void Upgrades_Init(void) {
         displaying_upgrades[i].image_x = current_image_x;
         displaying_upgrades[i].text_x = current_text_x;
         displaying_upgrades[i].icon_x = current_text_y;
-        displaying_upgrades[i].icon = upgrade_icon(upgrades[random_list[i]].upgrade_enum, upgrades[random_list[i]].value);
+        displaying_upgrades[i].icon = upgrade_icon(upgrades[random_list[i]].upgrade_enum);
 
         current_image_x += 450;
         current_text_x += 450;
@@ -210,7 +210,7 @@ void Upgrades_Update(void) {
             break;
 
         case BASIC_ATTACK_ITERATION:
-			player.skills[BASIC_ATTACK].iteration += selectedValue;
+			player.skills[BASIC_ATTACK].iteration += (int)selectedValue;
             break;
         }
 

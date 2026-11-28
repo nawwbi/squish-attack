@@ -4,13 +4,13 @@
 int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y);
 
 void DrawRectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius);
-void DrawCircle(float x, float y, CP_Color colour);
+void DrawCircle(float x, float y, float diameter, char* text, CP_Color colour);
 
-double CalculateHealing(double previous_hp, double max_hp, double healing_percentage);
-double CalculateCurrentAttack(double attack, double increment_percentage);
-double CalculateCurrentDefence(double defence, double increment_percentage);
-double CalculateCurrentHP(double previous_hp, double received_damage, double defence);
-double CalculateCurrentMaxHP(double health, double increment_percentage);
+float CalculateHealing(float previous_hp, float max_hp, float healing_percentage);
+float CalculateCurrentAttack(float attack, float increment_percentage);
+float CalculateCurrentDefence(float defence, float increment_percentage);
+float CalculateCurrentHP(float previous_hp, float received_damage, float defence);
+float CalculateCurrentMaxHP(float health, float increment_percentage);
 
 void SkillUpgradeButton(
 	int skillEnum,
@@ -25,7 +25,7 @@ void HealthBar(CP_Color current_colour, float x, float y, float current_hp, floa
 
 bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2);
 
-void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char* const string);
+void Text(float font_size, CP_Color colour, double value, float text_x, float text_y, const char* const string);
 
 void DamageText(
 	float current_timer, float total_timer, float value,

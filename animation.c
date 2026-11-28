@@ -37,12 +37,12 @@ void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x) {
         sprite,
         x,
         (isPlayer) ? PLAYER_Y_AXIS : ENEMY_Y_AXIS,   // where to draw
-        (isPlayer) ? 180 : 220,
-        (isPlayer) ? 220 : 150,                       // size on screen
+        (isPlayer) ? 180.0f : 220.0f,
+        (isPlayer) ? 220.0f : 150.0f,                       // size on screen
         frame * frameWidth, 
-        ((top) ? 0 : imageHeight) / 2,          // top-left of the source frame (u0, v0)
+        ((top) ? 0 : imageHeight) / 2.0f,          // top-left of the source frame (u0, v0)
         (frame + 1) * frameWidth,       // right edge of the source frame (u1)
-        imageHeight / ((top) ? 2 : 1),                    // bottom edge (v1)
+        imageHeight / ((top) ? 2.0f : 1.0f),                    // bottom edge (v1)
         255
     );
 }
@@ -53,8 +53,8 @@ void SpaceshipAnimation(CP_Image sprite) {
         return;
     }
 
-    int imageWidth = CP_Image_GetWidth(sprite);
-    int imageHeight = CP_Image_GetHeight(sprite);
+    float imageWidth = (float)CP_Image_GetWidth(sprite);
+    float imageHeight = (float)CP_Image_GetHeight(sprite);
 
     float frameWidth = imageWidth / (float)frameCount;
 
@@ -101,8 +101,8 @@ void MeteoriteAnimation(CP_Image sprite) {
         return;
     }
 
-    int imageWidth = CP_Image_GetWidth(sprite);
-    int imageHeight = CP_Image_GetHeight(sprite);
+    float imageWidth = (float)CP_Image_GetWidth(sprite);
+    float imageHeight = (float)CP_Image_GetHeight(sprite);
 
     float frameWidth = imageWidth / (float)frameCount;
     float movementProgress = meteoriteMovementTimer / meteoriteMovementDuration;
@@ -163,8 +163,8 @@ void BubbleAnimation(CP_Image sprite) {
         return;
     }
 
-    int imageWidth = CP_Image_GetWidth(sprite);
-    int imageHeight = CP_Image_GetHeight(sprite);
+    float imageWidth = (float)CP_Image_GetWidth(sprite);
+    float imageHeight = (float)CP_Image_GetHeight(sprite);
 
     float frameWidth = imageWidth / (float)frameCount;
 

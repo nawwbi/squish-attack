@@ -19,8 +19,8 @@ static bool frame_rewind = false;
 static int saved_fireball_x[MAX_FRAMES];
 static int saved_soundwave_x[MAX_FRAMES];
 static int saved_enemy_x[MAX_FRAMES];
-static double saved_player_hp[MAX_FRAMES];
-static double saved_enemy_hp[MAX_FRAMES];
+static float saved_player_hp[MAX_FRAMES];
+static float saved_enemy_hp[MAX_FRAMES];
 static int saved_frames = 0;
 
 static bool console_open = false;

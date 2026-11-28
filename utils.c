@@ -36,9 +36,9 @@ void DrawCircle(float x, float y, float diameter, char* text, CP_Color colour) {
 }
 
 // calculates current hp based on healing recieved 
-double CalculateHealing(double previous_hp, double max_hp, double healing_percentage)
+float CalculateHealing(float previous_hp, float max_hp, float healing_percentage)
 {
-	double current_hp = previous_hp + (max_hp * healing_percentage);
+	float current_hp = previous_hp + (max_hp * healing_percentage);
 	if (current_hp > max_hp) // make sure that current hp dont go above max hp
 	{
 		current_hp = max_hp;
@@ -46,27 +46,27 @@ double CalculateHealing(double previous_hp, double max_hp, double healing_percen
 	return current_hp;
 }
 
-double CalculateDamage(double attack, double defence)
+float CalculateDamage(float attack, float defence)
 {
-	double current_damage = attack - defence;
+	float current_damage = attack - defence;
 	return current_damage;
 }
 
 
-double CalculateCurrentAttack(double attack, double increment_percentage)
+float CalculateCurrentAttack(float attack, float increment_percentage)
 {
-	double current_attack = attack * (1 + increment_percentage);
+	float current_attack = attack * (1 + increment_percentage);
 	return current_attack;
 }
 
-double CalculateCurrentDefence(double defence, double increment_percentage)
+float CalculateCurrentDefence(float defence, float increment_percentage)
 {
-	double current_defence = defence * (1 + increment_percentage);
+	float current_defence = defence * (1 + increment_percentage);
 	return current_defence;
 }
 
 // calculates current hp based on damage taken
-double CalculateCurrentHP(double previous_hp, double received_damage, double defence)
+float CalculateCurrentHP(float previous_hp, float received_damage, float defence)
 {
 	received_damage = received_damage - defence;
 
@@ -74,14 +74,14 @@ double CalculateCurrentHP(double previous_hp, double received_damage, double def
 		received_damage = 0;
 	}
 
-	double current_hp = previous_hp - received_damage;
+	float current_hp = previous_hp - received_damage;
 
 	return current_hp;
 }
 
-double CalculateCurrentMaxHP(double health , double increment_percentage)
+float CalculateCurrentMaxHP(float health, float increment_percentage)
 {
-	double current_max_hp = health * (1 + increment_percentage);
+	float current_max_hp = health * (1 + increment_percentage);
 	// (suggestion!) add that current hp gets updated too when player picks the health upgrade
 	return current_max_hp;
 }
@@ -136,7 +136,7 @@ bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float 
 	return distance_squared <= diameter_squared;
 }
 
-void Text(int font_size, CP_Color colour, double value, float text_x, float text_y, const char*const string) {
+void Text(float font_size, CP_Color colour, double value, float text_x, float text_y, const char*const string) {
 	CP_Settings_TextSize(font_size);
 	CP_Settings_Fill(colour);
 	char text[50];

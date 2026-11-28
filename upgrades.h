@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef enum UpgradeEnum {
+enum UpgradeEnum {
 	DEFENCE,
 	ATTACK,
 	HP,
@@ -16,10 +16,10 @@ struct Upgrades {
 	int      upgrade_enum;
 	char*    details;
 	float    value;
-	float    rarity;
-	int      image_x;
-	int      text_x;
-	int      icon_x;
+	int      rarity;
+	float    image_x;
+	float    text_x;
+	float    icon_x;
 	CP_Image icon;
 };
 

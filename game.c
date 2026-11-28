@@ -48,9 +48,9 @@ white;
 extern CP_Image background;
 float speed = 400.0f;
 int speed_multiplier = 1;
-int fireball_x = 300;
-int soundwave_x = 1300;
-int enemy_x = 1300;
+float fireball_x = 300;
+float soundwave_x = 1300;
+float enemy_x = 1300;
 int score = 0;
 int highscore = 0;
 
@@ -209,13 +209,13 @@ void Progress_Bar(int current_level, float dt) {
     DrawRectangle(lightGrey, 800, 100, 999, 25, 10);
 
     CP_Settings_RectMode(CP_POSITION_CORNER);
-    int start_x = 300 + (current_level - 1) * 300;
-    int end_x = (current_level == 3) ? 1250 : start_x + 300;
+    float start_x = 300 + (current_level - 1) * 300.0f;
+    float end_x = (current_level == 3) ? 1250 : start_x + 300;
 
     DrawRectangle(
         darkGreen,
         300, 95,
-        (current_level - 1) * 333,
+        (current_level - 1) * 333.0f,
         10, 10
     );
 
@@ -238,8 +238,8 @@ void Progress_Bar(int current_level, float dt) {
 
 void Skill_Button(int round_finished) {
     int button_x = 220;
-    int icon_x = 270;
-    int cost_y = 865;
+    float icon_x = 270;
+    float cost_y = 865;
 
     if (round_finished == 1) {
         mana+=10;
@@ -323,7 +323,7 @@ void Skill_Button(int round_finished) {
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = (player.attack * 2) - current_enemy->defence;
                 current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 2), current_enemy->defence);
-                score += ((player.attack * 2) - current_enemy->defence);
+                score += (int)((player.attack * 2) - current_enemy->defence);
                 mana -= PLAYER_SPACESHIP_CHARGE;
             }
             else if ((i == METEORITE) && meteorite_charged) {
@@ -331,7 +331,7 @@ void Skill_Button(int round_finished) {
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = (player.attack * 3) - current_enemy->defence;
                 current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
-                score += ((player.attack * 3) - current_enemy->defence);
+                score += (int)((player.attack * 3) - current_enemy->defence);
                 mana -= PLAYER_METEORITE_CHARGE;
             } else if ((i == BUBBLE) && bubble_charged) {
                 TriggerBubbleAnimation();
@@ -523,7 +523,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 fireball_x = 300; // reset fireball position after hitting enemy
                 
                 player_basic_attack_shot++;
-                score += (player.attack - current_enemy->defence);
+                score += (int)(player.attack - current_enemy->defence);
                 PlayerState = PLAYER_IDLE;
             }
 
@@ -570,7 +570,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 					player_damage_text_value = current_enemy->attack - player.defence;
 					// update current hp with reduced health
 					player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
-					score -= (current_enemy->attack - player.defence);
+					score -= (int)(current_enemy->attack - player.defence);
 				}
 
 				soundwave_x = 1300; // reset soundwave position after hitting player

@@ -2,6 +2,7 @@
 #include "credits.h"
 #include "mainmenu.h"
 #include "utils.h"
+#include "audio.h"
 
 CP_Image credits_background;
 CP_Image credits_banner;
