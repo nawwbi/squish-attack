@@ -107,6 +107,7 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
   <ItemGroup>
     <ClCompile Include="..\animation.c" />
     <ClCompile Include="..\audio.c" />
+    <ClCompile Include="..\combatutils.c" />
     <ClCompile Include="..\constants.c" />
     <ClCompile Include="..\controls.c" />
     <ClCompile Include="..\credits.c" />
@@ -116,16 +117,18 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClCompile Include="..\levelintro.c" />
     <ClCompile Include="..\main.c" />
     <ClCompile Include="..\mainmenu.c" />
+    <ClCompile Include="..\mathutils.c" />
     <ClCompile Include="..\pause.c" />
     <ClCompile Include="..\settings.c" />
     <ClCompile Include="..\settingscontrols.c" />
     <ClCompile Include="..\splash.c" />
+    <ClCompile Include="..\uiutils.c" />
     <ClCompile Include="..\upgrades.c" />
-    <ClCompile Include="..\utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\animation.h" />
     <ClInclude Include="..\audio.h" />
+    <ClInclude Include="..\combatutils.h" />
     <ClInclude Include="..\constants.h" />
     <ClInclude Include="..\controls.h" />
     <ClInclude Include="..\credits.h" />
@@ -134,12 +137,13 @@ xcopy "$(SolutionDir)Extern\CProcessing\lib\x64\fmod.dll" "$(OutDir)" /s /r /y /
     <ClInclude Include="..\game.h" />
     <ClInclude Include="..\levelintro.h" />
     <ClInclude Include="..\mainmenu.h" />
+    <ClInclude Include="..\mathutils.h" />
     <ClInclude Include="..\pause.h" />
     <ClInclude Include="..\settings.h" />
     <ClInclude Include="..\settingscontrols.h" />
     <ClInclude Include="..\splash.h" />
+    <ClInclude Include="..\uiutils.h" />
     <ClInclude Include="..\upgrades.h" />
-    <ClInclude Include="..\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

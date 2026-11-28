@@ -1,5 +1,7 @@
 #include "cprocessing.h"
-#include "utils.h"
+#include "mathutils.h"
+#include "uiutils.h"
+#include "combatutils.h"
 #include "game.h"
 #include "mainmenu.h"
 #include "pause.h"

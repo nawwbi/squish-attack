@@ -1,27 +1,10 @@
 #include <math.h>
 #include "cprocessing.h"
-#include "utils.h"
+#include "uiutils.h"
 #include "constants.h"
 #include "upgrades.h"
 #include "game.h"
 
-int Is_Area_Clicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
-{
-
-	float half_width = area_width / 2;
-	float half_height = area_height / 2;
-
-	float left = area_center_x - half_width;
-	float right = area_center_x + half_width;
-	float top = area_center_y - half_height;
-	float bottom = area_center_y + half_height;
-
-	if (click_x >= left && click_x <= right && click_y >= top && click_y <= bottom && CP_Input_MouseClicked())
-	{
-		return 1;
-	}
-	else { return 0; }
-}
 
 void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float corner_radius) {
 	CP_Settings_Fill(colour);
@@ -33,57 +16,6 @@ void Draw_Circle(float x, float y, float diameter, char* text, CP_Color colour) 
 	CP_Graphics_DrawCircle(x, y, diameter);
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 	CP_Font_DrawText(text, x, y);
-}
-
-// calculates current hp based on healing recieved 
-float Calculate_Healing(float previous_hp, float max_hp, float healing_percentage)
-{
-	float current_hp = previous_hp + (max_hp * healing_percentage);
-	if (current_hp > max_hp) // make sure that current hp dont go above max hp
-	{
-		current_hp = max_hp;
-	}
-	return current_hp;
-}
-
-float Calculate_Damage(float attack, float defence)
-{
-	float current_damage = attack - defence;
-	return current_damage;
-}
-
-
-float Calculate_Current_Attack(float attack, float increment_percentage)
-{
-	float current_attack = attack * (1 + increment_percentage);
-	return current_attack;
-}
-
-float Calculate_Current_Defence(float defence, float increment_percentage)
-{
-	float current_defence = defence * (1 + increment_percentage);
-	return current_defence;
-}
-
-// calculates current hp based on damage taken
-float Calculate_Current_HP(float previous_hp, float received_damage, float defence)
-{
-	received_damage = received_damage - defence;
-
-	if (received_damage < 0) {
-		received_damage = 0;
-	}
-
-	float current_hp = previous_hp - received_damage;
-
-	return current_hp;
-}
-
-float Calculate_Current_Max_HP(float health, float increment_percentage)
-{
-	float current_max_hp = health * (1 + increment_percentage);
-	// (suggestion!) add that current hp gets updated too when player picks the health upgrade
-	return current_max_hp;
 }
 
 void Skill_Upgrade_Button(
@@ -127,13 +59,6 @@ void Health_Bar(CP_Color current_colour, float x, float y, float current_hp, flo
 	CP_Settings_NoStroke();
 	Draw_Rectangle(CP_Color_Create(100, 100, 100, 255), x, y, 100, 20, 0);
 	if (current_hp > 0) Draw_Rectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
-}
-
-bool Are_Circles_Intersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2)
-{
-	double distance_squared = (((c1_x - c2_x) * (c1_x - c2_x)) + ((c1_y - c2_y) * (c1_y - c2_y)));
-	double diameter_squared = (r1 + r2) * (r1 + r2);
-	return distance_squared <= diameter_squared;
 }
 
 void Text(float font_size, CP_Color colour, double value, float text_x, float text_y, const char*const string) {

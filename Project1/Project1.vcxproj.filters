@@ -27,9 +27,6 @@
     <ClCompile Include="..\mainmenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\utils.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\endmenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,15 +66,21 @@
     <ClCompile Include="..\settingscontrols.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\combatutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mathutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiutils.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\mainmenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\endmenu.h">
@@ -119,20 +122,20 @@
     <ClInclude Include="..\settingscontrols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\combatutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mathutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Downloads\defence_button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\hp_button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\attack_button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\title-banner1.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -143,9 +146,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\home-background.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\game_button.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\defence-icon.png">
@@ -196,39 +196,6 @@
     <Image Include="..\Assets\skip-button.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\Assets\boss_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\dumpling_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\player_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\spaceship_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\spaceship_icon.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\skill_button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\skill_button_grey.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\meteorite_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\meteorite_icon.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\bubble_icon.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\Assets\bubble_sprite.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\Assets\controls-gameplay.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -239,6 +206,51 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\Assets\controls-upgrades.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\defence-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\attack-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\boss-sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\bubble-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\bubble-sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\dumpling-sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\game-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\hp-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\meteorite-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\meteorite-sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\player-sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\skill-button.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\skill-button-grey.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\spaceship-icon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Assets\spaceship-sprite.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
