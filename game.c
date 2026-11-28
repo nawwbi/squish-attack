@@ -696,18 +696,18 @@ void Game_Init(void)
     defence_icon = CP_Image_Load("./Assets/defence-icon.png");
     hp_icon = CP_Image_Load("./Assets/hp-icon.png");
 
-    player_sprite = CP_Image_Load("./Assets/player_sprite.png");
-    dumpling_sprite = CP_Image_Load("./Assets/dumpling_sprite.png");
-    butter_sprite = CP_Image_Load("./Assets/butter_sprite.png");
-    boss_sprite = CP_Image_Load("./Assets/boss_sprite.png");
-    spaceship_sprite = CP_Image_Load("./Assets/spaceship_sprite.png");
-    spaceship_icon = CP_Image_Load("./Assets/spaceship_icon.png");
-    meteorite_sprite = CP_Image_Load("./Assets/meteorite_sprite.png");
-    meteorite_icon = CP_Image_Load("./Assets/meteorite_icon.png");
-    bubble_sprite = CP_Image_Load("./Assets/bubble_sprite.png");
-    bubble_icon = CP_Image_Load("./Assets/bubble_icon.png");
-    skill_button = CP_Image_Load("./Assets/skill_button.png");
-    skill_button_grey = CP_Image_Load("./Assets/skill_button_grey.png");
+    player_sprite = CP_Image_Load("./Assets/player-sprite.png");
+    dumpling_sprite = CP_Image_Load("./Assets/dumpling-sprite.png");
+    butter_sprite = CP_Image_Load("./Assets/butter-sprite.png");
+    boss_sprite = CP_Image_Load("./Assets/boss-sprite.png");
+    spaceship_sprite = CP_Image_Load("./Assets/spaceship-sprite.png");
+    spaceship_icon = CP_Image_Load("./Assets/spaceship-icon.png");
+    meteorite_sprite = CP_Image_Load("./Assets/meteorite-sprite.png");
+    meteorite_icon = CP_Image_Load("./Assets/meteorite-icon.png");
+    bubble_sprite = CP_Image_Load("./Assets/bubble-sprite.png");
+    bubble_icon = CP_Image_Load("./Assets/bubble-icon.png");
+    skill_button = CP_Image_Load("./Assets/skill-button.png");
+    skill_button_grey = CP_Image_Load("./Assets/skill-button-grey.png");
 
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");

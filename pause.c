@@ -38,7 +38,7 @@ extern bool player_turn;
 void Pause_Menu_Init(void) {
     font = CP_Font_Load("Assets/Exo2-Regular.ttf");
 	pause_button = CP_Image_Load("./Assets/pause-button.png");
-	menu_button = CP_Image_Load("./Assets/game_button.png");
+	menu_button = CP_Image_Load("./Assets/game-button.png");
     Settings_Init(); // Load settings assets here
     Settings_Controls_Init();
 }

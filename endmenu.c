@@ -28,7 +28,7 @@ void End_Menu_Init(void)
 
 	end_background = CP_Image_Load("./Assets/background.png");
 	end_banner = CP_Image_Load("./Assets/title-banner1.png");
-	end_button = CP_Image_Load("./Assets/game_button.png");
+	end_button = CP_Image_Load("./Assets/game-button.png");
 
 	// confirmation popup starts closed
 	end_confirm_quit = false;

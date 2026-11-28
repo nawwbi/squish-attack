@@ -19,7 +19,7 @@ void Splash_Init(void)
     // team logo
     splash_team_logo = CP_Image_Load("./Assets/moonsstudios-logo.png");
 
-    splash_skip_button = CP_Image_Load("./Assets/game_button.png");;
+    splash_skip_button = CP_Image_Load("./Assets/game-button.png");;
 
     font = CP_Font_Load("./Assets/Jersey15-Regular.ttf");
 

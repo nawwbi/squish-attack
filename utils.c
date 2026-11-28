@@ -94,9 +94,9 @@ void SkillUpgradeButton(
 	CP_Image icon, float icon_x, float icon_y, float icon_width, float icon_height,
 	float value, CP_Color circle_colour, int rarity
 ) {
-	CP_Image common_button = CP_Image_Load("./Assets/defence_button.png");
-	CP_Image rare_button = CP_Image_Load("./Assets/attack_button.png");
-	CP_Image very_rare_button = CP_Image_Load("./Assets/hp_button.png");
+	CP_Image common_button = CP_Image_Load("./Assets/defence-button.png");
+	CP_Image rare_button = CP_Image_Load("./Assets/attack-button.png");
+	CP_Image very_rare_button = CP_Image_Load("./Assets/hp-button.png");
 	
 	CP_Image_Draw(
 		(rarity == VERY_RARE) ? very_rare_button : 

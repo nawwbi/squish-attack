@@ -17,7 +17,7 @@ void Credits_Init(void)
 
     credits_background = CP_Image_Load("./Assets/background.png");
     credits_banner = CP_Image_Load("./Assets/title-banner1.png");
-    credits_button = CP_Image_Load("./Assets/game_button.png");
+    credits_button = CP_Image_Load("./Assets/game-button.png");
 
     credits_logo = CP_Image_Load("./Assets/digipen-logo-red.png");
     credits_y = 680.0f;

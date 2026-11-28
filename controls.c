@@ -22,7 +22,7 @@ void Controls_Init(void)
 
     controls_background = CP_Image_Load("./Assets/background.png");
     controls_banner = CP_Image_Load("./Assets/title-banner1.png");
-    controls_button = CP_Image_Load("./Assets/game_button.png");
+    controls_button = CP_Image_Load("./Assets/game-button.png");
 
     controls_left_arrow = CP_Image_Load("./Assets/skip-button-left.png");
     controls_right_arrow = CP_Image_Load("./Assets/skip-button.png");

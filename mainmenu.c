@@ -23,7 +23,7 @@ void Main_Menu_Init(void)
 
 	background = CP_Image_Load("./Assets/background.png");
 	banner = CP_Image_Load("./Assets/title-banner1.png");
-	game_button = CP_Image_Load("./Assets/game_button.png");
+	game_button = CP_Image_Load("./Assets/game-button.png");
 
 	// confirmation popup starts closed
 	main_confirm_quit = false;

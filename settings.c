@@ -28,7 +28,7 @@ void Update_Audio(void) {
 }
 void Settings_Init(void) {
     CP_Settings_RectMode(CP_POSITION_CENTER);
-	menu_button = CP_Image_Load("./Assets/game_button.png");
+	menu_button = CP_Image_Load("./Assets/game-button.png");
     white = CP_Color_Create(255, 255, 255, 255);
     green = CP_Color_Create(100, 255, 100, 255);
 
