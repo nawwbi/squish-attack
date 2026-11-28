@@ -4,39 +4,39 @@
 
 static int frame = 0;
 static float timer = 0.0f;
-const float frameDuration = 0.50f;   // seconds per frame
-const int frameCount = 3;
+const float frame_duration = 0.50f;   // seconds per frame
+const int frame_count = 3;
 
-static int skillAnimationFrameCount = 0;
-static bool isSpaceshipAnimationActive = false;
-static bool isMeteoriteAnimationActive = false;
-static bool isBubbleAnimationActive = false;
-static float skillTimer = 0.0f;
-const float skillFrameDuration = 0.30f;
+static int skill_animation_frame_count = 0;
+static bool is_spaceship_animation_active = false;
+static bool is_meteorite_animation_active = false;
+static bool is_bubble_animation_active = false;
+static float skill_timer = 0.0f;
+const float skill_frame_duration = 0.30f;
 const int SKILL_ANIMATION_FRAMES = 3;
 
-static float meteoriteMovementTimer = 0.0f;
-const float meteoriteMovementDuration = 0.60f;
+static float meteorite_movement_timer = 0.0f;
+const float meteorite_movement_duration = 0.60f;
 
-void Character_Animation(CP_Image sprite, bool isPlayer, bool top, float x) {
+void Character_Animation(CP_Image sprite, bool is_player, bool top, float x) {
 
     int imageWidth = CP_Image_GetWidth(sprite);
     int imageHeight = CP_Image_GetHeight(sprite);
 
     timer += CP_System_GetDt();
-    if (timer >= frameDuration) {
-        timer -= frameDuration;
-        frame = (frame + 1) % frameCount;
+    if (timer >= frame_duration) {
+        timer -= frame_duration;
+        frame = (frame + 1) % frame_count;
     }
 
-    float frameWidth = imageWidth / (float)frameCount;
+    float frameWidth = imageWidth / (float)frame_count;
 
     CP_Image_DrawSubImage(
         sprite,
         x,
-        (isPlayer) ? PLAYER_Y_AXIS : ENEMY_Y_AXIS,   // where to draw
-        (isPlayer) ? 180.0f : 220.0f,
-        (isPlayer) ? 220.0f : 150.0f,                       // size on screen
+        (is_player) ? PLAYER_Y_AXIS : ENEMY_Y_AXIS,   // where to draw
+        (is_player) ? 180.0f : 220.0f,
+        (is_player) ? 220.0f : 150.0f,                       // size on screen
         frame * frameWidth, 
         ((top) ? 0 : imageHeight) / 2.0f,          // top-left of the source frame (u0, v0)
         (frame + 1) * frameWidth,       // right edge of the source frame (u1)
@@ -47,14 +47,14 @@ void Character_Animation(CP_Image sprite, bool isPlayer, bool top, float x) {
 
 void Spaceship_Animation(CP_Image sprite) {
 
-    if (!isSpaceshipAnimationActive) {
+    if (!is_spaceship_animation_active) {
         return;
     }
 
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frameCount;
+    float frameWidth = imageWidth / (float)frame_count;
 
     CP_Image_DrawSubImage(
         sprite,
@@ -69,41 +69,41 @@ void Spaceship_Animation(CP_Image sprite) {
         225
     );
 
-    skillTimer += CP_System_GetDt();
-    if (skillTimer >= frameDuration) {
-        skillTimer -= frameDuration;
-    skillAnimationFrameCount++;
+    skill_timer += CP_System_GetDt();
+    if (skill_timer >= skill_frame_duration) {
+        skill_timer -= skill_frame_duration;
+    skill_animation_frame_count++;
 
-    if (skillAnimationFrameCount > SKILL_ANIMATION_FRAMES) {
-        isSpaceshipAnimationActive = false;
-        skillAnimationFrameCount = 0;
+    if (skill_animation_frame_count > SKILL_ANIMATION_FRAMES) {
+        is_spaceship_animation_active = false;
+        skill_animation_frame_count = 0;
         frame = 0;
-            skillTimer = 0.0f;
+            skill_timer = 0.0f;
     } else {
-            frame = skillAnimationFrameCount % frameCount;
+            frame = skill_animation_frame_count % frame_count;
         }
     }
 }
 
 void Trigger_Spaceship_Animation(void) {
-    if (!isSpaceshipAnimationActive) {
-        isSpaceshipAnimationActive = true;
-        skillAnimationFrameCount = 0;
+    if (!is_spaceship_animation_active) {
+        is_spaceship_animation_active = true;
+        skill_animation_frame_count = 0;
         frame = 0;
     }
 }
 
 void Meteorite_Animation(CP_Image sprite) {
 
-    if (!isMeteoriteAnimationActive) {
+    if (!is_meteorite_animation_active) {
         return;
     }
 
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frameCount;
-    float movementProgress = meteoriteMovementTimer / meteoriteMovementDuration;
+    float frameWidth = imageWidth / (float)frame_count;
+    float movementProgress = meteorite_movement_timer / meteorite_movement_duration;
     if (movementProgress > 1.0f) movementProgress = 1.0f;
 
     float startX = PLAYER_X_AXIS;
@@ -127,44 +127,44 @@ void Meteorite_Animation(CP_Image sprite) {
         225
     );
 
-    meteoriteMovementTimer += CP_System_GetDt();
-    skillTimer += CP_System_GetDt();
-    if (skillTimer >= skillFrameDuration) {
-        skillTimer -= skillFrameDuration;
-        skillAnimationFrameCount++;
+    meteorite_movement_timer += CP_System_GetDt();
+    skill_timer += CP_System_GetDt();
+    if (skill_timer >= skill_frame_duration) {
+        skill_timer -= skill_frame_duration;
+        skill_animation_frame_count++;
 
-        if (skillAnimationFrameCount > SKILL_ANIMATION_FRAMES) {
-            isMeteoriteAnimationActive = false;
-            skillAnimationFrameCount = 0;
+        if (skill_animation_frame_count > SKILL_ANIMATION_FRAMES) {
+            is_meteorite_animation_active = false;
+            skill_animation_frame_count = 0;
             frame = 0;
-            skillTimer = 0.0f;
-            meteoriteMovementTimer = 0.0f;
+            skill_timer = 0.0f;
+            meteorite_movement_timer = 0.0f;
         }
         else {
-            frame = skillAnimationFrameCount % frameCount;
+            frame = skill_animation_frame_count % frame_count;
         }
     }
 }
 
 void Trigger_Meteorite_Animation(void) {
-    if (!isMeteoriteAnimationActive) {
-        isMeteoriteAnimationActive = true;
-        skillAnimationFrameCount = 0;
+    if (!is_meteorite_animation_active) {
+        is_meteorite_animation_active = true;
+        skill_animation_frame_count = 0;
         frame = 0;
-        meteoriteMovementTimer = 0.0f;
+        meteorite_movement_timer = 0.0f;
     }
 }
 
 void Bubble_Animation(CP_Image sprite) {
 
-    if (!isBubbleAnimationActive) {
+    if (!is_bubble_animation_active) {
         return;
     }
 
     float imageWidth = (float)CP_Image_GetWidth(sprite);
     float imageHeight = (float)CP_Image_GetHeight(sprite);
 
-    float frameWidth = imageWidth / (float)frameCount;
+    float frameWidth = imageWidth / (float)frame_count;
 
     CP_Image_DrawSubImage(
         sprite,
@@ -179,29 +179,29 @@ void Bubble_Animation(CP_Image sprite) {
         225
     );
 
-    skillTimer += CP_System_GetDt();
-    if (skillTimer >= frameDuration) {
-        skillTimer -= frameDuration;
-        frame = (frame + 1) % frameCount;
+    skill_timer += CP_System_GetDt();
+    if (skill_timer >= skill_frame_duration) {
+        skill_timer -= skill_frame_duration;
+        frame = (frame + 1) % frame_count;
     }
 }
 
 void Trigger_Bubble_Animation(void) {
-    if (!isBubbleAnimationActive) {
-        isBubbleAnimationActive = true;
-        skillAnimationFrameCount = 0;
+    if (!is_bubble_animation_active) {
+        is_bubble_animation_active = true;
+        skill_animation_frame_count = 0;
         frame = 0;
-        skillTimer = 0.0f;
+        skill_timer = 0.0f;
     }
 }
 
 void End_Bubble_Animation(void) {
-    isBubbleAnimationActive = false;
-    skillAnimationFrameCount = 0;
+    is_bubble_animation_active = false;
+    skill_animation_frame_count = 0;
     frame = 0;
-    skillTimer = 0.0f;
+    skill_timer = 0.0f;
 }
 
 bool Is_Bubble_Animation_Active(void) {
-    return isBubbleAnimationActive;
+    return is_bubble_animation_active;
 }
