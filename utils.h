@@ -3,7 +3,7 @@
 
 int Is_Area_Clicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y);
 
-void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius);
+void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float corner_radius);
 void Draw_Circle(float x, float y, float diameter, char* text, CP_Color colour);
 
 float Calculate_Healing(float previous_hp, float max_hp, float healing_percentage);

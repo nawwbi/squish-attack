@@ -121,19 +121,19 @@ void Main_Menu_Update(void)
         CP_Font_DrawText("Yes", 680.0f, 490.0f);
         CP_Font_DrawText("No", 920.0f, 490.0f);
 
-        int yesClicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int yes_clicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-        int noClicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int no_clicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         // yes closes the application
-        if (yesClicked == 1)
+        if (yes_clicked == 1)
         {
             Audio_Play_Button_Click();
             CP_Engine_Terminate();
         }
 
         // no closes popup and stays on main menu
-        if (noClicked == 1)
+        if (no_clicked == 1)
         {
             Audio_Play_Button_Click();
             main_confirm_quit = false;

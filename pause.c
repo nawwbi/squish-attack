@@ -27,9 +27,9 @@ extern int fireball_x;
 extern int soundwave_x;
 extern int current_round;
 extern int current_level;
-extern bool showUpgrade;
-extern bool upgradeTriggered;
-extern bool gameOver; 
+extern bool show_upgrade;
+extern bool upgrade_triggered;
+extern bool game_over; 
 extern int player_basic_attack_shot;
 extern int enemy_basic_attack_shot;
 extern bool player_turn;
@@ -50,7 +50,7 @@ void Pause_Menu_Update(void) {
     float pause_button_w = 80.0f;
     float pause_button_h = 80.0f;
 
-    if (!is_paused && !showUpgrade) {
+    if (!is_paused && !show_upgrade) {
         CP_Image_Draw(pause_button, pause_button_x, pause_button_y, pause_button_w, pause_button_h, 255);
 
         if (Is_Area_Clicked(pause_button_x, pause_button_y, pause_button_w, pause_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
@@ -87,11 +87,11 @@ void Pause_Menu_Update(void) {
             float mainmenu_button_y = 720.0f;
 
             // clicks for menu buttons 
-            int continueClicked = Is_Area_Clicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int settingsClicked = Is_Area_Clicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int pmenuControlsClicked = Is_Area_Clicked(pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int restartClicked = Is_Area_Clicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int mainMenuClicked = Is_Area_Clicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int continue_clicked = Is_Area_Clicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int settings_clicked = Is_Area_Clicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int pmenu_controls_clicked = Is_Area_Clicked(pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int restart_clicked = Is_Area_Clicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int main_menu_clicked = Is_Area_Clicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
             // menu buttons 
             CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, 280.0f, 255);
@@ -112,35 +112,35 @@ void Pause_Menu_Update(void) {
             CP_Font_DrawText("Main Menu", pmenu_button_x, mainmenu_button_y - 10.0f);
 
             // continue 
-            if (continueClicked == 1) {
+            if (continue_clicked == 1) {
                 Audio_Play_Button_Click();
                 CP_Sound_ResumeGroup(CP_SOUND_GROUP_MUSIC);
                 is_paused = 0;
             }
 
             // settings 
-            else if (settingsClicked == 1) {
+            else if (settings_clicked == 1) {
                Audio_Play_Button_Click();
                is_settings = true;
             }
 
             // controls
-            else if (pmenuControlsClicked == 1) {
+            else if (pmenu_controls_clicked == 1) {
                 Audio_Play_Button_Click();
                 is_controls = true;
             }
 
             // restart
-            else if (restartClicked == 1) {
+            else if (restart_clicked == 1) {
                 Audio_Play_Button_Click();
 
                 // set everything back to start of game state
                 is_paused = 0; // not paused state
                 current_round = 1; // restart to round 1
                 current_level = 1; // restart to level 1
-                showUpgrade = false;
-                upgradeTriggered = false;
-                gameOver = false;
+                show_upgrade = false;
+                upgrade_triggered = false;
+                game_over = false;
 
                 fireball_x = 300;
                 soundwave_x = 1300;
@@ -159,7 +159,7 @@ void Pause_Menu_Update(void) {
                 CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
             }
 
-            else if (mainMenuClicked == 1) {
+            else if (main_menu_clicked == 1) {
                 Audio_Play_Button_Click();
                 confirm_quit = true;
             }
@@ -190,12 +190,12 @@ void Pause_Menu_Update(void) {
                 CP_Font_DrawText("Yes", 680.0f, 490.0f);
                 CP_Font_DrawText("No", 920.0f, 490.0f);
 
-                int yesClicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+                int yes_clicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-                int noClicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+                int no_clicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
                 // yes resets game and go back to main menu
-                if (yesClicked == 1){
+                if (yes_clicked == 1){
                     Audio_Play_Button_Click();
                     confirm_quit = 0;
                     is_paused = 0;
@@ -203,9 +203,9 @@ void Pause_Menu_Update(void) {
                     // restart game
                     current_round = 1;
                     current_level = 1;
-                    showUpgrade = false;
-                    upgradeTriggered = false;
-                    gameOver = false;
+                    show_upgrade = false;
+                    upgrade_triggered = false;
+                    game_over = false;
 
                     fireball_x = 300;
                     soundwave_x = 1300;
@@ -222,7 +222,7 @@ void Pause_Menu_Update(void) {
                 }
 
                 // closes popup and stays on pause menu
-                if (noClicked == 1){
+                if (no_clicked == 1){
                     Audio_Play_Button_Click();
                     confirm_quit = false;
                 }

@@ -125,13 +125,13 @@ void Settings_Controls_Update(void)
 
 
         // check left and right page buttons
-        int leftClicked = Is_Area_Clicked(375.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int left_clicked = Is_Area_Clicked(375.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-        int rightClicked = Is_Area_Clicked(1225.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int right_clicked = Is_Area_Clicked(1225.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
 
         // go to previous page
-        if (leftClicked == 1)
+        if (left_clicked == 1)
         {
             Audio_Play_Button_Click();
 
@@ -144,7 +144,7 @@ void Settings_Controls_Update(void)
         }
 
         // go to next page
-        if (rightClicked == 1)
+        if (right_clicked == 1)
         {
             Audio_Play_Button_Click();
 

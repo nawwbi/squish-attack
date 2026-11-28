@@ -23,9 +23,9 @@ int Is_Area_Clicked(float area_center_x, float area_center_y, float area_width, 
 	else { return 0; }
 }
 
-void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius) {
+void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float corner_radius) {
 	CP_Settings_Fill(colour);
-	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, cornerRadius);
+	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, corner_radius);
 }
 
 void Draw_Circle(float x, float y, float diameter, char* text, CP_Color colour) {

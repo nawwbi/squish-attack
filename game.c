@@ -38,10 +38,10 @@ defence_icon,
 hp_icon;
 
 CP_Color 
-darkRed, 
-darkGreen,
+dark_red, 
+dark_green,
 grey,
-lightGrey,
+light_grey,
 black,
 white;
 
@@ -54,19 +54,18 @@ float enemy_x = 1300;
 int score = 0;
 int highscore = 0;
 
-int numSkills;
 // global variable for game reset or restart 
-bool showUpgrade = false;
+bool show_upgrade = false;
 int player_basic_attack_shot = 0; 
 int enemy_basic_attack_shot = 0; 
 bool player_turn = true;
 int current_round = 1;
 int current_level = 1;
 int mana = 0;
-bool upgradeTriggered = false;
+bool upgrade_triggered = false;
 int is_paused = 0; // pause state initialize
 
-bool gameOver = false;
+bool game_over = false;
 
 float game_fade = 255.0f;
 
@@ -74,7 +73,6 @@ static float current_x = 1300.0f;
 
 float enemy_damage_text_timer = 0.0f;
 float enemy_damage_text_value = 0.0f;
-
 float player_damage_text_timer = 0.0f;
 float player_damage_text_value = 0.0f;
 float stunned_text_timer = 0.0f;
@@ -206,14 +204,14 @@ void Check_Current_Enemy(int current_level) {
 
 void Progress_Bar(int current_level, float dt) {
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    Draw_Rectangle(lightGrey, 800, 100, 999, 25, 10);
+    Draw_Rectangle(light_grey, 800, 100, 999, 25, 10);
 
     CP_Settings_RectMode(CP_POSITION_CORNER);
     float start_x = 300 + (current_level - 1) * 300.0f;
     float end_x = (current_level == 3) ? 1250 : start_x + 300;
 
     Draw_Rectangle(
-        darkGreen,
+        dark_green,
         300, 95,
         (current_level - 1) * 333.0f,
         10, 10
@@ -266,7 +264,7 @@ void Skill_Button(int round_finished) {
 		if (i == SPACESHIP) {
             if (spaceship_charged) {
                 CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
-                CP_Settings_Fill(darkGreen);
+                CP_Settings_Fill(dark_green);
                 CP_Font_DrawText("Available!", icon_x, cost_y);
             }
             else {
@@ -284,7 +282,7 @@ void Skill_Button(int round_finished) {
 
             if (meteorite_charged) {
                 CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
-                CP_Settings_Fill(darkGreen);
+                CP_Settings_Fill(dark_green);
                 CP_Font_DrawText("Available!", icon_x, cost_y);
             }
             else {
@@ -302,7 +300,7 @@ void Skill_Button(int round_finished) {
 
             if (bubble_charged) {
                 CP_Image_Draw(skill_button, icon_x, 800, 100, 100, 255);
-                CP_Settings_Fill(darkGreen);
+                CP_Settings_Fill(dark_green);
                 CP_Font_DrawText("Available!", icon_x, cost_y);
             }
             else {
@@ -368,9 +366,9 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         }
 
         enemy_x -= dash_speed * dt;
-        bool bossHitPlayer = Are_Circles_Intersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
+        bool boss_hit_player = Are_Circles_Intersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
 
-        if (!bossHitPlayer) {
+        if (!boss_hit_player) {
             EnemyState = ENEMY_ATTACKING;
         }
         else {
@@ -417,7 +415,6 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     //setting background
     CP_Image_Draw(background, 800, 450, 1600, 900, 255);
     CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
-    CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Settings_Fill(black);
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
     char speedMultiplierText[100];
@@ -445,9 +442,9 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
     CP_Settings_TextSize(40);
     // update the round for each hit when game is not over
-    char roundText[50];
-    snprintf(roundText, sizeof(roundText), "Round: %d/10", current_round);
-    CP_Font_DrawText(roundText, 800, 130);   
+    char round_text[50];
+    snprintf(round_text, sizeof(round_text), "Round: %d/10", current_round);
+    CP_Font_DrawText(round_text, 800, 130);   
 
     //--------------------------------------------PLAYER--------------------------------------------\\
     
@@ -598,8 +595,8 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     Check_Current_Enemy_State(EnemyState);
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
 
-    Health_Bar(darkRed, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
-    Health_Bar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+    Health_Bar(dark_red, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
+    Health_Bar(dark_green, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
     Skill_Button(round_finished);
 
     if (player_damage_text_timer > 0.0f) {
@@ -713,12 +710,12 @@ void Game_Init(void)
     score = 0; // reset score every time new game
     skip_button = CP_Image_Load("./Assets/skip-button.png");
 
-    gameOver = false; // reset game over state for a new game
+    game_over = false; // reset game over state for a new game
      
-    darkRed = CP_Color_Create(255, 0, 0, 255);
-    darkGreen = CP_Color_Create(0, 255, 0, 255);
+    dark_red = CP_Color_Create(255, 0, 0, 255);
+    dark_green = CP_Color_Create(0, 255, 0, 255);
     grey = CP_Color_Create(70, 70, 70, 225);
-    lightGrey = CP_Color_Create(100, 100, 100, 100);
+    light_grey = CP_Color_Create(100, 100, 100, 100);
     black = CP_Color_Create(0, 0, 0, 255);
     white = CP_Color_Create(255, 255, 255, 255);
 
@@ -742,25 +739,15 @@ void Game_Update(void)
     //get delta time
     float dt = CP_System_GetDt();
 
-    // int current_round = 1;      // track current round number  // moved out of game_update to global variable
-    // int current_level = 1;      // track current level number  // moved out of game_update to global variable
-    //static bool gameOver = false;      // check if game is over (for both win and lose)
-
-    // checking for lose conditions for player and enemy 
-    // check if player has killed dumpling , with health over 0 and current round is less than 10
-
-    // static bool showUpgrade = false; // moved out of game_update to global variable
-    // static bool upgradeTriggered = false; // moved out of game_update to global variable
-
     Check_Current_Enemy(current_level);
 
     if (current_enemy->current_hp <= 0 &&
         current_round <= 10 &&
         player.current_hp > 0 &&
-        !upgradeTriggered && current_level < 4) {
+        !upgrade_triggered && current_level < 4) {
 
-        showUpgrade = true;
-        upgradeTriggered = true;
+        show_upgrade = true;
+        upgrade_triggered = true;
         ++current_level;
     }
 
@@ -776,24 +763,24 @@ void Game_Update(void)
 
         current_level = 1;
         current_round = 1;
-        showUpgrade = false;
-        upgradeTriggered = false;
+        show_upgrade = false;
+        upgrade_triggered = false;
         Reset_Characters();
         Check_Current_Enemy(current_level);
     }
 
-    else if (showUpgrade) {
+    else if (show_upgrade) {
         CP_Engine_SetNextGameState(Upgrades_Init, Upgrades_Update, Upgrades_Exit);
         current_round = 1;
-        showUpgrade = false;
-        upgradeTriggered = false;
+        show_upgrade = false;
+        upgrade_triggered = false;
         return;
     }
 
     // player loses if they have lesser hp than dumpling
     if (player.current_hp <= 0 && current_enemy->current_hp > 0)
     {
-        gameOver = true;
+        game_over = true;
 
         if (highscore < score)
         {
@@ -807,8 +794,8 @@ void Game_Update(void)
 
         current_level = 1;
         current_round = 1;
-        showUpgrade = false;
-        upgradeTriggered = false;
+        show_upgrade = false;
+        upgrade_triggered = false;
 
         Reset_Characters();
         Check_Current_Enemy(current_level);
@@ -818,7 +805,7 @@ void Game_Update(void)
     // if current round exceeds 10, game is over
     if (current_round > 10)
     {
-        gameOver = true;
+        game_over = true;
 
         if (highscore < score)
         {
@@ -832,8 +819,8 @@ void Game_Update(void)
 
         current_level = 1;
         current_round = 1;
-        showUpgrade = false;
-        upgradeTriggered = false;
+        show_upgrade = false;
+        upgrade_triggered = false;
 
         Reset_Characters();
         Check_Current_Enemy(current_level);
@@ -845,7 +832,7 @@ void Game_Update(void)
     Debug_Update();
 
     // update the round for each hit when game is not over
-    if (!is_paused && !gameOver && current_round <= 10) {
+    if (!is_paused && !game_over && current_round <= 10) {
         float active_dt = Debug_Should_Update_Game() ? dt : 0.0f;
 
         if (Game_Per_Round(active_dt, current_round, current_level) == 1) {
@@ -882,5 +869,7 @@ void Game_Exit(void)
     CP_Image_Free(dumpling_opened);
     CP_Image_Free(butter_opened);
     CP_Image_Free(boss_opened);
+	CP_Image_Free(fireball);
+	CP_Image_Free(soundwave);
     Pause_Menu_Exit();
 }

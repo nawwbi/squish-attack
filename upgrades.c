@@ -9,11 +9,11 @@
 #include "debug.h"
 #include <stdbool.h>
 
-int numSkills = 0;
+int num_skills = 0;
 int clicked = 0;
 int minimum = 0;
 int maximum;
-float totalRarity = 0;
+float total_rarity = 0;
 enum { ARRAY_SIZE = 3 };
 int random_list[ARRAY_SIZE] = {0, 0, 0};
 
@@ -86,11 +86,11 @@ static CP_Image Upgrade_Icon(int upgrade_enum) {
 }
 
 static void Pick_Random_Upgrades(void) {
-    numSkills = sizeof(upgrades) / sizeof(upgrades[0]);
+    num_skills = sizeof(upgrades) / sizeof(upgrades[0]);
 
 	//getting total weight of all upgrades
     float total_weight = 0.0f;
-    for (int i = 0; i < numSkills; ++i) {
+    for (int i = 0; i < num_skills; ++i) {
         total_weight += upgrades[i].rarity;
     }
 
@@ -101,7 +101,7 @@ static void Pick_Random_Upgrades(void) {
         float cumulative = 0.0f;
 
         //going through all of the skills
-        for (int i = 0; i < numSkills; ++i) {
+        for (int i = 0; i < num_skills; ++i) {
             cumulative += upgrades[i].rarity;
             //adding weight of rarity until it is greater or equal to random roll
             if (roll <= cumulative) {
@@ -143,8 +143,8 @@ void Upgrades_Init(void) {
 }
 
 void Upgrades_Update(void) { 
-    static int upgradeEnum = 0;
-	static float selectedValue = 0;
+    static int upgrade_enum = 0;
+	static float selected_value = 0;
 
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
 
@@ -162,8 +162,8 @@ void Upgrades_Update(void) {
         );
 
         if (clicked) {
-            upgradeEnum = displaying_upgrades[i].upgrade_enum;
-			selectedValue = displaying_upgrades[i].value;
+            upgrade_enum = displaying_upgrades[i].upgrade_enum;
+			selected_value = displaying_upgrades[i].value;
             break;
         }
 
@@ -188,33 +188,33 @@ void Upgrades_Update(void) {
         );
     }
 
-    if (clicked && upgradeEnum >= 0) {
+    if (clicked && upgrade_enum >= 0) {
 
-        switch (upgradeEnum) {
+        switch (upgrade_enum) {
 
         case DEFENCE:
-            player.defence = Calculate_Current_Defence(player.defence, selectedValue);
+            player.defence = Calculate_Current_Defence(player.defence, selected_value);
             break;
 
         case ATTACK:
-            player.attack = Calculate_Current_Attack(player.attack, selectedValue);
+            player.attack = Calculate_Current_Attack(player.attack, selected_value);
             break;
 
         case HP:
-            player.max_hp = Calculate_Current_Max_HP(player.max_hp, selectedValue);
+            player.max_hp = Calculate_Current_Max_HP(player.max_hp, selected_value);
             break;
 
         case HEAL:
-            player.current_hp = Calculate_Healing(player.current_hp, player.max_hp, selectedValue);
+            player.current_hp = Calculate_Healing(player.current_hp, player.max_hp, selected_value);
             break;
 
         case BASIC_ATTACK_ITERATION:
-			player.skills[BASIC_ATTACK].iteration += (int)selectedValue;
+			player.skills[BASIC_ATTACK].iteration += (int)selected_value;
             break;
         }
 
-        upgradeEnum = 0;
-        selectedValue = 0;
+        upgrade_enum = 0;
+        selected_value = 0;
         clicked = 0;
         
         CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);

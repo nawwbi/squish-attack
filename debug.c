@@ -47,7 +47,6 @@ void Debug_Init(void) {
     saved_frames = 0;
 }
 
-
 bool Debug_Should_Update_Game(void) {
     if (!debug_mode || !is_frozen) {
         return true;
