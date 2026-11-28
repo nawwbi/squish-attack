@@ -1,6 +1,6 @@
 #include "cprocessing.h"
-#include "mathutils.h"
-#include "uiutils.h"
+#include "math.h"
+#include "ui.h"
 #include "constants.h"
 #include "game.h"
 #include "audio.h"

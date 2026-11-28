@@ -1,6 +1,6 @@
 #include <math.h>
 #include "cprocessing.h"
-#include "mathutils.h"
+#include "math.h"
 #include "constants.h"
 #include "upgrades.h"
 #include "game.h"

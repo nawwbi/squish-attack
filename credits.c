@@ -1,8 +1,8 @@
 #include "cprocessing.h"
 #include "credits.h"
 #include "mainmenu.h"
-#include "uiutils.h"
-#include "mathutils.h"
+#include "ui.h"
+#include "math.h"
 #include "audio.h"
 
 CP_Image credits_background;

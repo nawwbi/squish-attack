@@ -1,7 +1,7 @@
 #include "cprocessing.h"
-#include "mathutils.h"
-#include "uiutils.h"
-#include "combatutils.h"
+#include "math.h"
+#include "ui.h"
+#include "combat.h"
 #include "constants.h"
 #include "upgrades.h"
 #include <stdio.h>

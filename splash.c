@@ -1,7 +1,7 @@
 #include "cprocessing.h"
 #include "splash.h"
 #include "mainmenu.h"
-#include "mathutils.h"
+#include "math.h"
 
 CP_Image splash_digipen_logo;
 CP_Image splash_team_logo;

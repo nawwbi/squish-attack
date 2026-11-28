@@ -2,9 +2,9 @@
 #include "settingscontrols.h"
 #include "controls.h"
 #include "pause.h"
-#include "mathutils.h"
-#include "uiutils.h"
-#include "combatutils.h"
+#include "math.h"
+#include "ui.h"
+#include "combat.h"
 #include "audio.h"
 
 CP_Image controls_background;

@@ -66,13 +66,13 @@
     <ClCompile Include="..\settingscontrols.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\combatutils.c">
+    <ClCompile Include="..\combat.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\mathutils.c">
+    <ClCompile Include="..\math.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\uiutils.c">
+    <ClCompile Include="..\ui.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,13 +122,13 @@
     <ClInclude Include="..\settingscontrols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\combatutils.h">
+    <ClInclude Include="..\combat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\mathutils.h">
+    <ClInclude Include="..\math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\uiutils.h">
+    <ClInclude Include="..\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
