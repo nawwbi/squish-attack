@@ -18,9 +18,7 @@ const int SKILL_ANIMATION_FRAMES = 3;
 static float meteoriteMovementTimer = 0.0f;
 const float meteoriteMovementDuration = 0.60f;
 
-void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x) {
-    //int width = CP_System_GetWindowWidth();
-    //int height = CP_System_GetWindowHeight();
+void Character_Animation(CP_Image sprite, bool isPlayer, bool top, float x) {
 
     int imageWidth = CP_Image_GetWidth(sprite);
     int imageHeight = CP_Image_GetHeight(sprite);
@@ -47,7 +45,7 @@ void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x) {
     );
 }
 
-void SpaceshipAnimation(CP_Image sprite) {
+void Spaceship_Animation(CP_Image sprite) {
 
     if (!isSpaceshipAnimationActive) {
         return;
@@ -87,7 +85,7 @@ void SpaceshipAnimation(CP_Image sprite) {
     }
 }
 
-void TriggerSpaceshipAnimation(void) {
+void Trigger_Spaceship_Animation(void) {
     if (!isSpaceshipAnimationActive) {
         isSpaceshipAnimationActive = true;
         skillAnimationFrameCount = 0;
@@ -95,7 +93,7 @@ void TriggerSpaceshipAnimation(void) {
     }
 }
 
-void MeteoriteAnimation(CP_Image sprite) {
+void Meteorite_Animation(CP_Image sprite) {
 
     if (!isMeteoriteAnimationActive) {
         return;
@@ -148,7 +146,7 @@ void MeteoriteAnimation(CP_Image sprite) {
     }
 }
 
-void TriggerMeteoriteAnimation(void) {
+void Trigger_Meteorite_Animation(void) {
     if (!isMeteoriteAnimationActive) {
         isMeteoriteAnimationActive = true;
         skillAnimationFrameCount = 0;
@@ -157,7 +155,7 @@ void TriggerMeteoriteAnimation(void) {
     }
 }
 
-void BubbleAnimation(CP_Image sprite) {
+void Bubble_Animation(CP_Image sprite) {
 
     if (!isBubbleAnimationActive) {
         return;
@@ -188,7 +186,7 @@ void BubbleAnimation(CP_Image sprite) {
     }
 }
 
-void TriggerBubbleAnimation(void) {
+void Trigger_Bubble_Animation(void) {
     if (!isBubbleAnimationActive) {
         isBubbleAnimationActive = true;
         skillAnimationFrameCount = 0;
@@ -197,13 +195,13 @@ void TriggerBubbleAnimation(void) {
     }
 }
 
-void EndBubbleAnimation(void) {
+void End_Bubble_Animation(void) {
     isBubbleAnimationActive = false;
     skillAnimationFrameCount = 0;
     frame = 0;
     skillTimer = 0.0f;
 }
 
-bool IsBubbleAnimationActive(void) {
+bool Is_Bubble_Animation_Active(void) {
     return isBubbleAnimationActive;
 }

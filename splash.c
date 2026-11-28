@@ -116,7 +116,7 @@ void Splash_Update(void)
     CP_Font_DrawText("Skip", 1450.0f, 810.0f);
 
     // skip button click
-    int skipClicked = IsAreaClicked(1450.0f, 820.0f, 220.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    int skipClicked = Is_Area_Clicked(1450.0f, 820.0f, 220.0f, 80.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
     if (skipClicked == 1)
     {

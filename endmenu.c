@@ -97,7 +97,7 @@ void End_Menu_Update(void)
         CP_Font_DrawText("Play Again", 800.0f, 465.0f);
         CP_Font_DrawText("Quit", 800.0f, 585.0f);
         
-        int playClicked = IsAreaClicked(800.0f, 480.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int playClicked = Is_Area_Clicked(800.0f, 480.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (playClicked == 1)
         {
@@ -105,7 +105,7 @@ void End_Menu_Update(void)
             CP_Engine_SetNextGameState(Level_Intro_Init, Level_Intro_Update, Level_Intro_Exit);
         }
 
-        int quitClicked = IsAreaClicked(800.0f, 600.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int quitClicked = Is_Area_Clicked(800.0f, 600.0f, 400.0f, 120.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (quitClicked == 1)
         {
@@ -117,7 +117,7 @@ void End_Menu_Update(void)
     // confirmation popup
     else
     {
-        DrawRectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
+        Draw_Rectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
 
         CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
         CP_Settings_TextSize(45);
@@ -131,9 +131,9 @@ void End_Menu_Update(void)
         CP_Font_DrawText("Yes", 680.0f, 490.0f);
         CP_Font_DrawText("No", 920.0f, 490.0f);
 
-        int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int yesClicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-        int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int noClicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         // yes closes the application
         if (yesClicked == 1)
@@ -163,7 +163,7 @@ void End_Menu_Update(void)
         }
 
         CP_Settings_RectMode(CP_POSITION_CENTER);
-        DrawRectangle(CP_Color_Create(0, 0, 0, (int)end_menu_fade), 800, 450, 1600, 900, 0);
+        Draw_Rectangle(CP_Color_Create(0, 0, 0, (int)end_menu_fade), 800, 450, 1600, 900, 0);
     }
 }
 

@@ -43,7 +43,7 @@ void Controls_Update(void)
     CP_Image_Draw(controls_banner, 800, 450, 1600, 900, 255);
 
     // black background rectangle
-    DrawRectangle(CP_Color_Create(0, 0, 0, 150), 800, 420, 850, 500, 0);
+    Draw_Rectangle(CP_Color_Create(0, 0, 0, 150), 800, 420, 850, 500, 0);
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
@@ -119,9 +119,9 @@ void Controls_Update(void)
 
 
     // check left and right page buttons
-    int leftClicked = IsAreaClicked(375.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    int leftClicked = Is_Area_Clicked(375.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-    int rightClicked = IsAreaClicked(1225.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    int rightClicked = Is_Area_Clicked(1225.0f, 420.0f, 100.0f, 100.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
 
     // go to previous page
@@ -157,7 +157,7 @@ void Controls_Update(void)
     CP_Settings_TextSize(60);
     CP_Font_DrawText("Back", 250.0f, 735.0f);
 
-    int backClicked = IsAreaClicked(250.0f, 750.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+    int backClicked = Is_Area_Clicked(250.0f, 750.0f, 400.0f, 150.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
     if (backClicked == 1)
     {
@@ -165,7 +165,6 @@ void Controls_Update(void)
         CP_Engine_SetNextGameState(Main_Menu_Init, Main_Menu_Update, Main_Menu_Exit);
     }
 }
-
 
 void Controls_Exit(void)
 {

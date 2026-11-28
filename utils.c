@@ -5,7 +5,7 @@
 #include "upgrades.h"
 #include "game.h"
 
-int IsAreaClicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
+int Is_Area_Clicked(float area_center_x, float area_center_y, float area_width, float area_height, float click_x, float click_y)
 {
 
 	float half_width = area_width / 2;
@@ -23,12 +23,12 @@ int IsAreaClicked(float area_center_x, float area_center_y, float area_width, fl
 	else { return 0; }
 }
 
-void DrawRectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius) {
+void Draw_Rectangle(CP_Color colour, float x, float y, float width, float height, float cornerRadius) {
 	CP_Settings_Fill(colour);
 	CP_Graphics_DrawRectAdvanced(x, y, width, height, 0.0f, cornerRadius);
 }
 
-void DrawCircle(float x, float y, float diameter, char* text, CP_Color colour) {
+void Draw_Circle(float x, float y, float diameter, char* text, CP_Color colour) {
 	CP_Settings_Fill(colour);
 	CP_Graphics_DrawCircle(x, y, diameter);
 	CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
@@ -36,7 +36,7 @@ void DrawCircle(float x, float y, float diameter, char* text, CP_Color colour) {
 }
 
 // calculates current hp based on healing recieved 
-float CalculateHealing(float previous_hp, float max_hp, float healing_percentage)
+float Calculate_Healing(float previous_hp, float max_hp, float healing_percentage)
 {
 	float current_hp = previous_hp + (max_hp * healing_percentage);
 	if (current_hp > max_hp) // make sure that current hp dont go above max hp
@@ -46,27 +46,27 @@ float CalculateHealing(float previous_hp, float max_hp, float healing_percentage
 	return current_hp;
 }
 
-float CalculateDamage(float attack, float defence)
+float Calculate_Damage(float attack, float defence)
 {
 	float current_damage = attack - defence;
 	return current_damage;
 }
 
 
-float CalculateCurrentAttack(float attack, float increment_percentage)
+float Calculate_Current_Attack(float attack, float increment_percentage)
 {
 	float current_attack = attack * (1 + increment_percentage);
 	return current_attack;
 }
 
-float CalculateCurrentDefence(float defence, float increment_percentage)
+float Calculate_Current_Defence(float defence, float increment_percentage)
 {
 	float current_defence = defence * (1 + increment_percentage);
 	return current_defence;
 }
 
 // calculates current hp based on damage taken
-float CalculateCurrentHP(float previous_hp, float received_damage, float defence)
+float Calculate_Current_HP(float previous_hp, float received_damage, float defence)
 {
 	received_damage = received_damage - defence;
 
@@ -79,14 +79,14 @@ float CalculateCurrentHP(float previous_hp, float received_damage, float defence
 	return current_hp;
 }
 
-float CalculateCurrentMaxHP(float health, float increment_percentage)
+float Calculate_Current_Max_HP(float health, float increment_percentage)
 {
 	float current_max_hp = health * (1 + increment_percentage);
 	// (suggestion!) add that current hp gets updated too when player picks the health upgrade
 	return current_max_hp;
 }
 
-void SkillUpgradeButton(
+void Skill_Upgrade_Button(
 	int skillEnum,
 	float image_x, float image_y, float image_width, float image_height,
 	CP_Color colour,
@@ -113,7 +113,7 @@ void SkillUpgradeButton(
 	char value_text[3];
 	if (skillEnum == BASIC_ATTACK_ITERATION && (value >= 1)) {
 		snprintf(value_text, sizeof(value_text), "%+f", value); //auto positive numbers has a +
-		DrawCircle(icon_x + 80, icon_y + 40, 60, value_text, circle_colour);
+		Draw_Circle(icon_x + 80, icon_y + 40, 60, value_text, circle_colour);
 	}
 	
 	CP_Settings_Fill(colour);
@@ -122,14 +122,14 @@ void SkillUpgradeButton(
 	CP_Font_DrawTextBox(description_text, description_text_x, description_text_y, 250);
 }
 
-void HealthBar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {
+void Health_Bar(CP_Color current_colour, float x, float y, float current_hp, float max_hp) {
 	CP_Settings_RectMode(CP_POSITION_CORNER);
 	CP_Settings_NoStroke();
-	DrawRectangle(CP_Color_Create(100, 100, 100, 255), x, y, 100, 20, 0);
-	if (current_hp > 0) DrawRectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
+	Draw_Rectangle(CP_Color_Create(100, 100, 100, 255), x, y, 100, 20, 0);
+	if (current_hp > 0) Draw_Rectangle(current_colour, x, y, (current_hp/max_hp)*100, 20, 0);
 }
 
-bool AreCirclesIntersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2)
+bool Are_Circles_Intersecting(float c1_x, float c1_y, float r1, float c2_x, float c2_y, float r2)
 {
 	double distance_squared = (((c1_x - c2_x) * (c1_x - c2_x)) + ((c1_y - c2_y) * (c1_y - c2_y)));
 	double diameter_squared = (r1 + r2) * (r1 + r2);
@@ -144,7 +144,7 @@ void Text(float font_size, CP_Color colour, double value, float text_x, float te
 	CP_Font_DrawText(text, text_x, text_y);
 }
 
-void DamageText(
+void Damage_Text(
 	float current_timer, float total_timer, float value,
 	float x, float y
 ) {
@@ -162,7 +162,7 @@ void DamageText(
 	CP_Font_DrawText(text, x, y - rise);
 }
 
-void FadingText(
+void Fading_Text(
 	float current_timer, float total_timer, char* string,
 	float x, float y
 ) {

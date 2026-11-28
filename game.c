@@ -150,39 +150,39 @@ static enum PlayerState {
     PLAYER_ATTACKING
 } PlayerState = PLAYER_IDLE;
 
-void Check_Current_Player_State(int player_state) {
-    switch (player_state) {
-    case PLAYER_IDLE:
-        CharacterAnimation(player_sprite, true, true, PLAYER_X_AXIS);
-        break;
-
-    case PLAYER_ATTACKING:
-        CharacterAnimation(player_sprite, true, false, PLAYER_X_AXIS);
-        break;
-
-    default:
-        CharacterAnimation(player_sprite, true, true, PLAYER_X_AXIS);
-        break;
-    }
-}
-
 static enum EnemyState {
     ENEMY_IDLE,
     ENEMY_ATTACKING
 } EnemyState = ENEMY_IDLE;
 
-void Check_Current_Enemy_State(int enemy_state) {
-    switch (enemy_state) {
-    case ENEMY_IDLE:
-        CharacterAnimation(current_enemy_sprite, false, true, enemy_x);
+void Check_Current_Player_State(int player_state) {
+    switch (player_state) {
+    case PLAYER_IDLE:
+        Character_Animation(player_sprite, true, true, PLAYER_X_AXIS);
         break;
 
-    case ENEMY_ATTACKING:
-        CharacterAnimation(current_enemy_sprite, false, false, enemy_x);
+    case PLAYER_ATTACKING:
+        Character_Animation(player_sprite, true, false, PLAYER_X_AXIS);
         break;
 
     default:
-        CharacterAnimation(current_enemy_sprite, false, true, enemy_x);
+        Character_Animation(player_sprite, true, true, PLAYER_X_AXIS);
+        break;
+    }
+}
+
+void Check_Current_Enemy_State(int enemy_state) {
+    switch (enemy_state) {
+    case ENEMY_IDLE:
+        Character_Animation(current_enemy_sprite, false, true, enemy_x);
+        break;
+
+    case ENEMY_ATTACKING:
+        Character_Animation(current_enemy_sprite, false, false, enemy_x);
+        break;
+
+    default:
+        Character_Animation(current_enemy_sprite, false, true, enemy_x);
         break;
     }
 }
@@ -206,13 +206,13 @@ void Check_Current_Enemy(int current_level) {
 
 void Progress_Bar(int current_level, float dt) {
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(lightGrey, 800, 100, 999, 25, 10);
+    Draw_Rectangle(lightGrey, 800, 100, 999, 25, 10);
 
     CP_Settings_RectMode(CP_POSITION_CORNER);
     float start_x = 300 + (current_level - 1) * 300.0f;
     float end_x = (current_level == 3) ? 1250 : start_x + 300;
 
-    DrawRectangle(
+    Draw_Rectangle(
         darkGreen,
         300, 95,
         (current_level - 1) * 333.0f,
@@ -227,7 +227,7 @@ void Progress_Bar(int current_level, float dt) {
         progress_x = start_x;
     }
 
-    DrawRectangle(grey, progress_x, 95, 37, 10, 10);
+    Draw_Rectangle(grey, progress_x, 95, 37, 10, 10);
 
     CP_Settings_RectMode(CP_POSITION_CENTER);
     CP_Image_Draw(player_opened, PLAYER_X_AXIS, 100, MINI_PLAYER_WIDTH, MINI_PLAYER_HEIGHT, 255);
@@ -243,8 +243,8 @@ void Skill_Button(int round_finished) {
 
     if (round_finished == 1) {
         mana+=10;
-        TriggerBubbleAnimation();
-        EndBubbleAnimation();
+        Trigger_Bubble_Animation();
+        End_Bubble_Animation();
     }
 
     char text[50];
@@ -315,26 +315,26 @@ void Skill_Button(int round_finished) {
             CP_Image_Draw(bubble_icon, icon_x, 800, 100, 100, 255);
         }
 
-        int clicked = IsAreaClicked(icon_x, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+        int clicked = Is_Area_Clicked(icon_x, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
         if (clicked) {
             if ((i == SPACESHIP) && spaceship_charged) {
-                TriggerSpaceshipAnimation();
+                Trigger_Spaceship_Animation();
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = (player.attack * 2) - current_enemy->defence;
-                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 2), current_enemy->defence);
+                current_enemy->current_hp = Calculate_Current_HP(current_enemy->current_hp, (player.attack * 2), current_enemy->defence);
                 score += (int)((player.attack * 2) - current_enemy->defence);
                 mana -= PLAYER_SPACESHIP_CHARGE;
             }
             else if ((i == METEORITE) && meteorite_charged) {
-                TriggerMeteoriteAnimation();
+                Trigger_Meteorite_Animation();
                 enemy_damage_text_timer = DAMAGE_TEXT_DURATION;
                 enemy_damage_text_value = (player.attack * 3) - current_enemy->defence;
-                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
+                current_enemy->current_hp = Calculate_Current_HP(current_enemy->current_hp, (player.attack * 3), current_enemy->defence);
                 score += (int)((player.attack * 3) - current_enemy->defence);
                 mana -= PLAYER_METEORITE_CHARGE;
             } else if ((i == BUBBLE) && bubble_charged) {
-                TriggerBubbleAnimation();
+                Trigger_Bubble_Animation();
                 mana -= PLAYER_BUBBLE_CHARGE;
             }
         }
@@ -343,9 +343,9 @@ void Skill_Button(int round_finished) {
         icon_x += 120;
     }
     
-    SpaceshipAnimation(spaceship_sprite);
-    MeteoriteAnimation(meteorite_sprite);
-    BubbleAnimation(bubble_sprite);
+    Spaceship_Animation(spaceship_sprite);
+    Meteorite_Animation(meteorite_sprite);
+    Bubble_Animation(bubble_sprite);
 }
 
 int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_basic_attack_shot) {
@@ -368,13 +368,13 @@ int Boss_Ultimate(int current_round, float dt, bool* player_turn, int* enemy_bas
         }
 
         enemy_x -= dash_speed * dt;
-        bool bossHitPlayer = AreCirclesIntersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
+        bool bossHitPlayer = Are_Circles_Intersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, PLAYER_WIDTH / 2);
 
         if (!bossHitPlayer) {
             EnemyState = ENEMY_ATTACKING;
         }
         else {
-            player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack * 1.5f, player.defence);
+            player.current_hp = Calculate_Current_HP(player.current_hp, current_enemy->attack * 1.5f, player.defence);
             stunned_text_timer = DAMAGE_TEXT_DURATION;
             boss_state = BOSS_STUN_PAUSE;
         }
@@ -425,7 +425,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
     CP_Font_DrawText(speedMultiplierText, 1500 , 720);
 
-    if (IsAreaClicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+    if (Is_Area_Clicked(1500, 800, 100, 100, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
 
         Audio_Play_Button_Click();
 
@@ -453,7 +453,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     
     //player stats background
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(grey, 270, 410, 260, 95, 10);
+    Draw_Rectangle(grey, 270, 410, 260, 95, 10);
 
     //player stat icons
     CP_Image_Draw(defence_icon, 165, PLAYER_Y_AXIS - PLAYER_HEIGHT - 40, 25, 25, 255);
@@ -474,7 +474,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     
     //enemy stats background
     CP_Settings_RectMode(CP_POSITION_CENTER);
-    DrawRectangle(grey, 1300, 480, 260, 95, 10);
+    Draw_Rectangle(grey, 1300, 480, 260, 95, 10);
 
     //enemy stat icons
     CP_Image_Draw(defence_icon, 1195, ENEMY_Y_AXIS - ENEMY_HEIGHT, 25, 25, 255);
@@ -499,7 +499,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 
         if (player_basic_attack_shot < player.skills[BASIC_ATTACK].iteration) {
             //collision check for player fireball and enemy
-            bool fireballHitEnemy = AreCirclesIntersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
+            bool fireballHitEnemy = Are_Circles_Intersecting(fireball_x, PLAYER_Y_AXIS, 90 / 2, ENEMY_X_AXIS, ENEMY_Y_AXIS, PLAYER_WIDTH / 2);
 
             // play sound when player launches a new fireball
             if (fireball_x == 300) {
@@ -518,7 +518,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 
                 //base health should be current enemy health, and base attack should be current player attack
                 // update current hp with reduced health
-                current_enemy->current_hp = CalculateCurrentHP(current_enemy->current_hp, player.attack, current_enemy->defence);
+                current_enemy->current_hp = Calculate_Current_HP(current_enemy->current_hp, player.attack, current_enemy->defence);
                 
                 fireball_x = 300; // reset fireball position after hitting enemy
                 
@@ -542,8 +542,8 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
     if (player_turn == false) {
         //collision check for enemy soundwave and player
-        bool soundwaveHitPlayer = AreCirclesIntersecting(soundwave_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
-        bool enemyHitPlayer = AreCirclesIntersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
+        bool soundwaveHitPlayer = Are_Circles_Intersecting(soundwave_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
+        bool enemyHitPlayer = Are_Circles_Intersecting(enemy_x, ENEMY_Y_AXIS, 90 / 2, PLAYER_X_AXIS, PLAYER_Y_AXIS, ENEMY_WIDTH / 2);
 
         //enemy has not done all of its basic attack shots
         if (enemy_basic_attack_shot < current_enemy->skills[BASIC_ATTACK].iteration) {
@@ -562,14 +562,14 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
 			else {
 				EnemyState = ENEMY_IDLE;
 
-				if (IsBubbleAnimationActive()) {
+				if (Is_Bubble_Animation_Active()) {
 					player_damage_text_timer = DAMAGE_TEXT_DURATION;
 					player_damage_text_value = 0.0f;
 				} else {
 					player_damage_text_timer = DAMAGE_TEXT_DURATION;
 					player_damage_text_value = current_enemy->attack - player.defence;
 					// update current hp with reduced health
-					player.current_hp = CalculateCurrentHP(player.current_hp, current_enemy->attack, player.defence);
+					player.current_hp = Calculate_Current_HP(player.current_hp, current_enemy->attack, player.defence);
 					score -= (int)(current_enemy->attack - player.defence);
 				}
 
@@ -598,15 +598,16 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     Check_Current_Enemy_State(EnemyState);
     //--------------------------------------------ENEMY ATTACK--------------------------------------------//
 
-    HealthBar(darkRed, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
-    HealthBar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
+    Health_Bar(darkRed, 1250, 530, current_enemy->current_hp, current_enemy->max_hp);
+    Health_Bar(darkGreen, 230, PLAYER_Y_AXIS - PLAYER_HEIGHT + 50, player.current_hp, player.max_hp);
     Skill_Button(round_finished);
 
     if (player_damage_text_timer > 0.0f) {
         player_damage_text_timer -= dt;
 
-        if (player_damage_text_value == 0.0f && IsBubbleAnimationActive()) {
-            FadingText(
+
+        if (player_damage_text_value == 0.0f && Is_Bubble_Animation_Active()) {
+            Fading_Text(
                 player_damage_text_timer,
                 DAMAGE_TEXT_DURATION,
                 "Blocked!",
@@ -614,7 +615,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
                 PLAYER_Y_AXIS + 50
             );
         } else {
-            DamageText(
+            Damage_Text(
                 player_damage_text_timer, 
                 DAMAGE_TEXT_DURATION, 
                 player_damage_text_value,
@@ -628,7 +629,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     if (enemy_damage_text_timer > 0.0f) {
         enemy_damage_text_timer -= dt;
 
-        DamageText(
+        Damage_Text(
             enemy_damage_text_timer,
             DAMAGE_TEXT_DURATION,
             enemy_damage_text_value,
@@ -641,7 +642,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     if (stunned_text_timer > 0.0f) {
         stunned_text_timer -= dt;
 
-        FadingText(
+        Fading_Text(
             stunned_text_timer,
             DAMAGE_TEXT_DURATION,
             "STUNNED!",
@@ -845,17 +846,17 @@ void Game_Update(void)
 
     // update the round for each hit when game is not over
     if (!is_paused && !gameOver && current_round <= 10) {
-        float active_dt = Debug_ShouldUpdateGame() ? dt : 0.0f;
+        float active_dt = Debug_Should_Update_Game() ? dt : 0.0f;
 
         if (Game_Per_Round(active_dt, current_round, current_level) == 1) {
             ++current_round;
         }
 
-        Debug_RecordFrame();
+        Debug_Record_Frame();
     }
 
 
-    Debug_DrawCollisionCircles();
+    Debug_Draw_Collision_Circles();
     // pause 
     Pause_Menu_Update();
     Debug_Draw();
@@ -871,7 +872,7 @@ void Game_Update(void)
         }
 
         CP_Settings_RectMode(CP_POSITION_CENTER);
-        DrawRectangle(CP_Color_Create(0, 0, 0, (int)game_fade), 800, 450, 1600, 900, 0);
+        Draw_Rectangle(CP_Color_Create(0, 0, 0, (int)game_fade), 800, 450, 1600, 900, 0);
     }
 }
 

@@ -48,7 +48,7 @@ void Debug_Init(void) {
 }
 
 
-bool Debug_ShouldUpdateGame(void) {
+bool Debug_Should_Update_Game(void) {
     if (!debug_mode || !is_frozen) {
         return true;
     }
@@ -59,7 +59,7 @@ bool Debug_ShouldUpdateGame(void) {
     return false;
 }
 
-void Debug_RecordFrame(void) {
+void Debug_Record_Frame(void) {
     if (!debug_mode || is_frozen || current_enemy == NULL) return;
 
     if (saved_frames == MAX_FRAMES) {
@@ -133,7 +133,7 @@ void Debug_Update(void) {
 }
 
 // collision circles
-void Debug_DrawCollisionCircles(void) {
+void Debug_Draw_Collision_Circles(void) {
     char coord_buf[32];
 
     if (!debug_mode || !show_hitboxes) {
@@ -233,8 +233,8 @@ void Debug_Draw(void) {
     sprintf_s(buf, sizeof(buf), "Level: %d", current_level);
     CP_Font_DrawText(buf, 25.0f, 155.0f); // diff 28 y from one entity editor to another
 
-    DrawRectangle(CP_Color_Create(70, 130, 220, 255), 270.0f, 163.0f, 26.0f, 20.0f, 4.0f);
-    DrawRectangle(CP_Color_Create(70, 130, 220, 255), 305.0f, 163.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 130, 220, 255), 270.0f, 163.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 130, 220, 255), 305.0f, 163.0f, 26.0f, 20.0f, 4.0f);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -242,14 +242,14 @@ void Debug_Draw(void) {
     CP_Font_DrawText("+", 305.0f, 163.0f);
 
     // previous level button
-    if ((IsAreaClicked(270.0f, 163.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_J)) && current_level > 1 ) {
+    if ((Is_Area_Clicked(270.0f, 163.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_J)) && current_level > 1 ) {
         current_level--;
         Check_Current_Enemy(current_level);
         Audio_Play_Level(current_level);
     }
 
     // next round button
-    if ((IsAreaClicked(305.0f, 163.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_L)) && current_level < 3 ) {
+    if ((Is_Area_Clicked(305.0f, 163.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_L)) && current_level < 3 ) {
         current_level++;
         Check_Current_Enemy(current_level);
         Audio_Play_Level(current_level);
@@ -260,8 +260,8 @@ void Debug_Draw(void) {
     sprintf_s(buf, sizeof(buf), "Round: %d", current_round);
     CP_Font_DrawText(buf, 25.0f, 183.0f); // diff 28 y from one entity editor to another
 
-    DrawRectangle(CP_Color_Create(70, 130, 220, 255), 270.0f, 191.0f, 26.0f, 20.0f, 4.0f);
-    DrawRectangle(CP_Color_Create(70, 130, 220, 255), 305.0f, 191.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 130, 220, 255), 270.0f, 191.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 130, 220, 255), 305.0f, 191.0f, 26.0f, 20.0f, 4.0f);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -269,14 +269,14 @@ void Debug_Draw(void) {
     CP_Font_DrawText("+", 305.0f, 191.0f);
 
     // previous round button
-    if ((IsAreaClicked(270.0f, 191.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_E)) && current_round > 1) {
+    if ((Is_Area_Clicked(270.0f, 191.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_E)) && current_round > 1) {
         current_round--;
         Check_Current_Enemy(current_level);
         Audio_Play_Level(current_level);
     }
 
     // next round button
-    if ((IsAreaClicked(305.0f, 191.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_R)) && current_round < 10) {
+    if ((Is_Area_Clicked(305.0f, 191.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_R)) && current_round < 10) {
         current_round++;
         Check_Current_Enemy(current_level);
         Audio_Play_Level(current_level);
@@ -288,8 +288,8 @@ void Debug_Draw(void) {
     sprintf_s(buf, sizeof(buf), "Player HP: %.0f / %.0f", player.current_hp, player.max_hp);
     CP_Font_DrawText(buf, 25.0f, 211.0f);
 
-    DrawRectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 221.0f, 26.0f, 20.0f, 4.0f);
-    DrawRectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 221.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 221.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 221.0f, 26.0f, 20.0f, 4.0f);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -297,13 +297,13 @@ void Debug_Draw(void) {
     CP_Font_DrawText("+", 305.0f, 221.0f);
 
     // decrease player current hp -200
-    if (IsAreaClicked(270.0f, 221.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_G)) {
+    if (Is_Area_Clicked(270.0f, 221.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_G)) {
         player.current_hp -= 200.0;
         if (player.current_hp < 0.0) player.current_hp = 0.0;
     }
 
     // increase player current hp +200 
-    if (IsAreaClicked(305.0f, 221.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_H)) {
+    if (Is_Area_Clicked(305.0f, 221.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_H)) {
         player.current_hp += 200.0;
         if (player.current_hp > player.max_hp) player.current_hp = player.max_hp;
     }
@@ -313,8 +313,8 @@ void Debug_Draw(void) {
     sprintf_s(buf, sizeof(buf), "Player Atk: %.0f", player.attack);
     CP_Font_DrawText(buf, 25.0f, 239.0f);
 
-    DrawRectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 249.0f, 26.0f, 20.0f, 4.0f);
-    DrawRectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 249.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 249.0f, 26.0f, 20.0f, 4.0f);
+    Draw_Rectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 249.0f, 26.0f, 20.0f, 4.0f);
     CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
     CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -322,12 +322,12 @@ void Debug_Draw(void) {
     CP_Font_DrawText("+", 305.0f, 249.0f);
 
     // decrease player attack -50
-    if ((IsAreaClicked(270.0f, 249.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_O)) && player.attack > 50.0 ) {
+    if ((Is_Area_Clicked(270.0f, 249.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_O)) && player.attack > 50.0 ) {
         player.attack -= 50.0;
     }
 
     // increase player attack +50
-    if (IsAreaClicked(305.0f, 249.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_P)) {
+    if (Is_Area_Clicked(305.0f, 249.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_P)) {
         player.attack += 50.0;
     }
 
@@ -338,8 +338,8 @@ void Debug_Draw(void) {
         sprintf_s(buf, sizeof(buf), "Enemy HP: %.0f / %.0f", current_enemy->current_hp, current_enemy->max_hp);
         CP_Font_DrawText(buf, 25.0f, 267.0f);
 
-        DrawRectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 277.0f, 26.0f, 20.0f, 4.0f);
-        DrawRectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 277.0f, 26.0f, 20.0f, 4.0f);
+        Draw_Rectangle(CP_Color_Create(200, 70, 70, 255), 270.0f, 277.0f, 26.0f, 20.0f, 4.0f);
+        Draw_Rectangle(CP_Color_Create(70, 180, 90, 255), 305.0f, 277.0f, 26.0f, 20.0f, 4.0f);
         CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
 
         CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
@@ -347,13 +347,13 @@ void Debug_Draw(void) {
         CP_Font_DrawText("+", 305.0f, 277.0f);
 
         // decrease current enemy hp -500
-        if (IsAreaClicked(270.0f, 277.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_N)) {
+        if (Is_Area_Clicked(270.0f, 277.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_N)) {
             current_enemy->current_hp -= 500.0;
             if (current_enemy->current_hp < 0.0) current_enemy->current_hp = 0.0;
         }
 
         // increase current enemy hp +500
-        if (IsAreaClicked(305.0f, 277.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_M)) {
+        if (Is_Area_Clicked(305.0f, 277.0f, 26.0f, 20.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_M)) {
             current_enemy->current_hp += 500.0;
             if (current_enemy->current_hp > current_enemy->max_hp) current_enemy->current_hp = current_enemy->max_hp;
         }

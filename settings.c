@@ -37,7 +37,7 @@ void Settings_Init(void) {
 
 void Settings_Update(void) {
     if (is_settings == true) {
-            DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 600, 700, 20);
+            Draw_Rectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 600, 700, 20);
 
             CP_Settings_Fill(white);
             CP_Settings_TextSize(50);
@@ -55,8 +55,8 @@ void Settings_Update(void) {
             CP_Settings_TextSize(50);
             CP_Font_DrawText("0", 540, 320);
 
-            DrawRectangle(green, 610, 320, 50, 40, 0);
-            if (IsAreaClicked(610, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
+            Draw_Rectangle(green, 610, 320, 50, 40, 0);
+            if (Is_Area_Clicked(610, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
             {
                 Audio_Play_Button_Click();
                 main_volume = 0.0f;
@@ -64,7 +64,7 @@ void Settings_Update(void) {
             }
 
             // volume 25%
-            if (IsAreaClicked(700, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
+            if (Is_Area_Clicked(700, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
             {
                 Audio_Play_Button_Click();
                 main_volume = 0.25f;
@@ -72,7 +72,7 @@ void Settings_Update(void) {
             }
 
             // volume 50%
-            if (IsAreaClicked(790, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
+            if (Is_Area_Clicked(790, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
             {
                 Audio_Play_Button_Click();
                 main_volume = 0.50f;
@@ -80,7 +80,7 @@ void Settings_Update(void) {
             }
 
             // volume 75%
-            if (IsAreaClicked(880, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
+            if (Is_Area_Clicked(880, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
             {
                 Audio_Play_Button_Click();
                 main_volume = 0.75f;
@@ -92,7 +92,7 @@ void Settings_Update(void) {
             CP_Settings_TextSize(50);
             CP_Font_DrawText("100", 1040, 320);
 
-            if (IsAreaClicked(970, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
+            if (Is_Area_Clicked(970, 320, 50, 40, CP_Input_GetMouseX(), CP_Input_GetMouseY()))
             {
                 Audio_Play_Button_Click();
                 main_volume = 1.0f;
@@ -102,34 +102,34 @@ void Settings_Update(void) {
             // green volume boxes
             // green box 25%
             if (main_volume >= 0.25f) {
-                DrawRectangle(green, 700, 320, 50, 40, 0);
+                Draw_Rectangle(green, 700, 320, 50, 40, 0);
             }
             else {
-                DrawRectangle(white, 700, 320, 50, 40, 0);
+                Draw_Rectangle(white, 700, 320, 50, 40, 0);
             }
 
             // green box 50%
             if (main_volume >= 0.50f) {
-                DrawRectangle(green, 790, 320, 50, 40, 0);
+                Draw_Rectangle(green, 790, 320, 50, 40, 0);
             }
             else {
-                DrawRectangle(white, 790, 320, 50, 40, 0);
+                Draw_Rectangle(white, 790, 320, 50, 40, 0);
             }
 
             // green box 75%
             if (main_volume >= 0.75f) {
-                DrawRectangle(green, 880, 320, 50, 40, 0);
+                Draw_Rectangle(green, 880, 320, 50, 40, 0);
             }
             else {
-                DrawRectangle(white, 880, 320, 50, 40, 0);
+                Draw_Rectangle(white, 880, 320, 50, 40, 0);
             }
 
             // green box 100%
             if (main_volume >= 1.0f) {
-                DrawRectangle(green, 970, 320, 50, 40, 0);
+                Draw_Rectangle(green, 970, 320, 50, 40, 0);
             }
             else {
-                DrawRectangle(white, 970, 320, 50, 40, 0);
+                Draw_Rectangle(white, 970, 320, 50, 40, 0);
             }
 
             CP_Settings_Fill(white); // reset text fill color back to white after drawing green volume boxes
@@ -147,7 +147,7 @@ void Settings_Update(void) {
             CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
             CP_Font_DrawText(bgm_on ? "Background Music: On" : "Background Music: Off", 800, 485);
 
-            if (IsAreaClicked(800, 490, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+            if (Is_Area_Clicked(800, 490, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
                 bgm_on = !bgm_on;
                 Update_Audio();
                 Audio_Play_Button_Click();
@@ -160,7 +160,7 @@ void Settings_Update(void) {
             CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
             CP_Font_DrawText(sfx_on ? "Sound Effects: On" : "Sound Effects: Off", 800, 565);
 
-            if (IsAreaClicked(800, 570, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+            if (Is_Area_Clicked(800, 570, 350, 80, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
                 sfx_on = !sfx_on;
                 Update_Audio();
                 Audio_Play_Button_Click();
@@ -173,7 +173,7 @@ void Settings_Update(void) {
             CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
             CP_Font_DrawText("Back", 800, 680);
 
-            if (IsAreaClicked(800, 690, 350, 220, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
+            if (Is_Area_Clicked(800, 690, 350, 220, CP_Input_GetMouseX(), CP_Input_GetMouseY())) {
                 Audio_Play_Button_Click();
                 is_settings = false;
             }

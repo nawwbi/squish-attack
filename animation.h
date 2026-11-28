@@ -1,15 +1,15 @@
 #pragma once
 #include <stdbool.h>
 
-void CharacterAnimation(CP_Image sprite, bool isPlayer, bool top, float x);
+void Character_Animation(CP_Image sprite, bool isPlayer, bool top, float x);
 
-void SpaceshipAnimation(CP_Image sprite);
-void MeteoriteAnimation(CP_Image sprite);
-void BubbleAnimation(CP_Image sprite);
+void Spaceship_Animation(CP_Image sprite);
+void Meteorite_Animation(CP_Image sprite);
+void Bubble_Animation(CP_Image sprite);
 
-void TriggerSpaceshipAnimation(void);
-void TriggerMeteoriteAnimation(void);
-void TriggerBubbleAnimation(void);
+void Trigger_Spaceship_Animation(void);
+void Trigger_Meteorite_Animation(void);
+void Trigger_Bubble_Animation(void);
 
-void EndBubbleAnimation(void);
-bool IsBubbleAnimationActive(void);
+void End_Bubble_Animation(void);
+bool Is_Bubble_Animation_Active(void);

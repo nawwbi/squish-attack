@@ -54,7 +54,7 @@ struct Upgrades displaying_upgrades[ARRAY_SIZE];
 
 // helper funtion to only be used in this file
 // returns the image of the upgrade based on the upgrade_enum
-static CP_Image upgrade_icon(int upgrade_enum) {
+static CP_Image Upgrade_Icon(int upgrade_enum) {
     CP_Image image;
     switch (upgrade_enum) {
 
@@ -85,7 +85,7 @@ static CP_Image upgrade_icon(int upgrade_enum) {
     return image;
 }
 
-static void PickRandomUpgrades(void) {
+static void Pick_Random_Upgrades(void) {
     numSkills = sizeof(upgrades) / sizeof(upgrades[0]);
 
 	//getting total weight of all upgrades
@@ -114,14 +114,13 @@ static void PickRandomUpgrades(void) {
     }
 }
 
-
 void Upgrades_Init(void) { 
     defence_icon = CP_Image_Load("./Assets/defence-icon.png");
     hp_icon = CP_Image_Load("./Assets/hp-icon.png");
     attack_icon = CP_Image_Load("./Assets/fireball.png");
     heal_icon = CP_Image_Load("./Assets/heal-icon.png");
 
-	PickRandomUpgrades();
+	Pick_Random_Upgrades();
 
     float current_image_x = DEFENCE_IMAGE_X;
     float current_text_x = DEFENCE_TEXT_X;
@@ -135,7 +134,7 @@ void Upgrades_Init(void) {
         displaying_upgrades[i].image_x = current_image_x;
         displaying_upgrades[i].text_x = current_text_x;
         displaying_upgrades[i].icon_x = current_text_y;
-        displaying_upgrades[i].icon = upgrade_icon(upgrades[random_list[i]].upgrade_enum);
+        displaying_upgrades[i].icon = Upgrade_Icon(upgrades[random_list[i]].upgrade_enum);
 
         current_image_x += 450;
         current_text_x += 450;
@@ -153,7 +152,7 @@ void Upgrades_Update(void) {
         CP_Settings_Fill(CP_Color_Create(100, 100, 100, 255));
         CP_Settings_RectMode(CP_POSITION_CENTER);
 
-        clicked = IsAreaClicked(
+        clicked = Is_Area_Clicked(
             displaying_upgrades[i].image_x,
             BUTTON_Y_AXIS,
             300,
@@ -168,7 +167,7 @@ void Upgrades_Update(void) {
             break;
         }
 
-        SkillUpgradeButton(
+        Skill_Upgrade_Button(
             displaying_upgrades[i].upgrade_enum,
             displaying_upgrades[i].image_x,
             BUTTON_Y_AXIS,
@@ -194,19 +193,19 @@ void Upgrades_Update(void) {
         switch (upgradeEnum) {
 
         case DEFENCE:
-            player.defence = CalculateCurrentDefence(player.defence, selectedValue);
+            player.defence = Calculate_Current_Defence(player.defence, selectedValue);
             break;
 
         case ATTACK:
-            player.attack = CalculateCurrentAttack(player.attack, selectedValue);
+            player.attack = Calculate_Current_Attack(player.attack, selectedValue);
             break;
 
         case HP:
-            player.max_hp = CalculateCurrentMaxHP(player.max_hp, selectedValue);
+            player.max_hp = Calculate_Current_Max_HP(player.max_hp, selectedValue);
             break;
 
         case HEAL:
-            player.current_hp = CalculateHealing(player.current_hp, player.max_hp, selectedValue);
+            player.current_hp = Calculate_Healing(player.current_hp, player.max_hp, selectedValue);
             break;
 
         case BASIC_ATTACK_ITERATION:

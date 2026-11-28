@@ -53,7 +53,7 @@ void Pause_Menu_Update(void) {
     if (!is_paused && !showUpgrade) {
         CP_Image_Draw(pause_button, pause_button_x, pause_button_y, pause_button_w, pause_button_h, 255);
 
-        if (IsAreaClicked(pause_button_x, pause_button_y, pause_button_w, pause_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
+        if (Is_Area_Clicked(pause_button_x, pause_button_y, pause_button_w, pause_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY()) || CP_Input_KeyTriggered(KEY_ESCAPE)) {
             Audio_Play_Button_Click();
             CP_Sound_PauseGroup(CP_SOUND_GROUP_MUSIC);
             is_paused = 1; // pause state true if pause button clicked
@@ -68,7 +68,7 @@ void Pause_Menu_Update(void) {
         CP_Image_Draw(background, 800, 450, 1600, 900, 255);
 
         if (is_settings == false && confirm_quit == false) {
-            DrawRectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 650, 20);
+            Draw_Rectangle(CP_Color_Create(90, 190, 245, 180), 800, 450, 400, 650, 20);
 
             CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
             CP_Settings_TextSize(50);
@@ -87,11 +87,11 @@ void Pause_Menu_Update(void) {
             float mainmenu_button_y = 720.0f;
 
             // clicks for menu buttons 
-            int continueClicked = IsAreaClicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int settingsClicked = IsAreaClicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int pmenuControlsClicked = IsAreaClicked(pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int restartClicked = IsAreaClicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
-            int mainMenuClicked = IsAreaClicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int continueClicked = Is_Area_Clicked(pmenu_button_x, continue_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int settingsClicked = Is_Area_Clicked(pmenu_button_x, settings_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int pmenuControlsClicked = Is_Area_Clicked(pmenu_button_x, pmenu_controls_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int restartClicked = Is_Area_Clicked(pmenu_button_x, restart_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+            int mainMenuClicked = Is_Area_Clicked(pmenu_button_x, mainmenu_button_y, pmenu_button_w, pmenu_button_h, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
             // menu buttons 
             CP_Image_Draw(menu_button, pmenu_button_x, continue_button_y, pmenu_button_w, 280.0f, 255);
@@ -176,7 +176,7 @@ void Pause_Menu_Update(void) {
         }
         
         if (confirm_quit == true) {
-                DrawRectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
+                Draw_Rectangle(CP_Color_Create(0, 0, 0, 220), 800, 450, 600, 300, 0);
 
                 CP_Settings_Fill(CP_Color_Create(255, 255, 255, 255));
                 CP_Settings_TextSize(45);
@@ -190,9 +190,9 @@ void Pause_Menu_Update(void) {
                 CP_Font_DrawText("Yes", 680.0f, 490.0f);
                 CP_Font_DrawText("No", 920.0f, 490.0f);
 
-                int yesClicked = IsAreaClicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+                int yesClicked = Is_Area_Clicked(680.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
-                int noClicked = IsAreaClicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
+                int noClicked = Is_Area_Clicked(920.0f, 500.0f, 200.0f, 70.0f, CP_Input_GetMouseX(), CP_Input_GetMouseY());
 
                 // yes resets game and go back to main menu
                 if (yesClicked == 1){
