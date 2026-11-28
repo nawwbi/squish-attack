@@ -25,8 +25,8 @@ bool confirm_quit = false;
 // controls page 
 bool is_controls = false; // initialization to open controls page
 
-extern int fireball_x;
-extern int soundwave_x;
+extern float fireball_x;
+extern float soundwave_x;
 extern int current_round;
 extern int current_level;
 extern bool show_upgrade;
