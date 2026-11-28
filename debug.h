@@ -14,10 +14,7 @@ bool Debug_ShouldUpdateGame(void);
 // call after Game_Per_Round to save a snapshot for frame rewinding
 void Debug_RecordFrame(void);
 
-/*
-void Debug_StartTimer(int section); // 0 = combat logic, 1 = UI & Menus
-void Debug_EndTimer(int section);
-*/
-
 // draws collision circles when debug_mode & hitboxes are on
 void Debug_DrawCollisionCircles(void);
+
+void Debug_Exit();

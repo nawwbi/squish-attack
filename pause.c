@@ -40,6 +40,7 @@ void Pause_Menu_Init(void) {
 	pause_button = CP_Image_Load("./Assets/pause-button.png");
 	menu_button = CP_Image_Load("./Assets/game_button.png");
     Settings_Init(); // Load settings assets here
+    Settings_Controls_Init();
 }
 
 void Pause_Menu_Update(void) {
@@ -121,7 +122,6 @@ void Pause_Menu_Update(void) {
             else if (settingsClicked == 1) {
                Audio_Play_Button_Click();
                is_settings = true;
-               //is_controls = false;
             }
 
             // controls

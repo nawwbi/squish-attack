@@ -419,6 +419,7 @@ int Game_Per_Round(float dt, int current_round, int current_level) {
     CP_Image_Draw(skip_button, 1500, 800, 100, 100, 255);
     CP_Color black = CP_Color_Create(0, 0, 0, 255);
 	CP_Settings_Fill(black);
+    CP_Settings_TextAlignment(CP_TEXT_ALIGN_H_CENTER, CP_TEXT_ALIGN_V_MIDDLE);
     char speedMultiplierText[100];
     CP_Settings_TextSize(40);
     snprintf(speedMultiplierText, sizeof(speedMultiplierText), "x%d", speed_multiplier);
@@ -838,39 +839,26 @@ void Game_Update(void)
 
         return;
     }
-    // update the round for each hit when game is not over
-    if (!is_paused && !gameOver && current_round <= 10) {
 
-        if (Game_Per_Round(dt, current_round, current_level) == 1) {
-            ++current_round;
-        }
-    }
-
+    // debug 
     Debug_Update();
 
-    // Debug_StartTimer(0);
-    /*if (!is_paused && !gameOver && current_round <= 10) {
+    // update the round for each hit when game is not over
+    if (!is_paused && !gameOver && current_round <= 10) {
         float active_dt = Debug_ShouldUpdateGame() ? dt : 0.0f;
 
         if (Game_Per_Round(active_dt, current_round, current_level) == 1) {
             ++current_round;
         }
-        Debug_RecordFrame(); // save frame for rewinding
+
+        Debug_RecordFrame();
     }
-    //Debug_EndTimer(0);
 
-    // draw collision circles if F7 hitboxes on
+
     Debug_DrawCollisionCircles();
-
-    /* profile UI& pause Menu(once per frame)
-    Debug_StartTimer(1);
+    // pause 
     Pause_Menu_Update();
-    Debug_EndTimer(1);
-    */
-
-    // debug console
     Debug_Draw();
-    Pause_Menu_Update();
 
     // fade in effect
     if (game_fade > 0.0f)
